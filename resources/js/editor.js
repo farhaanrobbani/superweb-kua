@@ -35,8 +35,9 @@ import {
 import 'ckeditor5/ckeditor5.css';
 
 class CsrfUploadAdapter {
-    constructor(loader) {
+    constructor(loader, url) {
         this.loader = loader;
+        this.url = url;
     }
 
     upload() {
@@ -47,7 +48,7 @@ class CsrfUploadAdapter {
                     data.append('upload', file);
 
                     const xhr = new XMLHttpRequest();
-                    xhr.open('POST', '/admin/announcements/gambar', true);
+                    xhr.open('POST', this.url, true);
                     xhr.setRequestHeader(
                         'X-CSRF-TOKEN',
                         document.querySelector('meta[name="csrf-token"]')?.content || ''
@@ -76,8 +77,9 @@ class CsrfUploadAdapter {
 }
 
 function uploadPlugin(editor) {
+    const url = editor.sourceElement?.dataset?.uploadUrl || '/announcements/gambar';
     editor.plugins.get('FileRepository').createUploadAdapter = (loader) =>
-        new CsrfUploadAdapter(loader);
+        new CsrfUploadAdapter(loader, url);
 }
 
 const editorElements = document.querySelectorAll('textarea[data-editor]');
