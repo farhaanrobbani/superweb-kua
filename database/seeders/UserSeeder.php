@@ -12,14 +12,14 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Staf KUA',
-                'email' => env('STAFF_EMAIL', 'staf@kua.local'),
-                'password' => env('STAFF_PASSWORD', 'password'),
+                'email' => env('STAFF_EMAIL') ?: 'staf@kua.local',
+                'password' => env('STAFF_PASSWORD') ?: 'password',
                 'role' => User::ROLE_STAFF,
             ],
             [
                 'name' => 'Kepala KUA',
-                'email' => env('KEPALA_EMAIL', 'kepala@kua.local'),
-                'password' => env('KEPALA_PASSWORD', 'password'),
+                'email' => env('KEPALA_EMAIL') ?: 'kepala@kua.local',
+                'password' => env('KEPALA_PASSWORD') ?: 'password',
                 'role' => User::ROLE_KEPALA,
             ],
         ];
