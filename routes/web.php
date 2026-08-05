@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('letters/{letter}/reject', [LetterController::class, 'reject'])->name('letters.reject')->middleware('role:kepala');
     Route::post('letters/{letter}/tolak', [LetterController::class, 'tolak'])->name('letters.tolak')->middleware('role:kepala');
     Route::post('letters/{letter}/terbitkan', [LetterController::class, 'terbitkan'])->name('letters.terbitkan');
+    Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])->name('letters.pdf');
 
     Route::resource('letter-types', LetterTypeController::class);
     Route::resource('letter-templates', LetterTemplateController::class);

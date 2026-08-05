@@ -52,6 +52,43 @@ class Letter extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
+    public function activeTemplate(): ?LetterTemplate
+    {
+        return $this->letterType->templates()->where('active', true)->first();
+    }
+
+    public function renderBody(): string
+    {
+        $template = $this->activeTemplate();
+        if (! $template) {
+            return 'Template surat belum tersedia untuk jenis surat ini.';
+        }
+
+        $values = [];
+        foreach ($this->letterType->fields ?? [] as $field) {
+            $values[$field['name']] = $this->data[$field['name']] ?? '';
+        }
+
+        $values['nomor'] = $this->nomor ?? '';
+        $values['tanggal_surat'] = $this->tanggal_surat ? tanggal_indonesia($this->tanggal_surat) : '';
+        $values['perihal'] = $this->perihal;
+
+        $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala'];
+        foreach ($settingKeys as $key) {
+            if (! array_key_exists($key, $values)) {
+                $values[$key] = KuaSetting::get($key) ?? '';
+            }
+        }
+
+        $body = $template->body;
+        foreach ($values as $key => $value) {
+            $body = str_replace('[' . $key . ']', e((string) $value), $body);
+        }
+
+        return $body;
+    }
+
     protected function casts(): array
     {
         return [

@@ -86,6 +86,9 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm space-x-2">
                                     <a href="{{ route('letters.show', $letter) }}" class="text-blue-600 hover:underline">Detail</a>
+                                    @if ($letter->status === 'terbit')
+                                        <a href="{{ route('letters.pdf', $letter) }}" class="text-indigo-600 hover:underline">PDF</a>
+                                    @endif
                                     <form action="{{ route('letters.destroy', $letter) }}" method="POST" class="inline"
                                           onsubmit="return confirm('Hapus surat ini?')">
                                         @csrf

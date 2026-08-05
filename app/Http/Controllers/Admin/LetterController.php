@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KuaSetting;
 use App\Models\Letter;
 use App\Models\LetterType;
 use App\Services\LetterNumberService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class LetterController extends Controller
@@ -176,6 +177,28 @@ class LetterController extends Controller
 
         return redirect()->route('letters.show', $letter)
             ->with('success', 'Surat diterbitkan dengan nomor ' . $letter->nomor . '.');
+    }
+
+    public function pdf(Letter $letter)
+    {
+        abort_unless($letter->status === Letter::STATUS_TERBIT, 403, 'Surat dapat diunduh setelah diterbitkan.');
+
+        $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path'];
+        $settings = [];
+        foreach ($settingKeys as $key) {
+            $settings[$key] = KuaSetting::get($key) ?? '';
+        }
+
+        $pdf = Pdf::loadView('pdf.letter', [
+            'letter' => $letter,
+            'settings' => $settings,
+            'body' => $letter->renderBody(),
+        ])->setPaper('a4');
+
+        $fileName = ($letter->nomor ? str_replace('/', '-', $letter->nomor) : 'surat') . '.pdf';
+
+        return $pdf->download($fileName);
     }
 
     private function validateDynamic(Request $request, LetterType $letterType): array
