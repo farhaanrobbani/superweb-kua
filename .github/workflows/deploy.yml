@@ -49,28 +49,15 @@ jobs:
         run: php artisan test
 
   deploy:
-    name: Deploy to VPS
+    name: Deploy via webhook
     needs: test
     if: ${{ success() && vars.DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
-          script: |
-            set -e
-            cd ${{ secrets.DEPLOY_PATH }}
-            git pull origin main
-            composer install --no-dev --no-interaction --prefer-dist --no-progress
-            php artisan migrate --force
-            npm install --no-progress --ignore-scripts 2>/dev/null || true
-            npm run build 2>/dev/null || true
-            php artisan storage:link 2>/dev/null || true
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            sudo service php8.3-fpm restart 2>/dev/null || service php8.3-fpm restart 2>/dev/null || true
+      - name: Trigger deploy webhook
+        run: |
+          curl -sSf -o /dev/null \
+            -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
+            -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}" \
+            -H "X-GitHub-Event: push" \
+            -H "X-GitHub-Delivery: ${{ github.run_id }}-${{ github.run_attempt }}"
