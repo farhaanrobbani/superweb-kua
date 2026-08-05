@@ -1,176 +1,68 @@
-import {
-    Alignment,
-    AutoImage,
-    BlockQuote,
-    Bold,
-    ClassicEditor,
-    Essentials,
-    Font,
-    Heading,
-    HorizontalLine,
-    Image,
-    ImageBlock,
-    ImageCaption,
-    ImageInline,
-    ImageResize,
-    ImageStyle,
-    ImageToolbar,
-    ImageUpload,
-    Indent,
-    IndentBlock,
-    Italic,
-    Link,
-    List,
-    Paragraph,
-    SourceEditing,
-    Strikethrough,
-    Table,
-    TableCellProperties,
-    TableProperties,
-    TableToolbar,
-    Underline,
-    Undo,
-} from 'ckeditor5';
+import tinymce from 'tinymce';
 
-import 'ckeditor5/ckeditor5.css';
+import 'tinymce/icons/default/icons.min.js';
+import 'tinymce/themes/silver/theme.min.js';
+import 'tinymce/models/dom/model.min.js';
 
-class CsrfUploadAdapter {
-    constructor(loader, url) {
-        this.loader = loader;
-        this.url = url;
-    }
+import 'tinymce/skins/ui/oxide/skin.js';
+import 'tinymce/skins/ui/oxide/content.js';
+import 'tinymce/skins/content/default/content.js';
 
-    upload() {
-        return this.loader.file.then(
-            (file) =>
-                new Promise((resolve, reject) => {
-                    const data = new FormData();
-                    data.append('upload', file);
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/code';
 
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', this.url, true);
-                    xhr.setRequestHeader(
-                        'X-CSRF-TOKEN',
-                        document.querySelector('meta[name="csrf-token"]')?.content || ''
-                    );
-                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+function uploadImageHandler(blobInfo, success, failure) {
+    const textarea = document.querySelector('textarea[data-editor]');
+    const url = textarea?.dataset.uploadUrl || '/announcements/gambar';
 
-                    xhr.onload = () => {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            if (xhr.status === 200 && response.url) {
-                                resolve({ default: response.url });
-                            } else {
-                                reject(new Error(response.message || 'Gagal mengunggah gambar.'));
-                            }
-                        } catch {
-                            reject(new Error('Respon unggahan tidak valid.'));
-                        }
-                    };
-                    xhr.onerror = () => reject(new Error('Gagal mengunggah gambar.'));
-                    xhr.send(data);
-                })
-        );
-    }
+    const data = new FormData();
+    data.append('upload', blobInfo.blob(), blobInfo.filename());
 
-    abort() {}
-}
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader(
+        'X-CSRF-TOKEN',
+        document.querySelector('meta[name="csrf-token"]')?.content || ''
+    );
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-function uploadPlugin(editor) {
-    const url = editor.sourceElement?.dataset?.uploadUrl || '/announcements/gambar';
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader) =>
-        new CsrfUploadAdapter(loader, url);
-}
-
-const editorElements = document.querySelectorAll('textarea[data-editor]');
-
-editorElements.forEach((element) => {
-    ClassicEditor.create(element, {
-        licenseKey: 'GPL',
-        plugins: [
-            Essentials,
-            Paragraph,
-            Heading,
-            Bold,
-            Italic,
-            Underline,
-            Strikethrough,
-            Font,
-            Alignment,
-            List,
-            Link,
-            BlockQuote,
-            HorizontalLine,
-            Indent,
-            IndentBlock,
-            Table,
-            TableToolbar,
-            TableProperties,
-            TableCellProperties,
-            Image,
-            ImageBlock,
-            ImageInline,
-            ImageCaption,
-            ImageStyle,
-            ImageToolbar,
-            ImageResize,
-            ImageUpload,
-            AutoImage,
-            SourceEditing,
-            Undo,
-            uploadPlugin,
-        ],
-        toolbar: {
-            items: [
-                'undo',
-                'redo',
-                '|',
-                'heading',
-                '|',
-                'bold',
-                'italic',
-                'underline',
-                'strikethrough',
-                '|',
-                'fontSize',
-                'fontFamily',
-                'fontColor',
-                'fontBackgroundColor',
-                '|',
-                'alignment',
-                'bulletedList',
-                'numberedList',
-                '|',
-                'outdent',
-                'indent',
-                '|',
-                'link',
-                'blockQuote',
-                'horizontalLine',
-                'insertTable',
-                'imageUpload',
-                '|',
-                'sourceEditing',
-            ],
-        },
-        image: {
-            toolbar: ['imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight', '|', 'imageTextAlternative'],
-            styles: ['alignLeft', 'alignCenter', 'alignRight'],
-        },
-        table: {
-            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
-        },
-        language: 'id',
-    })
-        .then((editor) => {
-            const form = element.closest('form');
-            if (form) {
-                form.addEventListener('submit', () => {
-                    editor.updateSourceElement();
-                });
+    xhr.onload = () => {
+        try {
+            const response = JSON.parse(xhr.responseText);
+            if (xhr.status === 200 && response.url) {
+                success(response.url);
+            } else {
+                failure(response.message || 'Gagal mengunggah gambar.');
             }
-        })
-        .catch((error) => {
-            console.error('CKEditor gagal dimuat:', error);
-        });
+        } catch {
+            failure('Respon unggahan tidak valid.');
+        }
+    };
+    xhr.onerror = () => failure('Gagal mengunggah gambar.');
+    xhr.send(data);
+}
+
+tinymce.init({
+    selector: 'textarea[data-editor]',
+    license_key: 'gpl',
+    plugins: 'advlist autolink lists link image table code',
+    toolbar:
+        'undo redo | blocks | bold italic underline strikethrough | forecolor backcolor | fontfamily fontsize | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | link blockquote hr table image | code',
+    menubar: false,
+    height: 480,
+    skin_url: 'default',
+    content_css: 'default',
+    promotion: false,
+    font_family_formats:
+        'Arial=Arial, Helvetica, sans-serif; Tahoma=Tahoma, Geneva, sans-serif; Times New Roman=Times New Roman, Times, serif; Georgia=Georgia, serif; Verdana=Verdana, Geneva, sans-serif; Courier New=Courier New, Courier, monospace',
+    font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt',
+    automatic_uploads: true,
+    relative_urls: false,
+    convert_urls: false,
+    images_upload_handler: uploadImageHandler,
 });
