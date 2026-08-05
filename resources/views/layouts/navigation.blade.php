@@ -15,6 +15,21 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.*')">
+                        {{ __('Surat') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.*')">
+                        {{ __('Permohonan') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('letter-types.index')" :active="request()->routeIs('letter-types.*')">
+                        {{ __('Jenis Surat') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
+                        {{ __('Template') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
+                        {{ __('Pengaturan') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -69,6 +84,21 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.*')">
+                {{ __('Surat') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.*')">
+                {{ __('Permohonan') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('letter-types.index')" :active="request()->routeIs('letter-types.*')">
+                {{ __('Jenis Surat') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
+                {{ __('Template') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
+                {{ __('Pengaturan') }}
             </x-responsive-nav-link>
         </div>
 

@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\LetterType;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\View\View;
+
+class LetterTypeController extends Controller
+{
+    public function index(): View
+    {
+        return view('admin.letter-types.index', [
+            'letterTypes' => LetterType::withCount('letters')->orderBy('code')->paginate(15),
+        ]);
+    }
+
+    public function create(): View
+    {
+        return view('admin.letter-types.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $this->validateData($request);
+
+        LetterType::create($data);
+
+        return redirect()->route('letter-types.index')
+            ->with('success', 'Jenis surat berhasil ditambahkan.');
+    }
+
+    public function edit(LetterType $letterType): View
+    {
+        return view('admin.letter-types.edit', compact('letterType'));
+    }
+
+    public function update(Request $request, LetterType $letterType): RedirectResponse
+    {
+        $data = $this->validateData($request, $letterType);
+
+        $letterType->update($data);
+
+        return redirect()->route('letter-types.index')
+            ->with('success', 'Jenis surat berhasil diperbarui.');
+    }
+
+    public function destroy(LetterType $letterType): RedirectResponse
+    {
+        $letterType->delete();
+
+        return redirect()->route('letter-types.index')
+            ->with('success', 'Jenis surat berhasil dihapus.');
+    }
+
+    private function validateData(Request $request, ?LetterType $letterType = null): array
+    {
+        return $request->validate([
+            'code' => ['required', 'string', 'max:50', Rule::unique('letter_types', 'code')->ignore($letterType)],
+            'name' => ['required', 'string', 'max:150'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'fields' => ['nullable', 'array'],
+            'fields.*.name' => ['required', 'string', 'max:50', 'distinct'],
+            'fields.*.label' => ['required', 'string', 'max:150'],
+            'fields.*.type' => ['required', 'in:text,textarea,date,select'],
+            'fields.*.required' => ['sometimes', 'boolean'],
+            'fields.*.options' => ['nullable', 'array'],
+            'active' => ['sometimes', 'boolean'],
+        ]);
+    }
+}
