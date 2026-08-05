@@ -19,7 +19,7 @@
             @include('layouts.navigation')
 
             <!-- Mobile overlay -->
-            <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity
+            <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false" x-transition.opacity
                  class="fixed inset-0 z-20 bg-gray-900/50 lg:hidden"></div>
 
             <div class="flex min-h-screen flex-col lg:pl-64">

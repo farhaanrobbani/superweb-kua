@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    [x-cloak] { display: none !important; }
+}
+
 @layer components {
     .konten-pengumuman p { margin: 0 0 1em 0; }
     .konten-pengumuman h2, .konten-pengumuman h3, .konten-pengumuman h4 {
