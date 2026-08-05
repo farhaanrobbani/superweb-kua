@@ -80,6 +80,14 @@
                             <x-text-input id="kode_pos" name="kode_pos" class="mt-1 block w-full"
                                           value="{{ old('kode_pos', $settings['kode_pos']['value']) }}" />
                         </div>
+                        <div class="sm:col-span-2">
+                            <x-input-label for="jam_layanan" value="Jam Layanan" />
+                            <textarea id="jam_layanan" name="jam_layanan" rows="3"
+                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                      maxlength="255" placeholder="Senin – Jumat&#10;08.00 – 15.00 WIB">{{ old('jam_layanan', $settings['jam_layanan']['value']) }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">Ditampilkan di footer beranda, halaman permohonan, dan pengumuman. Boleh lebih dari satu baris.</p>
+                            <x-input-error :messages="$errors->get('jam_layanan')" class="mt-2" />
+                        </div>
                     </div>
 
                     <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Kepala KUA (Penandatangan)</h3>
