@@ -14,6 +14,10 @@
 
         <main>
             <section class="mx-auto max-w-5xl px-6 pb-14 pt-16 text-center">
+                @if (! empty($kua['hero_url']))
+                    <img src="{{ $kua['hero_url'] }}" alt="Banner {{ $kua['instansi'] ?? 'KUA' }}"
+                         class="mx-auto mb-10 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
+                @endif
                 <p class="text-sm font-medium uppercase tracking-widest text-teal-700">
                     {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
                 </p>

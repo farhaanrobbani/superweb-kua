@@ -16,7 +16,30 @@
                     @csrf
                     @method('PUT')
 
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Logo KUA</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Gambar Hero Beranda</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <x-input-label for="hero" value="Gambar Hero/Banner Beranda (PNG/JPG/WEBP, maks 3MB)" />
+                            <input id="hero" name="hero" type="file" accept="image/png,image/jpeg,image/webp"
+                                   class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800" />
+                            <p class="text-xs text-gray-500 mt-1">Gambar lebar (mis. rasio 21:9) yang tampil di bagian atas beranda. Kosongkan untuk menyembunyikan banner.</p>
+                            <x-input-error :messages="$errors->get('hero')" class="mt-2" />
+
+                            @if (! empty($settings['hero_path']['value']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings['hero_path']['value']))
+                                <div class="mt-4 flex items-start gap-4">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($settings['hero_path']['value']) }}"
+                                         alt="Hero Beranda" class="w-full max-w-md rounded-md border border-gray-200 object-cover" />
+                                    <label class="flex items-center gap-2 text-sm text-gray-600">
+                                        <input type="checkbox" name="hero_hapus" value="1"
+                                               class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                                        Hapus gambar
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Logo KUA</h3>
                     <div class="grid grid-cols-1 gap-4">
                         <div>
                             <x-input-label for="logo" value="Logo KUA (PNG/JPG/WEBP, maks 2MB)" />

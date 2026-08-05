@@ -23,8 +23,18 @@ class KuaSetting extends Model
 
     public static function logoUrl(): ?string
     {
+        return self::storedImageUrl('logo_path');
+    }
+
+    public static function heroUrl(): ?string
+    {
+        return self::storedImageUrl('hero_path');
+    }
+
+    private static function storedImageUrl(string $key): ?string
+    {
         try {
-            $path = static::get('logo_path');
+            $path = static::get($key);
 
             if (blank($path) || ! Storage::disk('public')->exists($path)) {
                 return null;

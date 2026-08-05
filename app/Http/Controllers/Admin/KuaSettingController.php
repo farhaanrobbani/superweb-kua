@@ -26,6 +26,7 @@ class KuaSettingController extends Controller
         'sk_kepala' => 'No. SK Pengangkatan Kepala KUA',
         'ttd_path' => 'File Tanda Tangan (path)',
         'logo_path' => 'Logo KUA (upload)',
+        'hero_path' => 'Gambar Hero Beranda (upload)',
     ];
 
     public function edit(): View
@@ -56,7 +57,26 @@ class KuaSettingController extends Controller
             'ttd_path' => ['nullable', 'string', 'max:255'],
             'logo' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'logo_hapus' => ['sometimes', 'in:1'],
+            'hero' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
+            'hero_hapus' => ['sometimes', 'in:1'],
         ]);
+
+        if ($request->hasFile('hero')) {
+            $old = KuaSetting::get('hero_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $path = $request->file('hero')->store('heroes', 'public');
+            KuaSetting::set('hero_path', $path);
+        } elseif ($request->boolean('hero_hapus')) {
+            $old = KuaSetting::get('hero_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            KuaSetting::set('hero_path', '');
+        }
 
         if ($request->hasFile('logo')) {
             $old = KuaSetting::get('logo_path');
