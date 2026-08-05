@@ -7,6 +7,10 @@ export PATH="/root/.local/bin:/tools/node/bin:/usr/local/sbin:/usr/local/bin:/us
 export HOME=/root
 
 git pull origin main
+apt-get install -y fonts-liberation >/dev/null 2>&1 || true
+mkdir -p storage/fonts
+cp /usr/share/fonts/truetype/liberation/LiberationSans-*.ttf storage/fonts/ 2>/dev/null || true
+chmod 755 /usr/share/fonts/truetype/liberation/*.ttf 2>/dev/null || true
 composer install --no-dev --no-interaction --prefer-dist --no-progress
 php artisan migrate --force
 if [ -f package.json ]; then

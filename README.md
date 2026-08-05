@@ -51,7 +51,7 @@ Workflow di `.github/workflows/deploy.yml`:
 ```bash
 sudo apt update
 sudo apt install -y nginx php8.3-fpm php8.3-cli php8.3-mbstring php8.3-xml \
-  php8.3-curl php8.3-mysql php8.3-zip php8.3-gd php8.3-bcmath php8.3-intl composer git mysql-server
+  php8.3-curl php8.3-mysql php8.3-zip php8.3-gd php8.3-bcmath php8.3-intl composer git mysql-server fonts-liberation
 ```
 
 ```bash
@@ -73,6 +73,13 @@ php artisan db:seed --force
 php artisan storage:link           # symlink untuk logo/upload (sekali saja)
 npm install && npm run build
 sudo chown -R www-data:www-data storage bootstrap/cache
+```
+
+Font PDF surat (Arial = Liberation Sans, harus tersedia di `storage/fonts/`):
+
+```bash
+mkdir -p storage/fonts
+cp /usr/share/fonts/truetype/liberation/LiberationSans-*.ttf storage/fonts/
 ```
 
 Config Nginx (`/etc/nginx/sites-available/surdig`):
