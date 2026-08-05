@@ -4,20 +4,23 @@ use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
+use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
+Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
+Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name('permohonan.sukses');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    Route::get('/letters', fn () => view('admin.coming-soon', ['title' => 'Surat']))->name('letters.index');
-    Route::get('/submissions', fn () => view('admin.coming-soon', ['title' => 'Permohonan']))->name('submissions.index');
 
     Route::resource('letters', LetterController::class);
     Route::post('letters/{letter}/ajukan', [LetterController::class, 'ajukan'])->name('letters.ajukan');
@@ -26,6 +29,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('letters/{letter}/tolak', [LetterController::class, 'tolak'])->name('letters.tolak')->middleware('role:kepala');
     Route::post('letters/{letter}/terbitkan', [LetterController::class, 'terbitkan'])->name('letters.terbitkan');
     Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])->name('letters.pdf');
+
+    Route::get('/submissions', [SubmissionAdminController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/{submission}', [SubmissionAdminController::class, 'show'])->name('submissions.show');
+    Route::put('/submissions/{submission}', [SubmissionAdminController::class, 'updateStatus'])->name('submissions.update');
+    Route::delete('/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])->name('submissions.destroy');
+    Route::post('/submissions/{submission}/buat-surat', [SubmissionAdminController::class, 'buatSurat'])->name('submissions.buat-surat');
 
     Route::resource('letter-types', LetterTypeController::class);
     Route::resource('letter-templates', LetterTemplateController::class);

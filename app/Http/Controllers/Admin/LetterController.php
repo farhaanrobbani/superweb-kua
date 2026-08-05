@@ -54,10 +54,21 @@ class LetterController extends Controller
             $data = old('data', []);
         }
 
+        $dari = null;
+        if ($request->filled('dari') && $selectedType) {
+            $dari = \App\Models\Submission::find($request->input('dari'));
+            if ($dari && $dari->letter_type_id === $selectedType->id) {
+                foreach ($data as $key => $value) {
+                    $data[$key] = $dari->data[$key] ?? $value;
+                }
+            }
+        }
+
         return view('admin.letters.create', [
             'letterTypes' => LetterType::where('active', true)->orderBy('name')->get(),
             'selectedType' => $selectedType,
             'data' => $data,
+            'dari' => $dari,
         ]);
     }
 

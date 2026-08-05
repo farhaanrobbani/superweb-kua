@@ -27,6 +27,12 @@
                             <a href="{{ route('letters.create') }}" class="text-sm text-gray-500 hover:underline">Ganti jenis</a>
                         </div>
 
+                        @if (isset($dari) && $dari)
+                            <div class="mb-4 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-md text-sm">
+                                Data diisi otomatis dari permohonan <strong>{{ $dari->nama_pemohon }}</strong> ({{ $dari->kontak }}). Silakan periksa kembali.
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ route('letters.store') }}">
                             @csrf
                             <input type="hidden" name="jenis" value="{{ $selectedType->code }}">
@@ -42,7 +48,7 @@
                                 @foreach ($selectedType->fields ?? [] as $field)
                                     @php
                                         $name = 'data[' . $field['name'] . ']';
-                                        $value = old('data.' . $field['name']);
+                                        $value = old('data.' . $field['name'], $data[$field['name']] ?? null);
                                     @endphp
                                     <div>
                                         <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />

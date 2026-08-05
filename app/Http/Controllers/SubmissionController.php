@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\KuaSetting;
+use App\Models\LetterType;
+use App\Models\Submission;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class SubmissionController extends Controller
+{
+    public function create(Request $request): View
+    {
+        $selectedType = null;
+        $data = [];
+
+        if ($request->has('jenis')) {
+            $selectedType = LetterType::where('code', $request->input('jenis'))->where('active', true)->firstOrFail();
+            $data = old('data', []);
+        }
+
+        return view('public.submissions.create', [
+            'letterTypes' => LetterType::where('active', true)->orderBy('name')->get(),
+            'selectedType' => $selectedType,
+            'data' => $data,
+            'kua' => [
+                'instansi' => KuaSetting::get('instansi'),
+                'alamat' => KuaSetting::get('alamat'),
+                'telepon' => KuaSetting::get('telepon'),
+                'email' => KuaSetting::get('email'),
+            ],
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        if ($request->filled('website')) {
+            abort(403, 'Permohonan ditolak.');
+        }
+
+        $request->validate([
+            'jenis' => ['required', 'exists:letter_types,code'],
+            'nama_pemohon' => ['required', 'string', 'max:150'],
+            'kontak' => ['required', 'string', 'max:100'],
+        ]);
+
+        $letterType = LetterType::where('code', $request->input('jenis'))->firstOrFail();
+
+        $rules = [];
+        $fields = $letterType->fields ?? [];
+        foreach ($fields as $field) {
+            $fieldRules = ['string', 'max:1000'];
+            if (! empty($field['required'])) {
+                $fieldRules[] = 'required';
+            }
+            $rules['data.' . $field['name']] = $fieldRules;
+        }
+        $validated = $request->validate($rules);
+
+        $safeData = [];
+        foreach ($fields as $field) {
+            $safeData[$field['name']] = $request->input('data.' . $field['name']);
+        }
+
+        Submission::create([
+            'letter_type_id' => $letterType->id,
+            'nama_pemohon' => $request->input('nama_pemohon'),
+            'kontak' => $request->input('kontak'),
+            'data' => $safeData,
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        return redirect()->route('permohonan.sukses');
+    }
+
+    public function sukses(): View
+    {
+        return view('public.submissions.sukses');
+    }
+}
