@@ -29,7 +29,7 @@
                 <button class="px-3 py-2 bg-gray-800 text-white text-xs rounded-md">Filter</button>
             </form>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
