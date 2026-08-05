@@ -21,7 +21,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div x-show="layanan" x-transition x-cloak
+                <div x-show="layanan"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     x-cloak
                      class="absolute start-1/2 mt-2 w-72 -translate-x-1/2 rounded-lg border border-teal-100 bg-white p-2 shadow-lg">
                     @forelse ($headerServices as $service)
                         <a href="{{ $service->url ? url($service->url) : '#' }}"
@@ -56,7 +63,15 @@
         </button>
         <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
         @if ($headerServices->isNotEmpty())
-            <div x-show="layanan" x-transition x-cloak class="w-full border-t border-teal-100 pt-1">
+            <div x-show="layanan"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 x-cloak
+                 class="w-full border-t border-teal-100 pt-1">
                 @foreach ($headerServices as $service)
                     <a href="{{ $service->url ? url($service->url) : '#' }}"
                        class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
