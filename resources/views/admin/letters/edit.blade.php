@@ -1,0 +1,75 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Surat</h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $letter->letterType->name }}</h3>
+                        <p class="text-xs text-gray-500">Perihal saat ini: {{ $letter->perihal }}</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('letters.update', $letter) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <div>
+                            <x-input-label for="perihal" value="Perihal Surat" />
+                            <x-text-input id="perihal" name="perihal" class="mt-1 block w-full" required
+                                          value="{{ old('perihal', $letter->perihal) }}" />
+                            <x-input-error :messages="$errors->get('perihal')" class="mt-2" />
+                        </div>
+
+                        <div class="mt-6 space-y-4">
+                            @foreach ($letter->letterType->fields ?? [] as $field)
+                                @php
+                                    $name = 'data[' . $field['name'] . ']';
+                                    $value = old('data.' . $field['name'], $data[$field['name']] ?? null);
+                                @endphp
+                                <div>
+                                    <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />
+                                    @if ($field['type'] === 'textarea')
+                                        <textarea id="field-{{ $field['name'] }}" name="{{ $name }}" rows="3"
+                                                  class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $value }}</textarea>
+                                    @elseif ($field['type'] === 'date')
+                                        <x-text-input id="field-{{ $field['name'] }}" name="{{ $name }}" type="date"
+                                                      class="mt-1 block w-full" :value="$value" />
+                                    @elseif ($field['type'] === 'select')
+                                        <select id="field-{{ $field['name'] }}" name="{{ $name }}"
+                                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                            <option value="">-- Pilih --</option>
+                                            @foreach ($field['options'] ?? [] as $option)
+                                                <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>{{ $option }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <x-text-input id="field-{{ $field['name'] }}" name="{{ $name }}"
+                                                      class="mt-1 block w-full" :value="$value" />
+                                    @endif
+                                    <x-input-error :messages="$errors->get('data.' . $field['name'])" class="mt-2" />
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="mt-6 flex items-center gap-4">
+                            <x-primary-button>Simpan Perubahan</x-primary-button>
+                            <a href="{{ route('letters.show', $letter) }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 h-fit">
+                    <h3 class="font-semibold text-gray-800 mb-3">Template Surat</h3>
+                    @if ($letter->letterType->templates->first())
+                        <pre class="text-xs text-gray-600 whitespace-pre-wrap font-mono bg-gray-50 rounded-md p-3">{{ $letter->letterType->templates->first()->body }}</pre>
+                    @else
+                        <p class="text-sm text-gray-400">Belum ada template untuk jenis surat ini.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
