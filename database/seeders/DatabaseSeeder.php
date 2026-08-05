@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(KuaSettingSeeder::class);
         $this->call(LetterTypeSeeder::class);
+        $this->call(ServiceSeeder::class);
     }
 }
