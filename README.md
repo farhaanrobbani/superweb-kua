@@ -126,6 +126,8 @@ Di repo `surdig` → **Settings → Secrets and variables → Actions**, tambahk
 | `DEPLOY_PORT` | port SSH (`22`) |
 | `DEPLOY_PATH` | path aplikasi (`/var/www/surdig`) |
 
+Lalu aktifkan deploy dengan menambahkan **Repository variable** `DEPLOY_ENABLED=true` (Settings → Secrets and variables → Actions → Variables). Job deploy akan berjalan otomatis setelah test lulus; selama variable belum diaktifkan, hanya test yang berjalan.
+
 Setelah secrets terpasang, setiap `git push origin main` akan otomatis men-deploy ke VPS.
 
 ## Struktur Nomor Surat

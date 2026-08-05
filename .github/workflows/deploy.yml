@@ -46,7 +46,7 @@ jobs:
   deploy:
     name: Deploy to VPS
     needs: test
-    if: ${{ success() && secrets.DEPLOY_HOST != '' }}
+    if: ${{ success() && vars.DEPLOY_ENABLED == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy via SSH
