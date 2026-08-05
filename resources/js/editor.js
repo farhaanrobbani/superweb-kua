@@ -84,6 +84,7 @@ const editorElements = document.querySelectorAll('textarea[data-editor]');
 
 editorElements.forEach((element) => {
     ClassicEditor.create(element, {
+        licenseKey: 'GPL',
         plugins: [
             Essentials,
             Paragraph,
