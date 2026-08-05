@@ -16,36 +16,42 @@ import 'tinymce/plugins/image';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/code';
 
-function uploadImageHandler(blobInfo, success, failure) {
-    const textarea = document.querySelector('textarea[data-editor]');
-    const url = textarea?.dataset.uploadUrl || '/announcements/gambar';
+function uploadImageHandler(blobInfo, progress) {
+    return new Promise((resolve, reject) => {
+        const textarea = document.querySelector('textarea[data-editor]');
+        const url = textarea?.dataset.uploadUrl || '/announcements/gambar';
 
-    const data = new FormData();
-    data.append('upload', blobInfo.blob(), blobInfo.filename());
+        const data = new FormData();
+        data.append('upload', blobInfo.blob(), blobInfo.filename());
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader(
-        'X-CSRF-TOKEN',
-        document.querySelector('meta[name="csrf-token"]')?.content || ''
-    );
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader(
+            'X-CSRF-TOKEN',
+            document.querySelector('meta[name="csrf-token"]')?.content || ''
+        );
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-    xhr.onload = () => {
-        try {
-            const response = JSON.parse(xhr.responseText);
-            if (xhr.status === 200 && response.url) {
-                success(response.url);
-            } else {
-                const message = response.message || 'Respon tidak dikenal.';
-                failure('Gagal (' + xhr.status + '): ' + message);
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+                progress((e.loaded / e.total) * 100);
             }
-        } catch {
-            failure('Respon unggahan tidak valid.');
-        }
-    };
-    xhr.onerror = () => failure('Gagal mengunggah gambar (jaringan).');
-    xhr.send(data);
+        };
+        xhr.onload = () => {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (xhr.status === 200 && response.url) {
+                    resolve(response.url);
+                } else {
+                    reject('Gagal (' + xhr.status + '): ' + (response.message || 'Respon tidak dikenal.'));
+                }
+            } catch {
+                reject('Respon unggahan tidak valid.');
+            }
+        };
+        xhr.onerror = () => reject('Gagal mengunggah gambar (jaringan).');
+        xhr.send(data);
+    });
 }
 
 tinymce.init({
