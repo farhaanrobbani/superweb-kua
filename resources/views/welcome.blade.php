@@ -21,15 +21,52 @@
                     @endif
                     <span class="text-sm font-semibold tracking-wide">{{ $kua['instansi'] ?? 'Surat Digital KUA' }}</span>
                 </div>
-                <nav class="flex items-center gap-3 text-sm">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="rounded-md bg-teal-700 px-4 py-1.5 font-medium text-white hover:bg-teal-800">Dashboard</a>
-                    @else
-                        <a href="{{ route('permohonan.create') }}" class="rounded-md px-3 py-1.5 hover:bg-teal-50 hover:text-teal-800">Permohonan</a>
-                        <a href="{{ route('login') }}" class="rounded-md border border-teal-700 px-4 py-1.5 font-medium text-teal-700 hover:bg-teal-50">Login Staf</a>
-                    @endauth
+                <nav x-data="{ layanan: false }" @click.outside="layanan = false" class="hidden items-center gap-6 text-sm font-medium sm:flex">
+                    <a href="{{ url('/') }}" class="text-teal-800 hover:text-teal-600">Beranda</a>
+                    <div class="relative">
+                        <button type="button" @click="layanan = !layanan"
+                                class="inline-flex items-center gap-1 text-teal-800 hover:text-teal-600"
+                                :aria-expanded="layanan">
+                            Layanan
+                            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="layanan" x-transition x-cloak
+                             class="absolute start-1/2 mt-2 w-72 -translate-x-1/2 rounded-lg border border-teal-100 bg-white p-2 shadow-lg">
+                            @forelse ($services as $service)
+                                <a href="{{ $service->url ? url($service->url) : '#' }}"
+                                   class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
+                                    <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
+                                    <span>
+                                        <span class="block text-sm font-semibold text-[#1b1b18]">{{ $service->name }}</span>
+                                        @if ($service->description)
+                                            <span class="block text-xs leading-relaxed text-[#1b1b1870]">{{ $service->description }}</span>
+                                        @endif
+                                    </span>
+                                </a>
+                            @empty
+                                <span class="block px-3 py-2 text-sm text-[#1b1b1870]">Belum ada layanan.</span>
+                            @endforelse
+                        </div>
+                    </div>
+                    <a href="{{ route('pengumuman.index') }}" class="text-teal-800 hover:text-teal-600">Pengumuman</a>
                 </nav>
+                <a href="{{ route('permohonan.create') }}"
+                   class="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 sm:hidden">
+                    Ajukan Surat
+                </a>
             </div>
+            <nav x-data="{ layanan: false }" class="flex items-center gap-5 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
+                <a href="{{ url('/') }}" class="text-teal-800 hover:text-teal-600">Beranda</a>
+                <button type="button" @click="layanan = !layanan" class="inline-flex items-center gap-1 text-teal-800 hover:text-teal-600">
+                    Layanan
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <a href="{{ route('pengumuman.index') }}" class="text-teal-800 hover:text-teal-600">Pengumuman</a>
+            </nav>
         </header>
 
         <main>
@@ -48,23 +85,47 @@
                     <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
                         Ajukan Permohonan Surat
                     </a>
-                    @guest
-                        <a href="{{ route('login') }}" class="rounded-md border border-[#19140035] px-6 py-3 text-sm font-semibold hover:border-[#1915014a]">
-                            Login Staf KUA
-                        </a>
-                    @endguest
                 </div>
             </section>
 
-            @if ($letterTypes->isNotEmpty())
+            @if ($services->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pb-16">
-                    <h2 class="text-center text-xl font-bold">Jenis Surat yang Dilayani</h2>
+                    <h2 class="text-center text-xl font-bold">Layanan Kami</h2>
                     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        @foreach ($letterTypes as $type)
-                            <div class="rounded-lg border border-[#19140012] p-5">
-                                <h3 class="font-semibold text-teal-800">{{ $type->name }}</h3>
-                                <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ $type->description }}</p>
-                            </div>
+                        @foreach ($services as $service)
+                            <a href="{{ $service->url ? url($service->url) : '#' }}"
+                               class="rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-teal-700">@include('partials.service-icon', ['icon' => $service->icon, 'class' => 'h-7 w-7'])</span>
+                                    <h3 class="font-semibold text-teal-900">{{ $service->name }}</h3>
+                                </div>
+                                @if ($service->description)
+                                    <p class="mt-2 text-sm leading-relaxed text-[#1b1b1870]">{{ $service->description }}</p>
+                                @endif
+                            </a>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            @if ($announcements->isNotEmpty())
+                <section class="mx-auto max-w-5xl px-6 pb-16">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold">Pengumuman Terbaru</h2>
+                        <a href="{{ route('pengumuman.index') }}" class="text-sm font-medium text-teal-700 hover:underline">
+                            Lihat Semua Pengumuman
+                        </a>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        @foreach ($announcements as $announcement)
+                            <a href="{{ route('pengumuman.show', $announcement) }}"
+                               class="block rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
+                                <h3 class="font-semibold text-teal-900">{{ $announcement->title }}</h3>
+                                <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ str(strip_tags($announcement->content))->limit(130) }}</p>
+                                <p class="mt-2 text-xs text-[#1b1b1870]">
+                                    {{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd F Y') }}
+                                </p>
+                            </a>
                         @endforeach
                     </div>
                 </section>

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use App\Models\KuaSetting;
 use App\Models\LetterType;
+use App\Models\Service;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -14,6 +16,8 @@ class WelcomeController extends Controller
         return view('welcome', [
             'kua' => $this->kua(),
             'letterTypes' => $this->letterTypes(),
+            'services' => $this->services(),
+            'announcements' => $this->announcements(),
         ]);
     }
 
@@ -44,6 +48,24 @@ class WelcomeController extends Controller
     {
         try {
             return LetterType::query()->where('active', true)->orderBy('name')->get(['name', 'description']);
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function services(): Collection
+    {
+        try {
+            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function announcements(): Collection
+    {
+        try {
+            return Announcement::query()->published()->take(3)->get(['id', 'title', 'content', 'published_at', 'created_at']);
         } catch (\Throwable) {
             return collect();
         }
