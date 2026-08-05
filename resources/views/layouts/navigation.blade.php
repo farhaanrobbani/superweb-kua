@@ -45,7 +45,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
-            <div x-show="open" class="mt-1 space-y-1">
+            <div x-show="open" x-collapse.duration.250ms class="mt-1 space-y-1">
                 <div class="ms-4">
                     <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.*')">
                         {{ __('Surat') }}
@@ -94,7 +94,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
             </button>
-            <div x-show="open" class="mt-1 space-y-1">
+            <div x-show="open" x-collapse.duration.250ms class="mt-1 space-y-1">
                 <div class="ms-4">
                     <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
                         {{ __('Layanan') }}
