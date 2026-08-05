@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
+use App\Support\HtmlSanitizer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AnnouncementController extends Controller
@@ -24,7 +27,7 @@ class AnnouncementController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Announcement::create($this->validateData($request));
+        Announcement::create($this->validatedWithImage($request));
 
         return redirect()->route('announcements.index')
             ->with('success', 'Pengumuman berhasil ditambahkan.');
@@ -37,7 +40,7 @@ class AnnouncementController extends Controller
 
     public function update(Request $request, Announcement $announcement): RedirectResponse
     {
-        $announcement->update($this->validateData($request));
+        $announcement->update($this->validatedWithImage($request, $announcement));
 
         return redirect()->route('announcements.index')
             ->with('success', 'Pengumuman berhasil diperbarui.');
@@ -45,19 +48,54 @@ class AnnouncementController extends Controller
 
     public function destroy(Announcement $announcement): RedirectResponse
     {
+        if ($announcement->image && Storage::disk('public')->exists($announcement->image)) {
+            Storage::disk('public')->delete($announcement->image);
+        }
+
         $announcement->delete();
 
         return redirect()->route('announcements.index')
             ->with('success', 'Pengumuman berhasil dihapus.');
     }
 
-    private function validateData(Request $request): array
+    public function uploadImage(Request $request): JsonResponse
     {
-        return $request->validate([
+        $request->validate([
+            'upload' => ['required', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:3072'],
+        ]);
+
+        $path = $request->file('upload')->store('announcements/content', 'public');
+
+        return response()->json(['url' => Storage::disk('public')->url($path)]);
+    }
+
+    private function validatedWithImage(Request $request, ?Announcement $announcement = null): array
+    {
+        $data = $request->validate([
             'title' => ['required', 'string', 'max:200'],
-            'content' => ['required', 'string', 'max:10000'],
+            'content' => ['required', 'string', 'max:100000'],
+            'image' => ['sometimes', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
+            'image_hapus' => ['sometimes', 'in:1'],
             'published_at' => ['nullable', 'date'],
             'active' => ['sometimes', 'boolean'],
         ]);
+
+        $data['content'] = HtmlSanitizer::sanitize($data['content']);
+
+        if ($request->hasFile('image')) {
+            if ($announcement?->image && Storage::disk('public')->exists($announcement->image)) {
+                Storage::disk('public')->delete($announcement->image);
+            }
+
+            $data['image'] = $request->file('image')->store('announcements/covers', 'public');
+        } elseif ($request->boolean('image_hapus')) {
+            if ($announcement?->image && Storage::disk('public')->exists($announcement->image)) {
+                Storage::disk('public')->delete($announcement->image);
+            }
+
+            $data['image'] = null;
+        }
+
+        return $data;
     }
 }

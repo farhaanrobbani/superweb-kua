@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('letter-templates', LetterTemplateController::class);
     Route::resource('services', ServiceController::class);
     Route::resource('announcements', AnnouncementController::class);
+    Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
