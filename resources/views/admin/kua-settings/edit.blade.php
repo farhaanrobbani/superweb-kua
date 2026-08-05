@@ -16,7 +16,27 @@
                     @csrf
                     @method('PUT')
 
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Gambar Hero Beranda</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Teks Beranda</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <x-input-label for="hero_judul" value="Judul Utama Beranda" />
+                            <textarea id="hero_judul" name="hero_judul" rows="3"
+                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                      maxlength="255" placeholder="Layanan Surat Digital&#10;Tanpa Antre, Kapan Saja">{{ old('hero_judul', $settings['hero_judul']['value']) }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">Baris baru (enter) menjadi baris baru pada judul. Kosongkan untuk memakai teks bawaan.</p>
+                            <x-input-error :messages="$errors->get('hero_judul')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="hero_subjudul" value="Paragraf Deskripsi Beranda" />
+                            <textarea id="hero_subjudul" name="hero_subjudul" rows="3"
+                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                      maxlength="500" placeholder="Ajukan permohonan surat keterangan dan surat pengantar secara online.">{{ old('hero_subjudul', $settings['hero_subjudul']['value']) }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">Kosongkan untuk memakai teks bawaan.</p>
+                            <x-input-error :messages="$errors->get('hero_subjudul')" class="mt-2" />
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Gambar Hero Beranda</h3>
                     <div class="grid grid-cols-1 gap-4">
                         <div>
                             <x-input-label for="hero" value="Gambar Hero/Banner Beranda (PNG/JPG/WEBP, maks 3MB)" />

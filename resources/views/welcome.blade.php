@@ -14,20 +14,20 @@
 
         <main>
             <section class="mx-auto max-w-5xl px-6 pb-14 pt-16 text-center">
-                @if (! empty($kua['hero_url']))
-                    <img src="{{ $kua['hero_url'] }}" alt="Banner {{ $kua['instansi'] ?? 'KUA' }}"
-                         class="mx-auto mb-10 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
-                @endif
                 <p class="text-sm font-medium uppercase tracking-widest text-teal-700">
                     {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
                 </p>
                 <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-                    Layanan Surat Digital<br>Tanpa Antre, Kapan Saja
+                    {!! ! empty($kua['hero_judul']) ? nl2br(e($kua['hero_judul'])) : 'Layanan Surat Digital<br>Tanpa Antre, Kapan Saja' !!}
                 </h1>
                 <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#1b1b1870]">
-                    Ajukan permohonan surat keterangan dan surat pengantar secara online.
-                    Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.
+                    {{ ! empty($kua['hero_subjudul']) ? $kua['hero_subjudul'] : 'Ajukan permohonan surat keterangan dan surat pengantar secara online.
+Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.' }}
                 </p>
+                @if (! empty($kua['hero_url']))
+                    <img src="{{ $kua['hero_url'] }}" alt="Banner {{ $kua['instansi'] ?? 'KUA' }}"
+                         class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
+                @endif
                 <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
                     <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
                         Ajukan Permohonan Surat

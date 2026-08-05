@@ -106,6 +106,35 @@ class KuaHeroTest extends TestCase
             ->assertDontSee('storage/heroes/', false);
     }
 
+    public function test_admin_can_set_hero_text_and_landing_shows_it(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'hero_judul' => 'Judul Baru'."\n".'Baris Kedua',
+                'hero_subjudul' => 'Deskripsi baru dari admin.',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame("Judul Baru\nBaris Kedua", KuaSetting::get('hero_judul'));
+        $this->assertSame('Deskripsi baru dari admin.', KuaSetting::get('hero_subjudul'));
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Judul Baru')
+            ->assertSee('Baris Kedua')
+            ->assertSee('Deskripsi baru dari admin.')
+            ->assertDontSee('Layanan Surat Digital');
+    }
+
+    public function test_landing_hero_text_falls_back_to_defaults(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Layanan Surat Digital')
+            ->assertSee('Tanpa Antre, Kapan Saja')
+            ->assertSee('Ajukan permohonan surat keterangan');
+    }
+
     private function basePayload(array $extra = []): array
     {
         return array_merge([

@@ -27,6 +27,8 @@ class KuaSettingController extends Controller
         'ttd_path' => 'File Tanda Tangan (path)',
         'logo_path' => 'Logo KUA (upload)',
         'hero_path' => 'Gambar Hero Beranda (upload)',
+        'hero_judul' => 'Judul Utama Beranda',
+        'hero_subjudul' => 'Paragraf Deskripsi Beranda',
     ];
 
     public function edit(): View
@@ -59,6 +61,8 @@ class KuaSettingController extends Controller
             'logo_hapus' => ['sometimes', 'in:1'],
             'hero' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
             'hero_hapus' => ['sometimes', 'in:1'],
+            'hero_judul' => ['nullable', 'string', 'max:255'],
+            'hero_subjudul' => ['nullable', 'string', 'max:500'],
         ]);
 
         if ($request->hasFile('hero')) {
