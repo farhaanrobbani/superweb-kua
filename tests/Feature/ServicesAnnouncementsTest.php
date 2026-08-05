@@ -20,6 +20,12 @@ class ServicesAnnouncementsTest extends TestCase
         $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
     }
 
+    public function test_app_timezone_is_wib(): void
+    {
+        $this->assertSame('Asia/Jakarta', config('app.timezone'));
+        $this->assertSame('+07:00', config('database.connections.mysql.timezone'));
+    }
+
     public function test_landing_shows_center_menu_without_login(): void
     {
         Service::factory()->create(['name' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'active' => true]);
