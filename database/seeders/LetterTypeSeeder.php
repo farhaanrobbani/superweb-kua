@@ -102,6 +102,78 @@ class LetterTypeSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'code' => 'SP',
+                'name' => 'Surat Pengantar',
+                'description' => 'Pengantar untuk keperluan SKCK, domisili, beasiswa, dan lainnya.',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
+                    ['name' => 'ttl', 'label' => 'Tempat, Tgl Lahir', 'type' => 'text', 'required' => true],
+                    ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => false],
+                    ['name' => 'alamat', 'label' => 'Alamat', 'type' => 'textarea', 'required' => true],
+                    ['name' => 'keperluan', 'label' => 'Keperluan', 'type' => 'select', 'required' => true, 'options' => ['Pengantar SKCK', 'Pengantar Domisili', 'Pengantar Beasiswa', 'Pengantar Melamar Kerja', 'Pengantar lainnya']],
+                ],
+                'templates' => [
+                    [
+                        'name' => 'Template Surat Pengantar',
+                        'body' => "Yang bertanda tangan di bawah ini, Kepala Kantor Urusan Agama Kecamatan [kecamatan] Kabupaten [kabupaten], menerangkan bahwa:\n\nNama : [nama]\nTempat, Tgl Lahir : [ttl]\nNIK : [nik]\nAlamat : [alamat]\n\nYang bersangkutan adalah warga di wilayah Kecamatan [kecamatan] dan beragama Islam. Surat pengantar ini dibuat untuk keperluan [keperluan].\n\nDemikian surat pengantar ini dibuat untuk dipergunakan sebagaimana mestinya.",
+                    ],
+                ],
+            ],
+            [
+                'code' => 'SPD',
+                'name' => 'Surat Permohonan Duplikat Akta Nikah',
+                'description' => 'Permohonan penggantian akta nikah yang hilang atau rusak.',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
+                    ['name' => 'no_akta', 'label' => 'Nomor Akta Nikah', 'type' => 'text', 'required' => true],
+                    ['name' => 'tanggal_akta', 'label' => 'Tanggal Akta Nikah', 'type' => 'date', 'required' => true],
+                    ['name' => 'tempat_akad', 'label' => 'Tempat Akad Nikah', 'type' => 'text', 'required' => true],
+                    ['name' => 'alasan', 'label' => 'Alasan Permohonan', 'type' => 'select', 'required' => true, 'options' => ['Akta hilang', 'Akta rusak', 'Keperluan lainnya']],
+                ],
+                'templates' => [
+                    [
+                        'name' => 'Template Surat Permohonan Duplikat Akta Nikah',
+                        'body' => "Yang bertanda tangan di bawah ini:\n\nNama : [nama]\nNomor Akta : [no_akta]\nTanggal Akta : [tanggal_akta]\nTempat Akad : [tempat_akad]\n\nDengan ini mengajukan permohonan duplikat Akta Nikah karena [alasan].\n\nDemikian permohonan ini kami sampaikan untuk dapat diproses sebagaimana mestinya.",
+                    ],
+                ],
+            ],
+            [
+                'code' => 'SPA',
+                'name' => 'Surat Permohonan Perubahan Akta',
+                'description' => 'Permohonan perbaikan/perubahan data pada akta nikah.',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
+                    ['name' => 'no_akta', 'label' => 'Nomor Akta Nikah', 'type' => 'text', 'required' => true],
+                    ['name' => 'tanggal_akta', 'label' => 'Tanggal Akta Nikah', 'type' => 'date', 'required' => true],
+                    ['name' => 'jenis_perubahan', 'label' => 'Jenis Perubahan', 'type' => 'select', 'required' => true, 'options' => ['Perubahan nama', 'Perubahan tanggal/tempat lahir', 'Perbaikan penulisan data', 'Perubahan data lainnya']],
+                    ['name' => 'uraian', 'label' => 'Uraian Perubahan', 'type' => 'textarea', 'required' => true],
+                ],
+                'templates' => [
+                    [
+                        'name' => 'Template Surat Permohonan Perubahan Akta',
+                        'body' => "Yang bertanda tangan di bawah ini:\n\nNama : [nama]\nNomor Akta : [no_akta]\nTanggal Akta : [tanggal_akta]\n\nDengan ini mengajukan permohonan perubahan data pada Akta Nikah, yaitu [jenis_perubahan], dengan uraian sebagai berikut:\n[uraian]\n\nDemikian permohonan ini kami sampaikan untuk dapat diproses sebagaimana mestinya.",
+                    ],
+                ],
+            ],
+            [
+                'code' => 'SPM',
+                'name' => 'Surat Permohonan (Umum)',
+                'description' => 'Permohonan keterangan atau layanan lain secara umum.',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
+                    ['name' => 'ttl', 'label' => 'Tempat, Tgl Lahir', 'type' => 'text', 'required' => true],
+                    ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => false],
+                    ['name' => 'alamat', 'label' => 'Alamat', 'type' => 'textarea', 'required' => true],
+                    ['name' => 'perihal', 'label' => 'Perihal Permohonan', 'type' => 'textarea', 'required' => true],
+                ],
+                'templates' => [
+                    [
+                        'name' => 'Template Surat Permohonan Umum',
+                        'body' => "Yang bertanda tangan di bawah ini:\n\nNama : [nama]\nTempat, Tgl Lahir : [ttl]\nNIK : [nik]\nAlamat : [alamat]\n\nDengan ini mengajukan permohonan sebagai berikut:\n[perihal]\n\nDemikian permohonan ini kami sampaikan untuk dapat diproses sebagaimana mestinya.",
+                    ],
+                ],
+            ],
         ];
 
         foreach ($types as $typeData) {
