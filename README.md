@@ -26,6 +26,7 @@ php artisan key:generate
 # atur kredensial MySQL di .env (DB_DATABASE, DB_USERNAME, DB_PASSWORD)
 php artisan migrate --force
 php artisan db:seed --force        # membuat user awal & data master
+php artisan storage:link           # symlink public/storage -> storage/app/public (untuk logo/upload)
 npm install && npm run build
 ```
 
@@ -69,6 +70,7 @@ php artisan key:generate
 # atur .env: APP_URL, DB_*, STAFF_EMAIL, STAFF_PASSWORD, KEPALA_EMAIL, KEPALA_PASSWORD
 php artisan migrate --force
 php artisan db:seed --force
+php artisan storage:link           # symlink untuk logo/upload (sekali saja)
 npm install && npm run build
 sudo chown -R www-data:www-data storage bootstrap/cache
 ```

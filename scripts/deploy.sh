@@ -13,7 +13,7 @@ if [ -f package.json ]; then
   npm install --no-progress --ignore-scripts 2>/dev/null || true
   npm run build 2>/dev/null || true
 fi
-php artisan storage:link 2>/dev/null || true
+php artisan storage:link --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
