@@ -43,7 +43,7 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    {{ $announcement->published_at ? tanggal_indonesia($announcement->published_at, 'd F Y H:i') : 'Segera' }}
+                                    {{ $announcement->published_at ? tanggal_indonesia($announcement->published_at, 'd F Y') : 'Segera' }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $announcement->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
