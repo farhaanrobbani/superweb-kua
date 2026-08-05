@@ -8,8 +8,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css'])
 </head>
-<body class="font-sans antialiased bg-gray-50 min-h-screen flex items-center justify-center">
-    <div class="max-w-lg w-full mx-4 bg-white rounded-lg shadow-sm border border-gray-200 p-10 text-center">
+<body class="font-sans antialiased bg-gradient-to-br from-teal-50 via-emerald-50 to-white min-h-screen flex items-center justify-center">
+    <div class="max-w-lg w-full mx-4 bg-white rounded-lg shadow-sm border border-teal-100 p-10 text-center">
         <div class="mx-auto mb-4 h-16 w-16 rounded-full bg-green-100 flex items-center justify-center">
             <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />

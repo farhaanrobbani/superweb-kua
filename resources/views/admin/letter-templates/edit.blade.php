@@ -14,7 +14,7 @@
                         <div>
                             <x-input-label for="letter_type_id" value="Jenis Surat" />
                             <select id="letter_type_id" name="letter_type_id" required
-                                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">
                                 <option value="">-- Pilih Jenis Surat --</option>
                                 @foreach ($letterTypes as $type)
                                     <option value="{{ $type->id }}" {{ old('letter_type_id', $letterTemplate->letter_type_id) == $type->id ? 'selected' : '' }}>
@@ -36,7 +36,7 @@
                         <x-input-label for="body" value="Isi Template Surat" />
                         <p class="text-xs text-gray-500 mt-1">Gunakan placeholder <code>[nama_field]</code> sesuai field pada jenis surat. Body adalah isi surat setelah kepala/kop surat (otomatis ditambahkan di PDF).</p>
                         <textarea id="body" name="body" rows="14"
-                                  class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm font-mono text-sm">{{ old('body', $letterTemplate->body) }}</textarea>
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm font-mono text-sm">{{ old('body', $letterTemplate->body) }}</textarea>
                         <x-input-error :messages="$errors->get('body')" class="mt-2" />
                     </div>
 

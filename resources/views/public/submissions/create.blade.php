@@ -9,8 +9,8 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-gray-50 min-h-screen flex flex-col">
-    <header class="bg-white border-b border-gray-200">
+<body class="font-sans antialiased bg-gradient-to-br from-teal-50 via-emerald-50 to-white min-h-screen flex flex-col">
+    <header class="bg-white/80 backdrop-blur border-b border-teal-100">
         <div class="max-w-3xl mx-auto px-4 py-6">
             <h1 class="text-xl font-bold text-gray-800">{{ $kua['instansi'] }}</h1>
             <p class="text-sm text-gray-500">{{ $kua['alamat'] }}
@@ -44,7 +44,7 @@
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         @foreach ($letterTypes as $type)
                             <a href="{{ route('permohonan.create', ['jenis' => $type->code]) }}"
-                               class="border border-gray-200 rounded-lg p-4 hover:border-indigo-400 hover:shadow transition">
+                               class="border border-gray-200 rounded-lg p-4 hover:border-teal-400 hover:shadow transition">
                                 <div class="font-semibold text-gray-800">{{ $type->name }}</div>
                                 <div class="text-sm text-gray-500 mt-1">{{ $type->description }}</div>
                             </a>
@@ -86,13 +86,13 @@
                                     <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />
                                     @if ($field['type'] === 'textarea')
                                         <textarea id="field-{{ $field['name'] }}" name="{{ $name }}" rows="3"
-                                                  class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $value }}</textarea>
+                                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ $value }}</textarea>
                                     @elseif ($field['type'] === 'date')
                                         <x-text-input id="field-{{ $field['name'] }}" name="{{ $name }}" type="date"
                                                       class="mt-1 block w-full" :value="$value" />
                                     @elseif ($field['type'] === 'select')
                                         <select id="field-{{ $field['name'] }}" name="{{ $name }}"
-                                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">
                                             <option value="">-- Pilih --</option>
                                             @foreach ($field['options'] ?? [] as $option)
                                                 <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>{{ $option }}</option>
@@ -108,7 +108,7 @@
 
                         <div class="mt-6 flex items-center gap-4">
                             <button type="submit"
-                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                                    class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
                                 Kirim Permohonan
                             </button>
                             <a href="{{ route('permohonan.create') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
@@ -119,7 +119,7 @@
         </div>
     </main>
 
-    <footer class="bg-white border-t border-gray-200 py-6 mt-10">
+    <footer class="bg-white/80 backdrop-blur border-t border-teal-100 py-6 mt-10">
         <div class="max-w-3xl mx-auto px-4 text-center text-xs text-gray-400">
             {{ $kua['instansi'] }} &copy; {{ date('Y') }}
         </div>

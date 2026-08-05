@@ -21,7 +21,7 @@
                         <div>
                             <x-input-label for="logo" value="Logo KUA (PNG/JPG/WEBP, maks 2MB)" />
                             <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp"
-                                   class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-emerald-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-800" />
+                                   class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800" />
                             <p class="text-xs text-gray-500 mt-1">Gunakan PNG dengan latar transparan untuk hasil terbaik. Logo tampil di beranda, halaman login, dan kop surat PDF.</p>
                             <x-input-error :messages="$errors->get('logo')" class="mt-2" />
 
@@ -31,7 +31,7 @@
                                          alt="Logo KUA" class="h-20 w-20 rounded-md border border-gray-200 object-contain p-1 bg-gray-50" />
                                     <label class="flex items-center gap-2 text-sm text-gray-600">
                                         <input type="checkbox" name="logo_hapus" value="1"
-                                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                               class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
                                         Hapus logo
                                     </label>
                                 </div>

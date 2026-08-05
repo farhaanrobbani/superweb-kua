@@ -15,7 +15,7 @@
                     <div>
                         <x-input-label for="keterangan" value="Catatan Penolakan" />
                         <textarea id="keterangan" name="keterangan" rows="4" required
-                                  class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('keterangan') }}</textarea>
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('keterangan') }}</textarea>
                         <x-input-error :messages="$errors->get('keterangan')" class="mt-2" />
                     </div>
                     <div class="mt-6 flex items-center gap-4">

@@ -9,7 +9,7 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="bg-[#FDFDFC] text-[#1b1b18] font-sans antialiased">
+    <body class="bg-gradient-to-br from-teal-50 via-emerald-50 to-white text-[#1b1b18] font-sans antialiased">
         <header class="sticky top-0 z-10 border-b border-[#19140012] bg-white/90 backdrop-blur">
             <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
                 <div class="flex items-center gap-2">
@@ -17,16 +17,16 @@
                         <img src="{{ $kua['logo_url'] }}" alt="Logo {{ $kua['instansi'] ?? 'KUA' }}"
                              class="h-9 w-9 rounded-md object-contain" />
                     @else
-                        <div class="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-700 text-sm font-bold text-white">K</div>
+                        <div class="flex h-8 w-8 items-center justify-center rounded-md bg-teal-700 text-sm font-bold text-white">K</div>
                     @endif
                     <span class="text-sm font-semibold tracking-wide">{{ $kua['instansi'] ?? 'Surat Digital KUA' }}</span>
                 </div>
                 <nav class="flex items-center gap-3 text-sm">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="rounded-md bg-emerald-700 px-4 py-1.5 font-medium text-white hover:bg-emerald-800">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}" class="rounded-md bg-teal-700 px-4 py-1.5 font-medium text-white hover:bg-teal-800">Dashboard</a>
                     @else
-                        <a href="{{ route('permohonan.create') }}" class="rounded-md px-3 py-1.5 hover:bg-emerald-50 hover:text-emerald-800">Permohonan</a>
-                        <a href="{{ route('login') }}" class="rounded-md border border-emerald-700 px-4 py-1.5 font-medium text-emerald-700 hover:bg-emerald-50">Login Staf</a>
+                        <a href="{{ route('permohonan.create') }}" class="rounded-md px-3 py-1.5 hover:bg-teal-50 hover:text-teal-800">Permohonan</a>
+                        <a href="{{ route('login') }}" class="rounded-md border border-teal-700 px-4 py-1.5 font-medium text-teal-700 hover:bg-teal-50">Login Staf</a>
                     @endauth
                 </nav>
             </div>
@@ -34,7 +34,7 @@
 
         <main>
             <section class="mx-auto max-w-5xl px-6 pb-14 pt-16 text-center">
-                <p class="text-sm font-medium uppercase tracking-widest text-emerald-700">
+                <p class="text-sm font-medium uppercase tracking-widest text-teal-700">
                     {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
                 </p>
                 <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
@@ -45,7 +45,7 @@
                     Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.
                 </p>
                 <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                    <a href="{{ route('permohonan.create') }}" class="rounded-md bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800">
+                    <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
                         Ajukan Permohonan Surat
                     </a>
                     @guest
@@ -62,7 +62,7 @@
                     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($letterTypes as $type)
                             <div class="rounded-lg border border-[#19140012] p-5">
-                                <h3 class="font-semibold text-emerald-800">{{ $type->name }}</h3>
+                                <h3 class="font-semibold text-teal-800">{{ $type->name }}</h3>
                                 <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ $type->description }}</p>
                             </div>
                         @endforeach

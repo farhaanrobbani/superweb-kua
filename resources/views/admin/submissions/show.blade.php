@@ -56,7 +56,7 @@
                             @method('PUT')
                             <div>
                                 <x-input-label for="status" value="Status" />
-                                <select id="status" name="status" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                <select id="status" name="status" class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">
                                     @foreach ($statuses = \App\Models\Submission::statuses() as $key => $label)
                                         <option value="{{ $key }}" {{ $submission->status === $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
@@ -65,7 +65,7 @@
                             <div class="mt-4">
                                 <x-input-label for="catatan" value="Catatan (untuk penolakan)" />
                                 <textarea id="catatan" name="catatan" rows="3"
-                                          class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('catatan', $submission->catatan) }}</textarea>
+                                          class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('catatan', $submission->catatan) }}</textarea>
                             </div>
                             <div class="mt-4">
                                 <x-primary-button>Simpan Status</x-primary-button>

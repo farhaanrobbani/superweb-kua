@@ -33,13 +33,13 @@
                                     <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />
                                     @if ($field['type'] === 'textarea')
                                         <textarea id="field-{{ $field['name'] }}" name="{{ $name }}" rows="3"
-                                                  class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $value }}</textarea>
+                                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ $value }}</textarea>
                                     @elseif ($field['type'] === 'date')
                                         <x-text-input id="field-{{ $field['name'] }}" name="{{ $name }}" type="date"
                                                       class="mt-1 block w-full" :value="$value" />
                                     @elseif ($field['type'] === 'select')
                                         <select id="field-{{ $field['name'] }}" name="{{ $name }}"
-                                                class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">
                                             <option value="">-- Pilih --</option>
                                             @foreach ($field['options'] ?? [] as $option)
                                                 <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>{{ $option }}</option>

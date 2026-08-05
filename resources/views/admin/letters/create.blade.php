@@ -11,7 +11,7 @@
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($letterTypes as $type)
                             <a href="{{ route('letters.create', ['jenis' => $type->code]) }}"
-                               class="border border-gray-200 rounded-lg p-4 hover:border-indigo-400 hover:shadow transition">
+                               class="border border-gray-200 rounded-lg p-4 hover:border-teal-400 hover:shadow transition">
                                 <div class="font-semibold text-gray-800">{{ $type->name }}</div>
                                 <div class="text-sm text-gray-500 mt-1">{{ $type->description }}</div>
                                 <div class="text-xs text-gray-400 mt-2 font-mono">{{ count($type->fields ?? []) }} field</div>
@@ -54,13 +54,13 @@
                                         <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />
                                         @if ($field['type'] === 'textarea')
                                             <textarea id="field-{{ $field['name'] }}" name="{{ $name }}" rows="3"
-                                                      class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $value }}</textarea>
+                                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ $value }}</textarea>
                                         @elseif ($field['type'] === 'date')
                                             <x-text-input id="field-{{ $field['name'] }}" name="{{ $name }}" type="date"
                                                           class="mt-1 block w-full" :value="$value" />
                                         @elseif ($field['type'] === 'select')
                                             <select id="field-{{ $field['name'] }}" name="{{ $name }}"
-                                                    class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                                    class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">
                                                 <option value="">-- Pilih --</option>
                                                 @foreach ($field['options'] ?? [] as $option)
                                                     <option value="{{ $option }}" {{ $value == $option ? 'selected' : '' }}>{{ $option }}</option>
