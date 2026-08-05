@@ -20,6 +20,38 @@ class ServicesAnnouncementsTest extends TestCase
         $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
     }
 
+    public function test_public_announcement_search_filters_results(): void
+    {
+        Announcement::factory()->create(['title' => 'Libur Nasional', 'content' => 'KUA tutup.', 'active' => true]);
+        Announcement::factory()->create(['title' => 'Jadwal Baru', 'content' => 'Jam layanan berubah.', 'active' => true]);
+
+        $this->get(route('pengumuman.index', ['q' => 'Libur']))
+            ->assertOk()
+            ->assertSee('Libur Nasional')
+            ->assertDontSee('Jadwal Baru');
+
+        $this->get(route('pengumuman.index', ['q' => 'tidak-ada']))
+            ->assertOk()
+            ->assertSee('Tidak ada pengumuman yang cocok');
+    }
+
+    public function test_letter_type_seeder_creates_new_types(): void
+    {
+        $this->seed(\Database\Seeders\LetterTypeSeeder::class);
+
+        foreach (['SPN', 'SKU', 'SPC', 'SUP', 'SIN', 'SP', 'SPD', 'SPA', 'SPM'] as $code) {
+            $this->assertDatabaseHas('letter_types', ['code' => $code]);
+        }
+    }
+
+    public function test_announcement_seeder_creates_published_examples(): void
+    {
+        $this->seed(\Database\Seeders\AnnouncementSeeder::class);
+
+        $this->assertSame(5, Announcement::count());
+        $this->assertSame(5, Announcement::published()->count());
+    }
+
     public function test_app_timezone_is_wib(): void
     {
         $this->assertSame('Asia/Jakarta', config('app.timezone'));
