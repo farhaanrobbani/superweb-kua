@@ -19,6 +19,9 @@
     </div>
 
     <!-- Navigation Links -->
+    @php($suratGroupActive = request()->routeIs('letters.*') || request()->routeIs('submissions.*') || request()->routeIs('letter-types.*') || request()->routeIs('letter-templates.*'))
+    @php($pengaturanGroupActive = request()->routeIs('services.*') || request()->routeIs('kua-settings.*'))
+
     <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -27,40 +30,38 @@
             {{ __('Dashboard') }}
         </x-nav-link>
 
-        <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            {{ __('Surat') }}
-        </x-nav-link>
-
-        <x-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-            </svg>
-            {{ __('Permohonan') }}
-        </x-nav-link>
-
-        <x-nav-link :href="route('letter-types.index')" :active="request()->routeIs('letter-types.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            {{ __('Jenis Surat') }}
-        </x-nav-link>
-
-        <x-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            {{ __('Template') }}
-        </x-nav-link>
-
-        <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            {{ __('Layanan') }}
-        </x-nav-link>
+        <!-- Group: Surat -->
+        <div x-data="{ open: {{ $suratGroupActive ? 'true' : 'false' }} }">
+            <button type="button" @click="open = ! open"
+                    :class="open || {{ $suratGroupActive ? 'true' : 'false' }} ? 'bg-teal-800/70 text-white' : 'text-teal-100 hover:bg-teal-800/40 hover:text-white'"
+                    class="flex w-full items-center justify-between rounded-md px-4 py-2.5 text-sm font-medium transition duration-150 ease-in-out">
+                <span class="flex items-center gap-3">
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ __('Surat') }}
+                </span>
+                <svg :class="open ? 'rotate-180' : ''" class="h-4 w-4 shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div x-show="open" class="mt-1 space-y-1">
+                <div class="ms-4">
+                    <x-nav-link :href="route('letters.index')" :active="request()->routeIs('letters.*')">
+                        {{ __('Surat') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('submissions.index')" :active="request()->routeIs('submissions.*')">
+                        {{ __('Permohonan') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('letter-types.index')" :active="request()->routeIs('letter-types.*')">
+                        {{ __('Jenis Surat') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
+                        {{ __('Template') }}
+                    </x-nav-link>
+                </div>
+            </div>
+        </div>
 
         <x-nav-link :href="route('announcements.index')" :active="request()->routeIs('announcements.*')">
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -78,12 +79,32 @@
             </x-nav-link>
         @endif
 
-        <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
-            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            </svg>
-            {{ __('Pengaturan') }}
-        </x-nav-link>
+        <!-- Group: Pengaturan -->
+        <div x-data="{ open: {{ $pengaturanGroupActive ? 'true' : 'false' }} }">
+            <button type="button" @click="open = ! open"
+                    :class="open || {{ $pengaturanGroupActive ? 'true' : 'false' }} ? 'bg-teal-800/70 text-white' : 'text-teal-100 hover:bg-teal-800/40 hover:text-white'"
+                    class="flex w-full items-center justify-between rounded-md px-4 py-2.5 text-sm font-medium transition duration-150 ease-in-out">
+                <span class="flex items-center gap-3">
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    </svg>
+                    {{ __('Pengaturan') }}
+                </span>
+                <svg :class="open ? 'rotate-180' : ''" class="h-4 w-4 shrink-0 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            <div x-show="open" class="mt-1 space-y-1">
+                <div class="ms-4">
+                    <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
+                        {{ __('Layanan') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
+                        {{ __('Pengaturan KUA') }}
+                    </x-nav-link>
+                </div>
+            </div>
+        </div>
     </nav>
 
     <!-- User & Session -->
