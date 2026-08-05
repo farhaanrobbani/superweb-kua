@@ -8,6 +8,8 @@ use App\Models\LetterTemplate;
 use App\Models\LetterType;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class LetterPdfTest extends TestCase
@@ -71,6 +73,22 @@ class LetterPdfTest extends TestCase
             ->get(route('letters.pdf', $this->letter))
             ->assertOk()
             ->assertHeader('content-type', 'application/pdf');
+    }
+
+    public function test_pdf_includes_logo_when_uploaded(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('logo.png', 200, 200)->store('logos', 'public');
+        KuaSetting::set('logo_path', $path);
+
+        $response = $this->actingAs($this->user)->get(route('letters.pdf', $this->letter));
+
+        $response->assertOk();
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+        $this->assertStringContainsString('/Subtype /Image', $content);
     }
 
     public function test_render_body_replaces_placeholders_and_escapes_html(): void

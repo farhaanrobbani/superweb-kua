@@ -7,11 +7,16 @@
         * { font-family: 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.6; color: #111; }
         .kop { text-align: center; margin-bottom: 4px; }
+        .kop-dengan-logo { position: relative; margin-bottom: 4px; }
+        .kop-dengan-logo .logo { position: absolute; left: 0; top: 0; height: 95px; width: 95px; }
+        .kop-dengan-logo .logo img { height: 95px; width: 95px; object-fit: contain; }
+        .kop-dengan-logo .teks { padding-left: 115px; text-align: center; }
         .kop .instansi { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
         .kop .sub { font-size: 13px; font-weight: bold; }
         .kop .alamat { font-size: 10.5px; }
         .kop hr { border: none; border-top: 3px solid #111; margin: 6px 0 2px 0; }
         .kop .garis-bawah { border: none; border-top: 1.5px solid #111; }
+        .ttd-img-logo { height: 75px; margin-bottom: 4px; }
         .meta { margin: 18px 0; }
         .meta div { display: block; margin-bottom: 2px; }
         .meta .baris { padding-left: 4.5em; text-indent: -4.5em; }
@@ -27,6 +32,28 @@
     </style>
 </head>
 <body>
+    @php($logoPath = $settings['logo_path'] ?? '')
+    @php($hasLogo = ! empty($logoPath) && \Illuminate\Support\Facades\Storage::disk('public')->exists($logoPath))
+
+    @if ($hasLogo)
+        <div class="kop-dengan-logo">
+            <div class="logo">
+                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->path($logoPath) }}">
+            </div>
+            <div class="teks">
+                <div class="instansi">{{ $settings['instansi'] }}</div>
+                <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
+                <div class="alamat">
+                    {{ $settings['alamat'] }}
+                    @if ($settings['telepon']) &bull; Telp. {{ $settings['telepon'] }} @endif
+                    @if ($settings['email']) &bull; Email: {{ $settings['email'] }} @endif
+                    @if ($settings['kode_pos']) &bull; Kode Pos {{ $settings['kode_pos'] }} @endif
+                </div>
+            </div>
+            <hr>
+            <hr class="garis-bawah">
+        </div>
+    @else
     <div class="kop">
         <div class="instansi">{{ $settings['instansi'] }}</div>
         <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
@@ -39,6 +66,7 @@
         <hr>
         <hr class="garis-bawah">
     </div>
+    @endif
 
     <div class="meta">
         <div class="baris">Nomor<span class="nilai">:</span>{{ $letter->nomor }}</div>

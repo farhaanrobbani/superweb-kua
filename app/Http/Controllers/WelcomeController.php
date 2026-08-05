@@ -19,12 +19,14 @@ class WelcomeController extends Controller
 
     private function kua(): array
     {
-        $keys = ['instansi', 'alamat', 'telepon', 'email', 'kecamatan', 'kabupaten', 'kode_pos', 'kepala_nama'];
+        $keys = ['instansi', 'alamat', 'telepon', 'email', 'kecamatan', 'kabupaten', 'kode_pos', 'kepala_nama', 'logo_path'];
 
         $values = [];
         foreach ($keys as $key) {
             $values[$key] = $this->setting($key);
         }
+
+        $values['logo_url'] = KuaSetting::logoUrl();
 
         return $values;
     }

@@ -195,7 +195,7 @@ class LetterController extends Controller
         abort_unless($letter->status === Letter::STATUS_TERBIT, 403, 'Surat dapat diunduh setelah diterbitkan.');
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
-            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path'];
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path'];
         $settings = [];
         foreach ($settingKeys as $key) {
             $settings[$key] = KuaSetting::get($key) ?? '';

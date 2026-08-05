@@ -12,11 +12,34 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form method="POST" action="{{ route('kua-settings.update') }}">
+                <form method="POST" action="{{ route('kua-settings.update') }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Instansi</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Logo KUA</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <x-input-label for="logo" value="Logo KUA (PNG/JPG/WEBP, maks 2MB)" />
+                            <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp"
+                                   class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-emerald-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-emerald-800" />
+                            <p class="text-xs text-gray-500 mt-1">Gunakan PNG dengan latar transparan untuk hasil terbaik. Logo tampil di beranda, halaman login, dan kop surat PDF.</p>
+                            <x-input-error :messages="$errors->get('logo')" class="mt-2" />
+
+                            @if (! empty($settings['logo_path']['value']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings['logo_path']['value']))
+                                <div class="mt-4 flex items-center gap-4">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($settings['logo_path']['value']) }}"
+                                         alt="Logo KUA" class="h-20 w-20 rounded-md border border-gray-200 object-contain p-1 bg-gray-50" />
+                                    <label class="flex items-center gap-2 text-sm text-gray-600">
+                                        <input type="checkbox" name="logo_hapus" value="1"
+                                               class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                                        Hapus logo
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Data Instansi</h3>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div class="sm:col-span-2">
                             <x-input-label for="instansi" value="Nama Instansi" />

@@ -13,7 +13,12 @@
         <header class="sticky top-0 z-10 border-b border-[#19140012] bg-white/90 backdrop-blur">
             <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
                 <div class="flex items-center gap-2">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-700 text-sm font-bold text-white">K</div>
+                    @if ($kua['logo_url'])
+                        <img src="{{ $kua['logo_url'] }}" alt="Logo {{ $kua['instansi'] ?? 'KUA' }}"
+                             class="h-9 w-9 rounded-md object-contain" />
+                    @else
+                        <div class="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-700 text-sm font-bold text-white">K</div>
+                    @endif
                     <span class="text-sm font-semibold tracking-wide">{{ $kua['instansi'] ?? 'Surat Digital KUA' }}</span>
                 </div>
                 <nav class="flex items-center gap-3 text-sm">

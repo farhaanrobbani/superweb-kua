@@ -18,4 +18,5 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 chown -R www-data:www-data storage bootstrap/cache
+setsid service php8.3-fpm restart </dev/null >/dev/null 2>&1 &
 echo "DEPLOY OK: $(git rev-parse --short HEAD)"
