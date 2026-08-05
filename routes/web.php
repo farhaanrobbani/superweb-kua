@@ -6,12 +6,14 @@ use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,8 @@ Route::get('/', [WelcomeController::class, 'index']);
 
 Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name('pengumuman.index');
 Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
+
+Route::get('/daftar-pegawai', [StaffPublicController::class, 'index'])->name('pegawai.index');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -47,6 +51,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class);
     Route::resource('letter-templates', LetterTemplateController::class);
     Route::resource('services', ServiceController::class);
+    Route::resource('staff', StaffController::class);
     Route::resource('announcements', AnnouncementController::class);
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->middleware('role:kepala');
