@@ -27,3 +27,9 @@
     .konten-pengumuman figure { margin: 0 0 1em 0; text-align: center; }
     .konten-pengumuman figcaption { font-size: 0.85em; color: #6b7280; margin-top: 0.4em; }
 }
+
+.ck.ck-editor { width: 100%; }
+.ck.ck-editor__editable { min-height: 24rem; border: 0 !important; box-shadow: none !important; }
+.ck.ck-editor__editable_inline { padding-left: 2rem; padding-right: 2rem; }
+.ck.ck-toolbar__items { flex-wrap: wrap !important; }
+.ck.ck-toolbar { border-left: 0 !important; border-right: 0 !important; border-top: 0 !important; }

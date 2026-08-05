@@ -27,7 +27,8 @@
                         </div>
                         <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                             <textarea id="content" name="content" data-editor rows="16"
-                                      placeholder="Tulis isi pengumuman di sini...">{{ old('content') }}</textarea>
+                                      placeholder="Tulis isi pengumuman di sini..."
+                                      class="block w-full">{{ old('content') }}</textarea>
                         </div>
                     </div>
                 </div>
