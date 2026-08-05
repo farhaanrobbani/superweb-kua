@@ -6,11 +6,19 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['title', 'content', 'published_at', 'active'])]
+#[Fillable(['title', 'content', 'image', 'published_at', 'active'])]
 class Announcement extends Model
 {
     use HasFactory;
+
+    public function imageUrl(): ?string
+    {
+        return $this->image && Storage::disk('public')->exists($this->image)
+            ? Storage::disk('public')->url($this->image)
+            : null;
+    }
 
     public function scopePublished(Builder $query): Builder
     {
