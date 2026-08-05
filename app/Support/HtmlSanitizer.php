@@ -22,9 +22,29 @@ class HtmlSanitizer
     private const ATTRS = [
         'a' => ['href', 'title'],
         'img' => ['src', 'alt', 'title', 'width', 'height'],
-        'th' => ['colspan', 'rowspan', 'align'],
-        'td' => ['colspan', 'rowspan', 'align'],
+        'th' => ['colspan', 'rowspan', 'align', 'style'],
+        'td' => ['colspan', 'rowspan', 'align', 'style'],
+        'tr' => ['style'],
+        'table' => ['style'],
         'ol' => ['start'],
+        'p' => ['style'],
+        'span' => ['style'],
+        'h2' => ['style'],
+        'h3' => ['style'],
+        'h4' => ['style'],
+        'li' => ['style'],
+        'blockquote' => ['style'],
+        'figcaption' => ['style'],
+    ];
+
+    private const SAFE_STYLE_PROPS = [
+        'font-size', 'font-family', 'font-weight', 'font-style', 'text-decoration',
+        'line-height', 'color', 'background-color', 'text-align', 'vertical-align',
+        'width', 'height', 'max-width', 'max-height', 'float',
+        'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+        'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+        'border', 'border-width', 'border-style', 'border-color', 'border-collapse',
+        'letter-spacing', 'text-indent', 'white-space',
     ];
 
     public static function sanitize(?string $html): string
@@ -101,6 +121,52 @@ class HtmlSanitizer
                 $node->removeAttribute($attr->name);
             }
         }
+
+        if (in_array('style', $allowed, true)) {
+            self::cleanStyle($node);
+        }
+    }
+
+    private static function cleanStyle(DOMElement $node): void
+    {
+        $style = trim($node->getAttribute('style'));
+        if ($style === '') {
+            $node->removeAttribute('style');
+
+            return;
+        }
+
+        $cleaned = [];
+        foreach (explode(';', $style) as $declaration) {
+            $parts = explode(':', $declaration, 2);
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            $property = strtolower(trim($parts[0]));
+            $value = trim($parts[1]);
+
+            if (! preg_match('/^[a-z-]+$/', $property) || ! in_array($property, self::SAFE_STYLE_PROPS, true)) {
+                continue;
+            }
+
+            if (self::isUnsafeStyleValue($value)) {
+                continue;
+            }
+
+            $cleaned[] = $property.': '.$value;
+        }
+
+        if ($cleaned === []) {
+            $node->removeAttribute('style');
+        } else {
+            $node->setAttribute('style', implode('; ', $cleaned));
+        }
+    }
+
+    private static function isUnsafeStyleValue(string $value): bool
+    {
+        return preg_match('/(url\s*\(|expression|javascript:|vbscript:|@import|behavior\s*:|-moz-binding)/i', $value) === 1;
     }
 
     private static function cleanUrl(DOMElement $node, string $attr): void

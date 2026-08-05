@@ -21,6 +21,15 @@ php artisan storage:link --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+
+PHP_FPM_CONF_DIR=$(ls -d /etc/php/*/fpm/conf.d 2>/dev/null | head -1)
+if [ -n "$PHP_FPM_CONF_DIR" ]; then
+  cat > "$PHP_FPM_CONF_DIR/99-kua-uploads.ini" <<'PHPEOF'
+upload_max_filesize = 10M
+post_max_size = 12M
+PHPEOF
+fi
+
 chown -R www-data:www-data storage bootstrap/cache
 setsid service php8.3-fpm restart </dev/null >/dev/null 2>&1 &
 echo "DEPLOY OK: $(git rev-parse --short HEAD)"

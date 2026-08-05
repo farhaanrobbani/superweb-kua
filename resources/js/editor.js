@@ -37,13 +37,14 @@ function uploadImageHandler(blobInfo, success, failure) {
             if (xhr.status === 200 && response.url) {
                 success(response.url);
             } else {
-                failure(response.message || 'Gagal mengunggah gambar.');
+                const message = response.message || 'Respon tidak dikenal.';
+                failure('Gagal (' + xhr.status + '): ' + message);
             }
         } catch {
             failure('Respon unggahan tidak valid.');
         }
     };
-    xhr.onerror = () => failure('Gagal mengunggah gambar.');
+    xhr.onerror = () => failure('Gagal mengunggah gambar (jaringan).');
     xhr.send(data);
 }
 
