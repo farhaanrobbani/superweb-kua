@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\KuaSetting;
+use App\Models\Service;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 if (! function_exists('kua_setting')) {
     function kua_setting(string $key, ?string $default = null): ?string
@@ -10,6 +12,17 @@ if (! function_exists('kua_setting')) {
             return KuaSetting::get($key) ?? $default;
         } catch (\Throwable) {
             return $default;
+        }
+    }
+}
+
+if (! function_exists('kua_services')) {
+    function kua_services(): Collection
+    {
+        try {
+            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
+        } catch (\Throwable) {
+            return collect();
         }
     }
 }

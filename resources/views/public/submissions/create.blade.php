@@ -10,16 +10,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gradient-to-br from-teal-50 via-emerald-50 to-white min-h-screen flex flex-col">
-    <header class="bg-white/80 backdrop-blur border-b border-teal-100">
-        <div class="max-w-3xl mx-auto px-4 py-6">
-            <h1 class="text-xl font-bold text-gray-800">{{ $kua['instansi'] }}</h1>
-            <p class="text-sm text-gray-500">{{ $kua['alamat'] }}
-                @if ($kua['telepon']) &bull; {{ $kua['telepon'] }} @endif
-                @if ($kua['email']) &bull; {{ $kua['email'] }} @endif
-            </p>
-            <a href="{{ route('login') }}" class="text-xs text-gray-400 hover:text-gray-600">Login Petugas</a>
-        </div>
-    </header>
+    @include('partials.public-header')
 
     <main class="flex-1 py-10">
         <div class="max-w-3xl mx-auto px-4">
@@ -119,10 +110,6 @@
         </div>
     </main>
 
-    <footer class="bg-white/80 backdrop-blur border-t border-teal-100 py-6 mt-10">
-        <div class="max-w-3xl mx-auto px-4 text-center text-xs text-gray-400">
-            {{ $kua['instansi'] }} &copy; {{ date('Y') }}
-        </div>
-    </footer>
+    @include('partials.public-footer')
 </body>
 </html>
