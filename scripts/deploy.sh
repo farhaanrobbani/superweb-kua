@@ -25,8 +25,8 @@ php artisan view:cache
 PHP_FPM_CONF_DIR=$(ls -d /etc/php/*/fpm/conf.d 2>/dev/null | head -1)
 if [ -n "$PHP_FPM_CONF_DIR" ]; then
   cat > "$PHP_FPM_CONF_DIR/99-kua-uploads.ini" <<'PHPEOF'
-upload_max_filesize = 10M
-post_max_size = 12M
+upload_max_filesize = 3M
+post_max_size = 4M
 PHPEOF
 fi
 
