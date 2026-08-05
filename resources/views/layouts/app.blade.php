@@ -13,7 +13,6 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @stack('editor')
     </head>
     <body class="font-sans antialiased">
         <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-white">
@@ -55,5 +54,6 @@
                 </main>
             </div>
         </div>
+        @stack('editor')
     </body>
 </html>
