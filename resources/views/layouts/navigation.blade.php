@@ -39,6 +39,11 @@
                     <x-nav-link :href="route('announcements.index')" :active="request()->routeIs('announcements.*')">
                         {{ __('Pengumuman') }}
                     </x-nav-link>
+                    @if (Auth::user()->isKepala())
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                            {{ __('Akun') }}
+                        </x-nav-link>
+                    @endif
                     <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                         {{ __('Pengaturan') }}
                     </x-nav-link>
@@ -115,6 +120,11 @@
             <x-responsive-nav-link :href="route('announcements.index')" :active="request()->routeIs('announcements.*')">
                 {{ __('Pengumuman') }}
             </x-responsive-nav-link>
+            @if (Auth::user()->isKepala())
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                    {{ __('Akun') }}
+                </x-responsive-nav-link>
+            @endif
             <x-responsive-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                 {{ __('Pengaturan') }}
             </x-responsive-nav-link>

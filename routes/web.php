@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
@@ -26,7 +27,7 @@ Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name(
 
 Route::post('/deploy', DeployController::class)->middleware('throttle:6,1');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('letters', LetterController::class);
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('letter-templates', LetterTemplateController::class);
     Route::resource('services', ServiceController::class);
     Route::resource('announcements', AnnouncementController::class);
+    Route::resource('users', UserController::class)->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
 });
