@@ -32,8 +32,15 @@
                         @forelse ($announcements as $announcement)
                             <tr>
                                 <td class="px-6 py-4 text-sm text-gray-900">
-                                    <span class="font-medium">{{ $announcement->title }}</span>
-                                    <p class="text-xs text-gray-500 mt-0.5">{{ str(strip_tags($announcement->content))->limit(80) }}</p>
+                                    <div class="flex items-center gap-3">
+                                        @if ($announcement->imageUrl())
+                                            <img src="{{ $announcement->imageUrl() }}" alt="" class="h-12 w-16 shrink-0 rounded-md border border-gray-200 object-cover" />
+                                        @endif
+                                        <div>
+                                            <span class="font-medium">{{ $announcement->title }}</span>
+                                            <p class="text-xs text-gray-500 mt-0.5">{{ str(strip_tags($announcement->content))->limit(80) }}</p>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
                                     {{ $announcement->published_at ? tanggal_indonesia($announcement->published_at, 'd F Y H:i') : 'Segera' }}

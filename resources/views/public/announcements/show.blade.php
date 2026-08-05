@@ -9,6 +9,10 @@
         <p class="mt-2 text-sm text-[#1b1b1870]">
             {{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd F Y H:i') }}
         </p>
-        <div class="mt-6 whitespace-pre-wrap leading-relaxed">{{ $announcement->content }}</div>
+        @if ($announcement->imageUrl())
+            <img src="{{ $announcement->imageUrl() }}" alt="{{ $announcement->title }}"
+                 class="mt-6 w-full rounded-lg border border-teal-100 object-contain" />
+        @endif
+        <div class="mt-6 leading-relaxed konten-pengumuman">{!! \App\Support\HtmlSanitizer::sanitize($announcement->content) !!}</div>
     </article>
 @endsection
