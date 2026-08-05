@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
@@ -18,9 +19,7 @@ Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permoh
 Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name('permohonan.sukses');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('letters', LetterController::class);
     Route::post('letters/{letter}/ajukan', [LetterController::class, 'ajukan'])->name('letters.ajukan');
