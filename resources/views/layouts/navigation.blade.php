@@ -5,8 +5,14 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-white" />
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+                        @if (\App\Models\KuaSetting::logoUrl())
+                            <img src="{{ \App\Models\KuaSetting::logoUrl() }}" alt="Logo {{ kua_setting('instansi', 'KUA') }}"
+                                 class="h-9 w-9 rounded-md bg-white p-0.5 object-contain" />
+                            <span class="hidden text-sm font-semibold text-white lg:block">{{ kua_setting('instansi', config('app.name')) }}</span>
+                        @else
+                            <x-application-logo class="block h-9 w-auto fill-current text-white" />
+                        @endif
                     </a>
                 </div>
 
