@@ -10,11 +10,11 @@
             @endif
             <span class="text-sm font-semibold tracking-wide">{{ kua_setting('instansi', 'Surat Digital KUA') }}</span>
         </div>
-        <nav x-data="{ layanan: false }" @click.outside="layanan = false" class="hidden items-center gap-6 text-sm font-medium sm:flex">
-            <a href="{{ url('/') }}" class="text-teal-800 hover:text-teal-600">Beranda</a>
-            <div class="relative">
+        <nav x-data="{ layanan: false }" @click.outside="layanan = false" class="hidden items-center gap-2 text-sm font-medium sm:flex">
+            <a href="{{ url('/') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Beranda</a>
+            <div class="relative" @mouseenter="layanan = true" @mouseleave="layanan = false">
                 <button type="button" @click="layanan = !layanan"
-                        class="inline-flex items-center gap-1 text-teal-800 hover:text-teal-600"
+                        class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700"
                         :aria-expanded="layanan">
                     Layanan
                     <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -39,21 +39,37 @@
                     @endforelse
                 </div>
             </div>
-            <a href="{{ route('pengumuman.index') }}" class="text-teal-800 hover:text-teal-600">Pengumuman</a>
+            <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
         </nav>
         <a href="{{ route('permohonan.create') }}"
            class="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 sm:hidden">
             Ajukan Surat
         </a>
     </div>
-    <nav x-data="{ layanan: false }" class="flex items-center gap-5 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
-        <a href="{{ url('/') }}" class="text-teal-800 hover:text-teal-600">Beranda</a>
-        <button type="button" @click="layanan = !layanan" class="inline-flex items-center gap-1 text-teal-800 hover:text-teal-600">
+    <nav x-data="{ layanan: false }" class="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
+        <a href="{{ url('/') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Beranda</a>
+        <button type="button" @click="layanan = !layanan" class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700" :aria-expanded="layanan">
             Layanan
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
         </button>
-        <a href="{{ route('pengumuman.index') }}" class="text-teal-800 hover:text-teal-600">Pengumuman</a>
+        <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
+        @if ($headerServices->isNotEmpty())
+            <div x-show="layanan" x-transition x-cloak class="w-full border-t border-teal-100 pt-1">
+                @foreach ($headerServices as $service)
+                    <a href="{{ $service->url ? url($service->url) : '#' }}"
+                       class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
+                        <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
+                        <span>
+                            <span class="block text-sm font-semibold text-[#1b1b18]">{{ $service->name }}</span>
+                            @if ($service->description)
+                                <span class="block text-xs leading-relaxed text-[#1b1b1870]">{{ $service->description }}</span>
+                            @endif
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        @endif
     </nav>
 </header>
