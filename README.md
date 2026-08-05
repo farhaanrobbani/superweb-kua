@@ -1,58 +1,147 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Surat Digital KUA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web untuk pembuatan surat digital di Kantor Urusan Agama (KUA) berbasis **Laravel 13** dengan alur persetujuan, penomoran otomatis, ekspor PDF berkop KUA, tanda tangan digital, dan permohonan surat secara online.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Autentikasi & role**: staf KUA (membuat surat) dan Kepala KUA (persetujuan & tanda tangan)
+- **Master data**: jenis surat dengan field dinamis, template surat, pengaturan KUA (kop, alamat, kepala KUA, TTD)
+- **Modul surat**: alur `draft → diajukan → disetujui → terbit`, penomoran otomatis per jenis per tahun (contoh: `SKU.001/KUA.VIII/2026`)
+- **PDF**: ekspor surat berkop KUA dengan tanda tangan digital (gambar PNG transparan)
+- **Arsip**: daftar, filter (jenis/status/tahun), pencarian, unduh ulang PDF
+- **Permohonan online**: masyarakat mengisi form tanpa login; staf memverifikasi dan membuat surat dari data permohonan (terisi otomatis)
+- **Dashboard**: statistik surat & permohonan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Persyaratan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3+, Composer, MySQL 8 / MariaDB
+- Node.js + NPM (untuk aset frontend)
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi (Lokal / VPS)
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+# atur kredensial MySQL di .env (DB_DATABASE, DB_USERNAME, DB_PASSWORD)
+php artisan migrate --force
+php artisan db:seed --force        # membuat user awal & data master
+npm install && npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+User awal (ubah via `.env` sebelum seed):
 
-## Contributing
+| Role | Email default | Password default |
+|---|---|---|
+| Staf | `staf@kua.local` | `password` |
+| Kepala | `kepala@kua.local` | `password` |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+⚠️ Wajib mengganti password default setelah deploy pertama.
 
-## Code of Conduct
+## Deploy Otomatis ke VPS (GitHub Actions)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Workflow di `.github/workflows/deploy.yml`:
 
-## Security Vulnerabilities
+1. **Test** — menjalankan seluruh test (PHPUnit + SQLite) di setiap push ke `main`.
+2. **Deploy** — jika test lulus, menarik kode ke VPS via SSH, menjalankan `composer install`, `migrate`, dan cache.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Setup VPS (sekali saja)
 
-## License
+```bash
+sudo apt update
+sudo apt install -y nginx php8.3-fpm php8.3-cli php8.3-mbstring php8.3-xml \
+  php8.3-curl php8.3-mysql php8.3-zip php8.3-gd php8.3-bcmath php8.3-intl composer git mysql-server
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+sudo mysql -e "CREATE DATABASE surdig CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+sudo mysql -e "CREATE USER 'surdig'@'localhost' IDENTIFIED BY 'GANTI_PASSWORD'; GRANT ALL ON surdig.* TO 'surdig'@'localhost'; FLUSH PRIVILEGES;"
+```
+
+```bash
+sudo mkdir -p /var/www/surdig
+sudo chown -R $USER /var/www/surdig
+cd /var/www/surdig
+git clone https://github.com/farhaanrobbani/surdig.git .
+composer install --no-dev --no-interaction
+cp .env.example .env
+php artisan key:generate
+# atur .env: APP_URL, DB_*, STAFF_EMAIL, STAFF_PASSWORD, KEPALA_EMAIL, KEPALA_PASSWORD
+php artisan migrate --force
+php artisan db:seed --force
+npm install && npm run build
+sudo chown -R www-data:www-data storage bootstrap/cache
+```
+
+Config Nginx (`/etc/nginx/sites-available/surdig`):
+
+```nginx
+server {
+    listen 80;
+    server_name kua.example.com;
+    root /var/www/surdig/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.php;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+```bash
+sudo ln -s /etc/nginx/sites-available/surdig /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+### Set GitHub Secrets
+
+Di repo `surdig` → **Settings → Secrets and variables → Actions**, tambahkan:
+
+| Secret | Nilai |
+|---|---|
+| `DEPLOY_HOST` | IP/domain VPS |
+| `DEPLOY_USER` | user SSH di VPS (mis. `deploy`) |
+| `DEPLOY_SSH_KEY` | private SSH key yang terpasang di VPS (authorized_keys) |
+| `DEPLOY_PORT` | port SSH (`22`) |
+| `DEPLOY_PATH` | path aplikasi (`/var/www/surdig`) |
+
+Setelah secrets terpasang, setiap `git push origin main` akan otomatis men-deploy ke VPS.
+
+## Struktur Nomor Surat
+
+Format: `{KODE}.{urutan:3}/KUA.{bulan-romawi}/{tahun}` — contoh `SKU.001/KUA.VIII/2026`. Counter dihitung per jenis surat dan direset setiap tahun.
+
+## Keamanan
+
+- Eloquent ORM (parameter binding) untuk seluruh query — bebas SQL Injection
+- Escape output di Blade — bebas XSS
+- Validasi form di sisi server untuk semua input
+- Rate limit pada form permohonan publik + honeypot anti-bot
+- Kredensial hanya di `.env` (tidak pernah di-commit)
+
+## Test
+
+```bash
+php artisan test
+```
