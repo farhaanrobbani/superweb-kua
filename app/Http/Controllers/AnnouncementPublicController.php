@@ -3,14 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AnnouncementPublicController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $query = trim((string) $request->query('q'));
+
+        $announcements = Announcement::published()
+            ->when($query !== '', function ($builder) use ($query) {
+                return $builder->where(function ($builder) use ($query) {
+                    return $builder->where('title', 'like', "%{$query}%")
+                        ->orWhere('content', 'like', "%{$query}%");
+                });
+            })
+            ->paginate(10)
+            ->withQueryString();
+
         return view('public.announcements.index', [
-            'announcements' => Announcement::published()->paginate(10),
+            'announcements' => $announcements,
+            'q' => $query,
         ]);
     }
 
