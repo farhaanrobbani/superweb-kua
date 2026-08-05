@@ -27,6 +27,12 @@
                     <x-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
                         {{ __('Template') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
+                        {{ __('Layanan') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('announcements.index')" :active="request()->routeIs('announcements.*')">
+                        {{ __('Pengumuman') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                         {{ __('Pengaturan') }}
                     </x-nav-link>
@@ -96,6 +102,12 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('letter-templates.index')" :active="request()->routeIs('letter-templates.*')">
                 {{ __('Template') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
+                {{ __('Layanan') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('announcements.index')" :active="request()->routeIs('announcements.*')">
+                {{ __('Pengumuman') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                 {{ __('Pengaturan') }}

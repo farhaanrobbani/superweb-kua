@@ -1,6 +1,18 @@
 <?php
 
+use App\Models\KuaSetting;
 use Illuminate\Support\Carbon;
+
+if (! function_exists('kua_setting')) {
+    function kua_setting(string $key, ?string $default = null): ?string
+    {
+        try {
+            return KuaSetting::get($key) ?? $default;
+        } catch (\Throwable) {
+            return $default;
+        }
+    }
+}
 
 if (! function_exists('tanggal_indonesia')) {
     function tanggal_indonesia(Carbon|string $date, string $format = 'd F Y'): string

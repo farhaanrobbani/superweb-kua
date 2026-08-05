@@ -4,7 +4,10 @@ use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
+use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +16,9 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index']);
+
+Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name('pengumuman.index');
+Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -39,6 +45,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('letter-types', LetterTypeController::class);
     Route::resource('letter-templates', LetterTemplateController::class);
+    Route::resource('services', ServiceController::class);
+    Route::resource('announcements', AnnouncementController::class);
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
 });
