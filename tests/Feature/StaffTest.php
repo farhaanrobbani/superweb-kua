@@ -67,6 +67,20 @@ class StaffTest extends TestCase
         ]);
     }
 
+    public function test_staff_update_without_checkbox_turns_off_active(): void
+    {
+        $staff = Staff::factory()->create(['active' => true]);
+
+        $this->actingAs($this->user)
+            ->put(route('staff.update', $staff), [
+                'nama' => 'Nama Diubah',
+                'jabatan' => 'Penghulu',
+            ])
+            ->assertRedirect(route('staff.index'));
+
+        $this->assertDatabaseHas('staff', ['id' => $staff->id, 'active' => 0]);
+    }
+
     public function test_staff_can_delete_pegawai(): void
     {
         $staff = Staff::factory()->create();

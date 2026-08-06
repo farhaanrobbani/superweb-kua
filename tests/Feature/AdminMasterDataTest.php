@@ -48,6 +48,58 @@ class AdminMasterDataTest extends TestCase
         $this->assertDatabaseHas('letter_types', ['code' => 'SKX', 'publik' => true]);
     }
 
+    public function test_letter_type_created_without_checkboxes_is_inactive_and_not_public(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKY',
+                'name' => 'Surat Keterangan Y',
+                'description' => 'Tanpa centang aktif/tampil',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', ['code' => 'SKY', 'active' => false, 'publik' => false]);
+    }
+
+    public function test_letter_type_update_without_checkboxes_turns_off_active_and_publik(): void
+    {
+        $type = LetterType::factory()->create(['active' => true, 'publik' => true]);
+
+        $this->actingAs($this->user)
+            ->put(route('letter-types.update', $type), [
+                'code' => $type->code,
+                'name' => $type->name,
+                'description' => $type->description,
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'active' => false, 'publik' => false]);
+    }
+
+    public function test_letter_template_created_without_checkbox_is_inactive(): void
+    {
+        $type = LetterType::factory()->create(['active' => true]);
+
+        $this->actingAs($this->user)
+            ->post(route('letter-templates.store'), [
+                'letter_type_id' => $type->id,
+                'name' => 'Template Tanpa Centang',
+                'body' => 'Isi template tanpa centang aktif.',
+            ])
+            ->assertRedirect(route('letter-templates.index'));
+
+        $this->assertDatabaseHas('letter_templates', [
+            'name' => 'Template Tanpa Centang',
+            'active' => false,
+        ]);
+    }
+
     public function test_staff_can_view_templates_list(): void
     {
         $type = LetterType::factory()->create();

@@ -186,6 +186,24 @@ class ServicesAnnouncementsTest extends TestCase
         $this->assertDatabaseMissing('services', ['name' => 'Ikon Salah']);
     }
 
+    public function test_service_update_without_checkbox_turns_off_active(): void
+    {
+        $service = Service::factory()->create(['active' => true]);
+
+        $this->actingAs($this->user)
+            ->put(route('services.update', $service), [
+                'name' => 'Layanan Diubah',
+                'description' => 'Tanpa centang aktif',
+            ])
+            ->assertRedirect(route('services.index'));
+
+        $this->assertDatabaseHas('services', [
+            'id' => $service->id,
+            'name' => 'Layanan Diubah',
+            'active' => 0,
+        ]);
+    }
+
     public function test_staff_can_delete_service(): void
     {
         $service = Service::factory()->create();
