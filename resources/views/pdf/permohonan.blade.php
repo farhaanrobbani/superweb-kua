@@ -8,7 +8,7 @@
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.6; color: #111; }
 
-        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 14px; margin-bottom: 24px; }
+        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 12px; margin-bottom: 24px; }
 
         .isi { text-align: justify; }
         .isi p { margin: 0 0 12px 0; }
@@ -25,7 +25,7 @@
     </style>
 </head>
 <body>
-    <div class="judul">PERMOHONAN PENERBITAN {{ strtoupper($submission->letterType->name) }}</div>
+    <div class="judul">{{ strtoupper($submission->letterType->name) }}</div>
 
     <div class="isi">
         <p>Yang bertanda tangan di bawah ini, saya:</p>
@@ -35,7 +35,7 @@
                 <tr>
                     <td class="label">{{ $field['label'] }}</td>
                     <td class="titik">:</td>
-                    <td>{{ $submission->data[$field['name']] ?? '—' }}</td>
+                    <td>{{ $submission->identityValue($field['name']) }}</td>
                 </tr>
             @endforeach
         </table>

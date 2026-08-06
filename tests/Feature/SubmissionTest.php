@@ -236,6 +236,21 @@ class SubmissionTest extends TestCase
         );
     }
 
+    public function test_identity_value_formats_dates_and_falls_back(): void
+    {
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['tanggal_akta' => '2024-01-15', 'nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $this->assertSame('15 Januari 2024', $submission->identityValue('tanggal_akta'));
+        $this->assertSame('Andi', $submission->identityValue('nama'));
+        $this->assertSame('—', $submission->identityValue('tidak_ada'));
+    }
+
     public function test_render_permohonan_body_replaces_tokens(): void
     {
         $this->type->update([
