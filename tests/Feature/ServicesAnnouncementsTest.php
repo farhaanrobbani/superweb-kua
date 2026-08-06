@@ -133,6 +133,20 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertDontSee('Login Petugas');
     }
 
+    public function test_submission_page_shows_service_description(): void
+    {
+        Service::factory()->create([
+            'name' => 'Pengajuan Surat Online',
+            'url' => '/permohonan',
+            'description' => 'Ajukan surat tanpa antre',
+            'active' => true,
+        ]);
+
+        $this->get(route('permohonan.create'))
+            ->assertOk()
+            ->assertSee('Ajukan surat tanpa antre');
+    }
+
     public function test_guest_cannot_access_admin_service_crud(): void
     {
         $this->get(route('services.index'))->assertRedirect(route('login'));

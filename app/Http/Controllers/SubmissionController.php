@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KuaSetting;
 use App\Models\LetterType;
+use App\Models\Service;
 use App\Models\Submission;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class SubmissionController extends Controller
             'letterTypes' => LetterType::where('active', true)->publik()->orderBy('name')->get(),
             'selectedType' => $selectedType,
             'data' => $data,
+            'service' => Service::query()->where('url', '/permohonan')->active()->first(),
             'kua' => [
                 'instansi' => KuaSetting::get('instansi'),
                 'alamat' => KuaSetting::get('alamat'),
