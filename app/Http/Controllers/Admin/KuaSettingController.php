@@ -11,39 +11,61 @@ use Illuminate\View\View;
 
 class KuaSettingController extends Controller
 {
-    private const KEYS = [
-        'instansi' => 'Nama Instansi (KUA)',
-        'alamat' => 'Alamat',
-        'telepon' => 'Telepon',
-        'email' => 'Email',
-        'kecamatan' => 'Kecamatan',
-        'kabupaten' => 'Kabupaten/Kota',
-        'kode_pos' => 'Kode Pos',
-        'jam_layanan' => 'Jam Layanan',
-        'kepala_nama' => 'Nama Kepala KUA',
-        'kepala_nip' => 'NIP Kepala KUA',
-        'kepala_pangkat' => 'Pangkat/Golongan Kepala KUA',
-        'sk_kepala' => 'No. SK Pengangkatan Kepala KUA',
-        'kop_anchor' => 'Tampilkan Anchor (^) di Tanda Tangan',
-        'logo_path' => 'Logo 1 (KUA) (upload)',
-        'logo2_path' => 'Logo 2 (upload)',
-        'kop_logo' => 'Logo Kop Surat (pilih)',
-        'kop_teks' => 'Teks Kop Surat (bebas)',
-        'kop_ukuran_judul' => 'Ukuran Font Level 1 (px)',
-        'kop_ukuran_sub' => 'Ukuran Font Level 2 (px)',
-        'kop_ukuran_sub2' => 'Ukuran Font Level 3 (px)',
-        'kop_ukuran_baris' => 'Ukuran Font Baris (px)',
-        'bg_path' => 'Foto Background Welcome (upload)',
-        'hero_path' => 'Banner Beranda (upload)',
-        'hero_judul' => 'Judul Utama Beranda',
-        'hero_subjudul' => 'Paragraf Deskripsi Beranda',
+    private const GROUPS = [
+        'web' => [
+            'label' => 'Web',
+            'keys' => [
+                'hero_judul',
+                'hero_subjudul',
+                'bg_path',
+                'hero_path',
+                'jam_layanan',
+            ],
+        ],
+        'instansi' => [
+            'label' => 'Instansi',
+            'keys' => [
+                'instansi',
+                'alamat',
+                'telepon',
+                'email',
+                'kecamatan',
+                'kabupaten',
+                'kode_pos',
+            ],
+        ],
+        'surat' => [
+            'label' => 'Surat',
+            'keys' => [
+                'logo_path',
+                'logo2_path',
+                'kop_logo',
+                'kop_teks',
+                'kop_ukuran_judul',
+                'kop_ukuran_sub',
+                'kop_ukuran_sub2',
+                'kop_ukuran_baris',
+            ],
+        ],
+        'kepala' => [
+            'label' => 'Kepala & Tanda Tangan',
+            'keys' => [
+                'kepala_nama',
+                'kepala_nip',
+                'kepala_pangkat',
+                'sk_kepala',
+                'kop_anchor',
+            ],
+        ],
     ];
 
     public function edit(): View
     {
         $settings = [];
-        foreach (self::KEYS as $key => $label) {
-            $settings[$key] = ['label' => $label, 'value' => KuaSetting::get($key)];
+        foreach (self::GROUPS as $group) {
+            foreach ($group['keys'] as $key) {
+                $settings[$key] = ['label' => $key, 'value' => KuaSetting::get($key)];
+            }
         }
 
         return view('admin.kua-settings.edit', compact('settings'));
@@ -156,6 +178,6 @@ class KuaSettingController extends Controller
         }
 
         return redirect()->route('kua-settings.edit')
-            ->with('success', 'Pengaturan KUA berhasil disimpan.');
+            ->with('success', 'Pengaturan Web berhasil disimpan.');
     }
 }

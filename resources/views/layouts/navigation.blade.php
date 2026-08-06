@@ -114,7 +114,7 @@
                         {{ __('Layanan') }}
                     </x-nav-link>
                     <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
-                        {{ __('Pengaturan KUA') }}
+                        {{ __('Pengaturan Web') }}
                     </x-nav-link>
                 </div>
             </div>

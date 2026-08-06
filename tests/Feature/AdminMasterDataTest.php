@@ -380,7 +380,9 @@ class AdminMasterDataTest extends TestCase
         $this->actingAs($this->user)
             ->get(route('kua-settings.edit'))
             ->assertOk()
-            ->assertSee('Pengaturan KUA');
+            ->assertSee('Pengaturan Web')
+            ->assertSee('Instansi')
+            ->assertSee('Surat');
     }
 
     public function test_staff_can_update_kua_settings(): void
