@@ -81,6 +81,13 @@
 
                     <div class="mt-6">
                         <label class="flex items-center">
+                            <input type="checkbox" name="publik" value="1" {{ old('publik') ? 'checked' : '' }} class="rounded border-gray-300">
+                            <span class="ms-2 text-sm text-gray-700">Tampil di permohonan publik</span>
+                        </label>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="flex items-center">
                             <input type="checkbox" name="active" value="1" checked class="rounded border-gray-300">
                             <span class="ms-2 text-sm text-gray-700">Aktif (bisa dipilih saat membuat surat)</span>
                         </label>

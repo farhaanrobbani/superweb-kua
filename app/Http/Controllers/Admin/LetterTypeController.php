@@ -69,6 +69,7 @@ class LetterTypeController extends Controller
             'fields.*.required' => ['sometimes', 'boolean'],
             'fields.*.options' => ['nullable', 'array'],
             'active' => ['sometimes', 'boolean'],
+            'publik' => ['sometimes', 'boolean'],
         ]);
     }
 }
