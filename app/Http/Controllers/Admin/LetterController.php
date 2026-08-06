@@ -216,7 +216,7 @@ class LetterController extends Controller
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
             'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path',
-            'logo2_path', 'kop_logo', 'kop_teks', 'kop_ukuran_judul', 'kop_ukuran_sub', 'kop_ukuran_baris'];
+            'logo2_path', 'kop_logo', 'kop_teks', 'kop_ukuran_judul', 'kop_ukuran_sub', 'kop_ukuran_sub2', 'kop_ukuran_baris'];
         $settings = [];
         foreach ($settingKeys as $key) {
             $settings[$key] = KuaSetting::get($key) ?? '';
@@ -230,6 +230,7 @@ class LetterController extends Controller
             'kopSizes' => [
                 'judul' => (float) ($settings['kop_ukuran_judul'] ?: 17),
                 'sub' => (float) ($settings['kop_ukuran_sub'] ?: 13),
+                'sub2' => (float) ($settings['kop_ukuran_sub2'] ?: 11.5),
                 'baris' => (float) ($settings['kop_ukuran_baris'] ?: 10.5),
             ],
         ])->setPaper('a4');

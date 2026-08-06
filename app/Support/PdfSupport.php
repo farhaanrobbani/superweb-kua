@@ -19,7 +19,10 @@ class PdfSupport
                 continue;
             }
 
-            if (str_starts_with($line, '##')) {
+            if (str_starts_with($line, '###')) {
+                $text = trim(substr($line, 3));
+                $class = 'sub2';
+            } elseif (str_starts_with($line, '##')) {
                 $text = trim(substr($line, 2));
                 $class = 'sub';
             } elseif (str_starts_with($line, '#')) {

@@ -144,13 +144,15 @@ class KuaLogoTest extends TestCase
             ->put(route('kua-settings.update'), $this->basePayload([
                 'kop_ukuran_judul' => '20',
                 'kop_ukuran_sub' => '14',
-                'kop_ukuran_baris' => '12',
+                'kop_ukuran_sub2' => '12',
+                'kop_ukuran_baris' => '11',
             ]))
             ->assertRedirect(route('kua-settings.edit'));
 
         $this->assertSame('20', KuaSetting::get('kop_ukuran_judul'));
         $this->assertSame('14', KuaSetting::get('kop_ukuran_sub'));
-        $this->assertSame('12', KuaSetting::get('kop_ukuran_baris'));
+        $this->assertSame('12', KuaSetting::get('kop_ukuran_sub2'));
+        $this->assertSame('11', KuaSetting::get('kop_ukuran_baris'));
     }
 
     public function test_kop_font_size_out_of_range_is_rejected(): void

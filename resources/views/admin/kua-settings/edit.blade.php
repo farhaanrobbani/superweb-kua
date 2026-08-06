@@ -154,27 +154,35 @@
                                       placeholder="#KUA KECAMATAN CONTOH&#10;##KECAMATAN CONTOH KABUPATEN CONTOH&#10;Jl. Contoh No. 1, Telp. (021) 123456">{{ old('kop_teks', $settings['kop_teks']['value']) }}</textarea>
                             <p class="text-xs text-gray-500 mt-1">
                                 Tiap baris menjadi satu baris di kop surat. Penanda:
-                                <code>#</code> = besar dan tebal (nama instansi), <code>##</code> = tebal (sub), tanpa penanda = baris biasa (alamat, dll).
+                                <code>#</code> = Level 1 (besar dan tebal, nama instansi), <code>##</code> = Level 2 (tebal),
+                                <code>###</code> = Level 3 (tebal, ukuran sedang), tanpa penanda = baris biasa (alamat, dll).
                                 Kosongkan untuk memakai field Instansi/Kecamatan/Alamat yang sudah diisi di atas.
                             </p>
                             <x-input-error :messages="$errors->get('kop_teks')" class="mt-2" />
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
                         <div>
-                            <x-input-label for="kop_ukuran_judul" value="Ukuran Font Judul (px)" />
+                            <x-input-label for="kop_ukuran_judul" value="Ukuran Font Level 1 (px)" />
                             <x-text-input id="kop_ukuran_judul" name="kop_ukuran_judul" type="number" min="6" max="72" step="0.5"
                                           class="mt-1 block w-full" placeholder="17"
                                           value="{{ old('kop_ukuran_judul', $settings['kop_ukuran_judul']['value']) }}" />
                             <x-input-error :messages="$errors->get('kop_ukuran_judul')" class="mt-2" />
                         </div>
                         <div>
-                            <x-input-label for="kop_ukuran_sub" value="Ukuran Font Sub (px)" />
+                            <x-input-label for="kop_ukuran_sub" value="Ukuran Font Level 2 (px)" />
                             <x-text-input id="kop_ukuran_sub" name="kop_ukuran_sub" type="number" min="6" max="72" step="0.5"
                                           class="mt-1 block w-full" placeholder="13"
                                           value="{{ old('kop_ukuran_sub', $settings['kop_ukuran_sub']['value']) }}" />
                             <x-input-error :messages="$errors->get('kop_ukuran_sub')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="kop_ukuran_sub2" value="Ukuran Font Level 3 (px)" />
+                            <x-text-input id="kop_ukuran_sub2" name="kop_ukuran_sub2" type="number" min="6" max="72" step="0.5"
+                                          class="mt-1 block w-full" placeholder="11.5"
+                                          value="{{ old('kop_ukuran_sub2', $settings['kop_ukuran_sub2']['value']) }}" />
+                            <x-input-error :messages="$errors->get('kop_ukuran_sub2')" class="mt-2" />
                         </div>
                         <div>
                             <x-input-label for="kop_ukuran_baris" value="Ukuran Font Baris (px)" />
@@ -184,7 +192,7 @@
                             <x-input-error :messages="$errors->get('kop_ukuran_baris')" class="mt-2" />
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">Kosongkan untuk memakai ukuran bawaan (Judul 17, Sub 13, Baris 10.5 px).</p>
+                    <p class="text-xs text-gray-500 mt-2">Kosongkan untuk memakai ukuran bawaan (Level 1 = 17, Level 2 = 13, Level 3 = 11.5, Baris = 10.5 px).</p>
 
                     <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Data Instansi</h3>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">

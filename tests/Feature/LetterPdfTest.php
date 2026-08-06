@@ -127,10 +127,11 @@ class LetterPdfTest extends TestCase
     {
         Storage::fake('public');
 
-        KuaSetting::set('kop_teks', "#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\nJl. Contoh No. 1");
+        KuaSetting::set('kop_teks', "#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\n###KECAMATAN SEKSI\nJl. Contoh No. 1");
         KuaSetting::set('kop_ukuran_judul', '20');
         KuaSetting::set('kop_ukuran_sub', '14');
-        KuaSetting::set('kop_ukuran_baris', '12');
+        KuaSetting::set('kop_ukuran_sub2', '12');
+        KuaSetting::set('kop_ukuran_baris', '11');
 
         $this->actingAs($this->user)
             ->get(route('letters.pdf', $this->letter))

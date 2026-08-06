@@ -12,6 +12,7 @@
         .kop { text-align: center; margin-bottom: 4px; }
         .kop .instansi, .kop-dengan-logo .instansi, .kop .judul, .kop-dengan-logo .judul { font-size: {{ $kopSizes['judul'] }}px; font-weight: bold; letter-spacing: 0.5px; }
         .kop .sub, .kop-dengan-logo .sub { font-size: {{ $kopSizes['sub'] }}px; font-weight: bold; }
+        .kop .sub2, .kop-dengan-logo .sub2 { font-size: {{ $kopSizes['sub2'] }}px; font-weight: bold; }
         .kop .alamat, .kop-dengan-logo .alamat, .kop .baris, .kop-dengan-logo .baris { font-size: {{ $kopSizes['baris'] }}px; }
         .kop-dengan-logo { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
         .kop-dengan-logo td { vertical-align: middle; }
