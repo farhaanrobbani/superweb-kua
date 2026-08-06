@@ -20,7 +20,7 @@
 
     <!-- Navigation Links -->
     @php($suratGroupActive = request()->routeIs('letters.*') || request()->routeIs('submissions.*') || request()->routeIs('letter-types.*') || request()->routeIs('letter-templates.*'))
-    @php($pengaturanGroupActive = request()->routeIs('services.*') || request()->routeIs('kua-settings.*') || request()->routeIs('pages.*'))
+    @php($pengaturanGroupActive = request()->routeIs('services.*') || request()->routeIs('kua-settings.*'))
 
     <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -112,9 +112,6 @@
                 <div class="ms-4">
                     <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.*')">
                         {{ __('Layanan') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('pages.index')" :active="request()->routeIs('pages.*')">
-                        {{ __('Halaman') }}
                     </x-nav-link>
                     <x-nav-link :href="route('kua-settings.edit')" :active="request()->routeIs('kua-settings.*')">
                         {{ __('Pengaturan KUA') }}
