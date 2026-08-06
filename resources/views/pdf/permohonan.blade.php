@@ -29,8 +29,6 @@
     <div class="judul">PERMOHONAN PENERBITAN {{ strtoupper($submission->letterType->name) }}</div>
 
     <div class="isi">
-        <p>Yang bertanda tangan di bawah ini, saya:</p>
-
         <table class="data-tabel">
             @foreach ($submission->letterType->fields ?? [] as $field)
                 <tr>
