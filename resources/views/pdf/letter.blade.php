@@ -30,7 +30,7 @@
         .meta .nilai { display: inline-block; width: 2.2em; text-align: center; }
         .isi { text-align: justify; }
         .isi p { margin: 0 0 12px 0; }
-        .ttd { margin-top: 24px; text-align: right; padding-right: 8px; }
+        .ttd { margin-top: 40px; text-align: right; padding-right: 8px; }
         .ttd .kota { margin-bottom: 80px; }
         .ttd .ttd-img { height: 75px; width: auto; margin-bottom: 4px; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
