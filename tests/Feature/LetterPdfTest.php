@@ -123,6 +123,18 @@ class LetterPdfTest extends TestCase
         $this->assertStringNotContainsString('/Subtype /Image', $content);
     }
 
+    public function test_pdf_downloads_with_anchor_hidden(): void
+    {
+        Storage::fake('public');
+
+        KuaSetting::set('kop_anchor', '0');
+
+        $this->actingAs($this->user)
+            ->get(route('letters.pdf', $this->letter))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
+
     public function test_pdf_downloads_with_custom_kop_text(): void
     {
         Storage::fake('public');

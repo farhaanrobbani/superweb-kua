@@ -235,7 +235,6 @@ class AdminMasterDataTest extends TestCase
                 'kepala_nip' => '123456',
                 'kepala_pangkat' => 'Pembina',
                 'sk_kepala' => 'SK/001',
-                'ttd_path' => '',
             ])
             ->assertRedirect(route('kua-settings.edit'));
 

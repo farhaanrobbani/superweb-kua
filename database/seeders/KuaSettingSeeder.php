@@ -21,7 +21,7 @@ class KuaSettingSeeder extends Seeder
             'kepala_nip' => '197001011990011001',
             'kepala_pangkat' => 'Pembina, IV/a',
             'sk_kepala' => '',
-            'ttd_path' => '',
+            'kop_anchor' => '1',
         ];
 
         foreach ($defaults as $key => $value) {

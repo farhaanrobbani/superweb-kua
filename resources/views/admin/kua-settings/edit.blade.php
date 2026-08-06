@@ -270,15 +270,26 @@
                         </div>
                     </div>
 
-                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Tanda Tangan Digital</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Tanda Tangan</h3>
                     <div class="grid grid-cols-1 gap-4">
                         <div>
-                            <x-input-label for="ttd_path" value="File Tanda Tangan (path)" />
-                            <x-text-input id="ttd_path" name="ttd_path" class="mt-1 block w-full"
-                                          value="{{ old('ttd_path', $settings['ttd_path']['value']) }}"
-                                          placeholder="storage/ttd/tanda-tangan.png" />
-                            <p class="text-xs text-gray-500 mt-1">Upload file gambar TTD (PNG dengan latar transparan) ke folder <code>storage/ttd/</code>, lalu isi path-nya di sini.</p>
-                            <x-input-error :messages="$errors->get('ttd_path')" class="mt-2" />
+                            <x-input-label value="Tampilkan Anchor (^) di Blok Tanda Tangan" />
+                            <div class="mt-1 space-y-2">
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="radio" name="kop_anchor" value="1"
+                                           class="rounded-full border-gray-300 text-teal-600 focus:ring-teal-500"
+                                           {{ (old('kop_anchor', $settings['kop_anchor']['value'] ?: '1') === '1') ? 'checked' : '' }}>
+                                    Ya, tampilkan
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="radio" name="kop_anchor" value="0"
+                                           class="rounded-full border-gray-300 text-teal-600 focus:ring-teal-500"
+                                           {{ (old('kop_anchor', $settings['kop_anchor']['value'] ?: '1') === '0') ? 'checked' : '' }}>
+                                    Tidak
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Simbol <code>^</code> ditampilkan di antara "Kepala," dan nama penandatangan pada kop surat PDF sebagai penanda posisi tanda tangan.</p>
+                            <x-input-error :messages="$errors->get('kop_anchor')" class="mt-2" />
                         </div>
                     </div>
 

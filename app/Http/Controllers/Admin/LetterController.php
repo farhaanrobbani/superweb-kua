@@ -215,7 +215,7 @@ class LetterController extends Controller
         PdfSupport::registerArialFonts();
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
-            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path',
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'kop_anchor', 'logo_path',
             'logo2_path', 'kop_logo', 'kop_teks', 'kop_ukuran_judul', 'kop_ukuran_sub', 'kop_ukuran_sub2', 'kop_ukuran_baris'];
         $settings = [];
         foreach ($settingKeys as $key) {

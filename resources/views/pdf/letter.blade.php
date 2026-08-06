@@ -29,8 +29,9 @@
         .isi { text-align: justify; }
         .isi p { margin: 0 0 12px 0; }
         .ttd { margin-top: 40px; text-align: right; padding-right: 8px; }
+        .ttd .blok { display: inline-block; text-align: left; }
         .ttd .kota { margin-bottom: 0; }
-        .ttd .ttd-img { height: 75px; width: auto; margin-bottom: 4px; }
+        .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
         .ttd .nip { font-size: 11px; }
     </style>
@@ -102,19 +103,19 @@
     </div>
 
     <div class="ttd">
-        <div class="kota">{{ Str::title($settings['kabupaten']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
-        <div>Kepala,</div>
-        @if ($settings['ttd_path'] && \Illuminate\Support\Facades\Storage::exists($settings['ttd_path']))
-            <div>
-                <img class="ttd-img" src="{{ \Illuminate\Support\Facades\Storage::path($settings['ttd_path']) }}">
-            </div>
-        @else
-            <div style="height: 75px;"></div>
-        @endif
-        <div class="nama">{{ $settings['kepala_nama'] }}</div>
-        @if ($settings['kepala_nip'])
-            <div class="nip">NIP. {{ $settings['kepala_nip'] }}</div>
-        @endif
+        <div class="blok">
+            <div class="kota">{{ Str::title($settings['kabupaten']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+            <div>Kepala,</div>
+            @if (($settings['kop_anchor'] ?? '1') !== '0')
+                <div class="anchor">^</div>
+            @else
+                <div style="height: 40px;"></div>
+            @endif
+            <div class="nama">{{ $settings['kepala_nama'] }}</div>
+            @if ($settings['kepala_nip'])
+                <div class="nip">NIP. {{ $settings['kepala_nip'] }}</div>
+            @endif
+        </div>
     </div>
 </body>
 </html>

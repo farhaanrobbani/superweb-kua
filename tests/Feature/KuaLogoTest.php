@@ -166,6 +166,36 @@ class KuaLogoTest extends TestCase
         $this->assertNull(KuaSetting::get('kop_ukuran_judul'));
     }
 
+    public function test_staff_can_toggle_anchor_setting(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_anchor' => '0',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('0', KuaSetting::get('kop_anchor'));
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_anchor' => '1',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('1', KuaSetting::get('kop_anchor'));
+    }
+
+    public function test_invalid_anchor_value_is_rejected(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_anchor' => 'yes',
+            ]))
+            ->assertSessionHasErrors('kop_anchor');
+
+        $this->assertNull(KuaSetting::get('kop_anchor'));
+    }
+
     public function test_invalid_logo_is_rejected(): void
     {
         Storage::fake('public');
