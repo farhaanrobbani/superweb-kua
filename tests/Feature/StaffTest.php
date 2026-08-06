@@ -30,6 +30,7 @@ class StaffTest extends TestCase
             ->post(route('staff.store'), [
                 'nama' => 'Ahmad Fauzi',
                 'nip' => '198001012010011001',
+                'kontak' => '081234567890',
                 'jabatan' => 'Penghulu',
                 'pangkat_golongan' => 'Penata, III/c',
                 'bagian' => 'Jabatan Fungsional',
@@ -41,12 +42,14 @@ class StaffTest extends TestCase
         $staff = Staff::where('nama', 'Ahmad Fauzi')->first();
         $this->assertNotNull($staff);
         $this->assertSame('Penghulu', $staff->jabatan);
+        $this->assertSame('081234567890', $staff->kontak);
         $this->assertTrue($staff->active);
 
         $this->actingAs($this->user)
             ->put(route('staff.update', $staff), [
                 'nama' => 'Ahmad Fauzi, S.Ag',
                 'nip' => '198001012010011001',
+                'kontak' => '082198765432',
                 'jabatan' => 'Kepala KUA',
                 'pangkat_golongan' => 'Penata, III/c',
                 'bagian' => 'Pimpinan',
@@ -58,6 +61,7 @@ class StaffTest extends TestCase
         $this->assertDatabaseHas('staff', [
             'id' => $staff->id,
             'nama' => 'Ahmad Fauzi, S.Ag',
+            'kontak' => '082198765432',
             'jabatan' => 'Kepala KUA',
             'active' => 0,
         ]);
@@ -89,6 +93,7 @@ class StaffTest extends TestCase
             'nama' => 'H. Abdul Malik',
             'jabatan' => 'Kepala KUA',
             'bagian' => 'Pimpinan',
+            'kontak' => '081111222333',
             'active' => true,
         ]);
         Staff::factory()->create([
@@ -103,7 +108,9 @@ class StaffTest extends TestCase
             ->assertSee('Daftar Pegawai')
             ->assertSee('Struktur Organisasi')
             ->assertSee('Data Pegawai')
+            ->assertSee('Kontak')
             ->assertSee('H. Abdul Malik')
+            ->assertSee('081111222333')
             ->assertSee('Pimpinan')
             ->assertDontSee('Siti Rahma');
     }
