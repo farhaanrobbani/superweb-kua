@@ -58,7 +58,7 @@ class LetterTypeController extends Controller
 
     private function validateData(Request $request, ?LetterType $letterType = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'code' => ['required', 'string', 'max:50', Rule::unique('letter_types', 'code')->ignore($letterType)],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
@@ -71,5 +71,10 @@ class LetterTypeController extends Controller
             'active' => ['sometimes', 'boolean'],
             'publik' => ['sometimes', 'boolean'],
         ]);
+
+        $data['active'] = $request->boolean('active');
+        $data['publik'] = $request->boolean('publik');
+
+        return $data;
     }
 }

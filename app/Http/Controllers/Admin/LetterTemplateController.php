@@ -61,11 +61,15 @@ class LetterTemplateController extends Controller
 
     private function validateData(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'letter_type_id' => ['required', 'exists:letter_types,id'],
             'name' => ['required', 'string', 'max:150'],
             'body' => ['required', 'string'],
             'active' => ['sometimes', 'boolean'],
         ]);
+
+        $data['active'] = $request->boolean('active');
+
+        return $data;
     }
 }

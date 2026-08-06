@@ -71,6 +71,8 @@ class StaffController extends Controller
             'active' => ['sometimes', 'boolean'],
         ]);
 
+        $data['active'] = $request->boolean('active');
+
         if ($request->hasFile('foto')) {
             if ($staff?->foto && Storage::disk('public')->exists($staff->foto)) {
                 Storage::disk('public')->delete($staff->foto);

@@ -70,7 +70,7 @@ class ServiceController extends Controller
 
     private function validateData(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
             'url' => ['nullable', 'string', 'max:255', Rule::notIn(['#'])],
@@ -78,5 +78,9 @@ class ServiceController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'active' => ['sometimes', 'boolean'],
         ]);
+
+        $data['active'] = $request->boolean('active');
+
+        return $data;
     }
 }
