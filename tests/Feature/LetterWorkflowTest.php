@@ -86,6 +86,55 @@ class LetterWorkflowTest extends TestCase
             ->assertSessionHasErrors('data.nama');
     }
 
+    public function test_letter_create_form_shows_internal_fields(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => false, 'internal' => true],
+        ]]);
+
+        $this->actingAs($this->staff)
+            ->get(route('letters.create', ['jenis' => 'SKU']))
+            ->assertOk()
+            ->assertSee('Catatan Petugas')
+            ->assertSee('Data tambahan (diisi petugas)');
+    }
+
+    public function test_internal_required_field_is_validated_on_letter(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => true, 'internal' => true],
+        ]]);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'perihal' => 'Tanpa catatan',
+                'data' => ['nama' => 'Budi', 'catatan_petugas' => ''],
+            ])
+            ->assertSessionHasErrors('data.catatan_petugas');
+    }
+
+    public function test_internal_field_data_is_saved_on_letter(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => false, 'internal' => true],
+        ]]);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'perihal' => 'Permohonan SK',
+                'data' => ['nama' => 'Budi', 'catatan_petugas' => 'Sudah diverifikasi'],
+            ])
+            ->assertRedirect();
+
+        $letter = Letter::where('perihal', 'Permohonan SK')->firstOrFail();
+        $this->assertSame('Sudah diverifikasi', $letter->data['catatan_petugas']);
+    }
+
     public function test_staff_can_submit_letter_for_approval(): void
     {
         $letter = $this->draftLetter();

@@ -66,11 +66,19 @@
                             </div>
 
                             <div class="mt-6 space-y-4">
+                                @php($internalShown = false)
                                 @foreach ($selectedType->fields ?? [] as $field)
-                                    @php
-                                        $name = 'data[' . $field['name'] . ']';
-                                        $value = old('data.' . $field['name'], $data[$field['name']] ?? null);
-                                    @endphp
+                                    @if (! empty($field['internal']))
+                                        @if (! $internalShown)
+                                            @php($internalShown = true)
+                                            <div class="border-t border-gray-200 pt-4">
+                                                <h4 class="font-semibold text-gray-700">Data tambahan (diisi petugas)</h4>
+                                                <p class="text-xs text-gray-500 mt-1">Field berikut hanya diisi oleh petugas saat membuat surat.</p>
+                                            </div>
+                                        @endif
+                                    @endif
+                                    @php($name = 'data[' . $field['name'] . ']')
+                                    @php($value = old('data.' . $field['name'], $data[$field['name']] ?? null))
                                     <div>
                                         <x-input-label :for="'field-' . $field['name']" :value="$field['label'] . ($field['required'] ? ' *' : '')" />
                                         @if ($field['type'] === 'textarea')

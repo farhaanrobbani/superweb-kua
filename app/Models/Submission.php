@@ -60,7 +60,10 @@ class Submission extends Model
 
     public function permohonanFields(): array
     {
-        $fields = $this->letterType->fields ?? [];
+        $fields = array_values(array_filter(
+            $this->letterType->fields ?? [],
+            fn (array $field) => empty($field['internal'])
+        ));
         $selected = $this->letterType->permohonan_fields ?? [];
 
         if (empty($selected)) {

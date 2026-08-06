@@ -52,7 +52,7 @@
                             <button type="button" @click="addField()"
                                     class="text-sm text-blue-600 hover:underline">+ Tambah Field</button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat. Seret ikon untuk mengurutkan field.</p>
+                        <p class="text-xs text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Centang <strong>Internal</strong> bila field hanya diisi petugas (tidak tampil di permohonan publik). Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat. Seret ikon untuk mengurutkan field.</p>
 
                         <div class="mt-3 space-y-3">
                             <template x-for="(field, index) in fields" :key="index">
@@ -61,6 +61,7 @@
                                      @dragover.prevent="dragOver($event)"
                                      @drop.prevent="dropAt(index)">
                                     <input type="hidden" :name="`fields[${index}][required]`" :value="field.required ? 1 : 0">
+                                    <input type="hidden" :name="`fields[${index}][internal]`" :value="field.internal ? 1 : 0">
                                     <div class="flex items-start gap-3">
                                         <button type="button"
                                                 draggable="true"
@@ -94,6 +95,9 @@
                                                 <div class="sm:col-span-1 flex items-center gap-3">
                                                     <label class="flex items-center text-xs text-gray-600">
                                                         <input type="checkbox" x-model="field.required" class="rounded border-gray-300"> Wajib
+                                                    </label>
+                                                    <label class="flex items-center text-xs text-gray-600" title="Hanya ditampilkan saat petugas membuat surat, tidak tampil di permohonan publik">
+                                                        <input type="checkbox" x-model="field.internal" class="rounded border-gray-300"> Internal
                                                     </label>
                                                     <button type="button" @click="fields.splice(index, 1)"
                                                             class="text-red-600 text-sm hover:underline">Hapus</button>
@@ -156,6 +160,7 @@
                 label: f.label || '',
                 type: f.type || 'text',
                 required: !!f.required,
+                internal: !!f.internal,
                 optionsText: Array.isArray(f.options) ? f.options.join(', ') : (f.optionsText || ''),
             });
 
@@ -164,7 +169,7 @@
                 permohonanFields: initialPermohonanFields || [],
                 draggingIndex: null,
                 addField() {
-                    this.fields.push({ name: '', label: '', type: 'text', required: true, optionsText: '' });
+                    this.fields.push({ name: '', label: '', type: 'text', required: true, internal: false, optionsText: '' });
                 },
                 dragStart(index, event) {
                     this.draggingIndex = index;

@@ -51,6 +51,10 @@ class SubmissionController extends Controller
         $rules = [];
         $fields = $letterType->fields ?? [];
         foreach ($fields as $field) {
+            if (! empty($field['internal'])) {
+                continue;
+            }
+
             $fieldRules = ['string', 'max:1000'];
             if (! empty($field['required'])) {
                 $fieldRules[] = 'required';
@@ -61,6 +65,10 @@ class SubmissionController extends Controller
 
         $safeData = [];
         foreach ($fields as $field) {
+            if (! empty($field['internal'])) {
+                continue;
+            }
+
             $safeData[$field['name']] = $request->input('data.' . $field['name']);
         }
 

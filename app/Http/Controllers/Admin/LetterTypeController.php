@@ -71,6 +71,7 @@ class LetterTypeController extends Controller
             'fields.*.label' => ['required', 'string', 'max:150'],
             'fields.*.type' => ['required', 'in:text,textarea,date,select'],
             'fields.*.required' => ['sometimes', 'boolean'],
+            'fields.*.internal' => ['sometimes', 'boolean'],
             'fields.*.options' => ['nullable', 'array'],
             'active' => ['sometimes', 'boolean'],
             'publik' => ['sometimes', 'boolean'],

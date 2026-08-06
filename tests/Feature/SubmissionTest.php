@@ -72,6 +72,58 @@ class SubmissionTest extends TestCase
         ])->assertForbidden();
     }
 
+    public function test_public_form_hides_internal_fields(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => false, 'internal' => true],
+        ]]);
+
+        $this->get(route('permohonan.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertSee('Nama')
+            ->assertDontSee('Catatan Petugas');
+    }
+
+    public function test_public_submission_ignores_internal_fields(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => true, 'internal' => true],
+        ]]);
+
+        $this->post(route('permohonan.store'), [
+            'jenis' => 'SPD',
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+        ])->assertRedirect(route('permohonan.sukses'));
+
+        $submission = Submission::where('nama_pemohon', 'Andi')->firstOrFail();
+        $this->assertArrayNotHasKey('catatan_petugas', $submission->data);
+    }
+
+    public function test_permohonan_fields_excludes_internal_fields(): void
+    {
+        $this->type->update([
+            'fields' => [
+                ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+                ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => false, 'internal' => true],
+            ],
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $names = array_column($submission->permohonanFields(), 'name');
+        $this->assertSame(['nama'], $names);
+    }
+
     public function test_staff_can_view_submission_list(): void
     {
         Submission::create([

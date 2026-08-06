@@ -30,6 +30,10 @@ class LetterType extends Model
     public static function normalizeFieldOptions(array $fields): array
     {
         return array_values(array_map(function (array $field) {
+            if (array_key_exists('internal', $field)) {
+                $field['internal'] = (bool) filter_var($field['internal'], FILTER_VALIDATE_BOOLEAN);
+            }
+
             if (($field['type'] ?? null) !== 'select') {
                 unset($field['options']);
 

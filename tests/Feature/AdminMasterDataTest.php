@@ -132,6 +132,22 @@ class AdminMasterDataTest extends TestCase
         $this->assertArrayNotHasKey('options', $fields[0]);
     }
 
+    public function test_letter_type_internal_field_flag_is_stored(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKR',
+                'name' => 'Surat Keterangan Internal',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1, 'internal' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $fields = LetterType::where('code', 'SKR')->firstOrFail()->fields;
+        $this->assertTrue($fields[0]['internal']);
+    }
+
     public function test_staff_can_save_permohonan_body_on_letter_type(): void
     {
         $this->actingAs($this->user)

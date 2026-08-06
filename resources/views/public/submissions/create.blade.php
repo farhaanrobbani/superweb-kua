@@ -70,6 +70,9 @@
 
                         <div class="mt-5 space-y-4">
                             @foreach ($selectedType->fields ?? [] as $field)
+                                @if (! empty($field['internal']))
+                                    @continue
+                                @endif
                                 @php
                                     $name = 'data[' . $field['name'] . ']';
                                     $value = old('data.' . $field['name']);
