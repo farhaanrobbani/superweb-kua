@@ -383,7 +383,8 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Pengaturan Web')
             ->assertSee('Instansi')
             ->assertSee('Surat')
-            ->assertSee('Layanan');
+            ->assertSee('Layanan')
+            ->assertSee('Media Sosial');
     }
 
     public function test_staff_can_update_kua_settings(): void

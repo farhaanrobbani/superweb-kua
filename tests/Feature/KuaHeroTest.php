@@ -220,6 +220,40 @@ class KuaHeroTest extends TestCase
             ->assertDontSee('storage/welcome/', false);
     }
 
+    public function test_footer_shows_medsos_links_when_set(): void
+    {
+        KuaSetting::set('sosmed_instagram', 'https://instagram.com/kua.contoh');
+        KuaSetting::set('sosmed_tiktok', 'https://tiktok.com/@kua.contoh');
+        KuaSetting::set('sosmed_whatsapp', 'https://wa.me/6281234567890');
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Media Sosial')
+            ->assertSee('https://instagram.com/kua.contoh')
+            ->assertSee('https://tiktok.com/@kua.contoh')
+            ->assertSee('https://wa.me/6281234567890')
+            ->assertSee('Instagram')
+            ->assertSee('WhatsApp');
+    }
+
+    public function test_footer_hides_medsos_column_when_empty(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('Media Sosial')
+            ->assertDontSee('Instagram');
+    }
+
+    public function test_settings_reject_invalid_sosmed_urls(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), array_merge($this->basePayload(), [
+                'sosmed_instagram' => 'bukan-url',
+                'sosmed_whatsapp' => 'wa.me/6281234567890',
+            ]))
+            ->assertSessionHasErrors(['sosmed_instagram', 'sosmed_whatsapp']);
+    }
+
     private function basePayload(array $extra = []): array
     {
         return array_merge([

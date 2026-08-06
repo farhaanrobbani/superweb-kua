@@ -169,6 +169,29 @@
                                               value="{{ old('kode_pos', $settings['kode_pos']['value']) }}" />
                             </div>
                         </div>
+
+                        <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Media Sosial</h3>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <x-input-label for="sosmed_instagram" value="Instagram" />
+                                <x-text-input id="sosmed_instagram" name="sosmed_instagram" type="url" class="mt-1 block w-full"
+                                              placeholder="https://instagram.com/..." value="{{ old('sosmed_instagram', $settings['sosmed_instagram']['value']) }}" />
+                                <x-input-error :messages="$errors->get('sosmed_instagram')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="sosmed_tiktok" value="TikTok" />
+                                <x-text-input id="sosmed_tiktok" name="sosmed_tiktok" type="url" class="mt-1 block w-full"
+                                              placeholder="https://tiktok.com/@..." value="{{ old('sosmed_tiktok', $settings['sosmed_tiktok']['value']) }}" />
+                                <x-input-error :messages="$errors->get('sosmed_tiktok')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="sosmed_whatsapp" value="WhatsApp" />
+                                <x-text-input id="sosmed_whatsapp" name="sosmed_whatsapp" type="url" class="mt-1 block w-full"
+                                              placeholder="https://wa.me/6281..." value="{{ old('sosmed_whatsapp', $settings['sosmed_whatsapp']['value']) }}" />
+                                <x-input-error :messages="$errors->get('sosmed_whatsapp')" class="mt-2" />
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Isi URL lengkap dengan <code>https://</code>. Link tampil di footer beranda dengan ikon platform. Kosongkan untuk menyembunyikan platform tersebut.</p>
                     </div>
 
                     <div x-show="tab === 'surat'" x-cloak>
