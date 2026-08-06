@@ -15,7 +15,7 @@ class LetterTemplateController extends Controller
     public function index(): View
     {
         return view('admin.letter-templates.index', [
-            'templates' => LetterTemplate::with('letterType')->orderBy('name')->paginate(15),
+            'templates' => LetterTemplate::with('letterType')->orderByDesc('active')->orderBy('name')->paginate(15),
         ]);
     }
 

@@ -30,6 +30,17 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Surat Keterangan');
     }
 
+    public function test_letter_types_list_sorts_active_first(): void
+    {
+        LetterType::factory()->create(['code' => 'ZZZ', 'name' => 'Surat Aktif Zeta', 'active' => true]);
+        LetterType::factory()->create(['code' => 'AAA', 'name' => 'Surat Nonaktif Alpha', 'active' => false]);
+
+        $this->actingAs($this->user)
+            ->get(route('letter-types.index'))
+            ->assertOk()
+            ->assertSeeInOrder(['Surat Aktif Zeta', 'Surat Nonaktif Alpha']);
+    }
+
     public function test_staff_can_create_letter_type(): void
     {
         $response = $this->actingAs($this->user)
@@ -313,6 +324,18 @@ class AdminMasterDataTest extends TestCase
             ->get(route('letter-templates.index'))
             ->assertOk()
             ->assertSee('Template Utama');
+    }
+
+    public function test_templates_list_sorts_active_first(): void
+    {
+        $type = LetterType::factory()->create();
+        LetterTemplate::factory()->create(['letter_type_id' => $type->id, 'name' => 'Template Aktif Zeta', 'active' => true]);
+        LetterTemplate::factory()->create(['letter_type_id' => $type->id, 'name' => 'Template Nonaktif Alpha', 'active' => false]);
+
+        $this->actingAs($this->user)
+            ->get(route('letter-templates.index'))
+            ->assertOk()
+            ->assertSeeInOrder(['Template Aktif Zeta', 'Template Nonaktif Alpha']);
     }
 
     public function test_letter_template_body_is_sanitized(): void

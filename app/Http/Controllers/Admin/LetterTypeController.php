@@ -15,7 +15,7 @@ class LetterTypeController extends Controller
     public function index(): View
     {
         return view('admin.letter-types.index', [
-            'letterTypes' => LetterType::withCount('letters')->orderBy('code')->paginate(15),
+            'letterTypes' => LetterType::withCount('letters')->orderByDesc('active')->orderBy('code')->paginate(15),
         ]);
     }
 
