@@ -17,12 +17,12 @@ class SubmissionController extends Controller
         $data = [];
 
         if ($request->has('jenis')) {
-            $selectedType = LetterType::where('code', $request->input('jenis'))->where('active', true)->firstOrFail();
+            $selectedType = LetterType::where('code', $request->input('jenis'))->where('active', true)->publik()->firstOrFail();
             $data = old('data', []);
         }
 
         return view('public.submissions.create', [
-            'letterTypes' => LetterType::where('active', true)->orderBy('name')->get(),
+            'letterTypes' => LetterType::where('active', true)->publik()->orderBy('name')->get(),
             'selectedType' => $selectedType,
             'data' => $data,
             'kua' => [
@@ -46,7 +46,7 @@ class SubmissionController extends Controller
             'kontak' => ['required', 'string', 'max:100'],
         ]);
 
-        $letterType = LetterType::where('code', $request->input('jenis'))->firstOrFail();
+        $letterType = LetterType::where('code', $request->input('jenis'))->publik()->firstOrFail();
 
         $rules = [];
         $fields = $letterType->fields ?? [];
