@@ -13,7 +13,7 @@
         .isi { text-align: justify; }
         .isi p { margin: 0 0 12px 0; }
 
-        .data-tabel { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+        .data-tabel { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
         .data-tabel td { vertical-align: top; padding: 1px 0; }
         .data-tabel .label { width: 190px; }
         .data-tabel .titik { width: 16px; }
