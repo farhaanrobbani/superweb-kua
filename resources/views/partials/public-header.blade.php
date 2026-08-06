@@ -36,9 +36,6 @@
                             <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
                             <span>
                                 <span class="block text-sm font-semibold text-[#1b1b18]">{{ $service->name }}</span>
-                                @if ($service->description)
-                                    <span class="block text-xs leading-relaxed text-[#1b1b1870]">{{ $service->description }}</span>
-                                @endif
                             </span>
                         </a>
                     @empty
@@ -102,9 +99,6 @@
                         <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
                         <span>
                             <span class="block text-sm font-semibold text-[#1b1b18]">{{ $service->name }}</span>
-                            @if ($service->description)
-                                <span class="block text-xs leading-relaxed text-[#1b1b1870]">{{ $service->description }}</span>
-                            @endif
                         </span>
                     </a>
                 @endforeach
