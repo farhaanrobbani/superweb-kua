@@ -64,6 +64,26 @@ class AdminMasterDataTest extends TestCase
         $this->assertDatabaseHas('letter_types', ['code' => 'SKY', 'active' => false, 'publik' => false]);
     }
 
+    public function test_letter_type_field_order_is_preserved(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKZ',
+                'name' => 'Surat Keterangan Z',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                    ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => 1],
+                    ['name' => 'tanggal_lahir', 'label' => 'Tanggal Lahir', 'type' => 'date', 'required' => 0],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertSame(
+            ['nama', 'nik', 'tanggal_lahir'],
+            array_column(LetterType::where('code', 'SKZ')->firstOrFail()->fields, 'name')
+        );
+    }
+
     public function test_letter_type_update_without_checkboxes_turns_off_active_and_publik(): void
     {
         $type = LetterType::factory()->create(['active' => true, 'publik' => true]);
