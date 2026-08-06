@@ -31,6 +31,14 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
+                    <div class="mt-4">
+                        <x-input-label for="permohonan_body" value="Narasi Surat Permohonan" />
+                        <textarea id="permohonan_body" name="permohonan_body" rows="4"
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_body') }}</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>.</p>
+                        <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
+                    </div>
+
                     <div class="mt-6">
                         <div class="flex items-center justify-between">
                             <x-input-label value="Field / Data Surat" />

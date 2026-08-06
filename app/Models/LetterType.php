@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['code', 'name', 'description', 'fields', 'active', 'publik'])]
+#[Fillable(['code', 'name', 'description', 'permohonan_body', 'fields', 'active', 'publik'])]
 class LetterType extends Model
 {
     use HasFactory;

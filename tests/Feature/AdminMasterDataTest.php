@@ -84,6 +84,51 @@ class AdminMasterDataTest extends TestCase
         );
     }
 
+    public function test_staff_can_save_permohonan_body_on_letter_type(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKQ',
+                'name' => 'Surat Keterangan Q',
+                'description' => 'Tes narasi',
+                'permohonan_body' => "Memohon agar diterbitkan Surat atas nama [nama].\n\nDemikian Surat Permohonan ini kami buat.",
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', ['code' => 'SKQ']);
+
+        $type = LetterType::where('code', 'SKQ')->firstOrFail();
+        $this->assertStringContainsString('[nama]', $type->permohonan_body);
+
+        $this->actingAs($this->user)
+            ->put(route('letter-types.update', $type), [
+                'code' => 'SKQ',
+                'name' => 'Surat Keterangan Q',
+                'description' => 'Tes narasi',
+                'permohonan_body' => 'Narasi diperbarui.',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_body' => 'Narasi diperbarui.']);
+    }
+
+    public function test_letter_type_edit_form_shows_permohonan_body_textarea(): void
+    {
+        $type = LetterType::factory()->create(['permohonan_body' => 'Narasi contoh.']);
+
+        $this->actingAs($this->user)
+            ->get(route('letter-types.edit', $type))
+            ->assertOk()
+            ->assertSee('Narasi Surat Permohonan')
+            ->assertSee('Narasi contoh.');
+    }
+
     public function test_letter_type_update_without_checkboxes_turns_off_active_and_publik(): void
     {
         $type = LetterType::factory()->create(['active' => true, 'publik' => true]);

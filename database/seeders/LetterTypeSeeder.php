@@ -15,6 +15,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SPN',
                 'name' => 'Surat Pengantar Nikah',
                 'description' => 'Pengantar untuk pencatatan perkawinan di KUA.',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Pengantar Nikah untuk pelaksanaan akad nikah atas nama [nama_suami] dan [nama_istri] yang rencananya dilaksanakan pada tanggal [tanggal_nikah] bertempat di [tempat_nikah].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama_suami', 'label' => 'Nama Calon Suami', 'type' => 'text', 'required' => true],
@@ -36,6 +37,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SKU',
                 'name' => 'Surat Keterangan (Umum)',
                 'description' => 'Surat keterangan untuk keperluan umum (belum menikah, domisili, dll).',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Keterangan atas nama [nama] yang diperlukan untuk keperluan [keperluan].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -55,6 +57,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SPC',
                 'name' => 'Surat Pengantar Cerai/Talak',
                 'description' => 'Pengantar permohonan cerai/talak ke Pengadilan Agama.',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Pengantar Cerai/Talak atas nama [nama_suami] dan [nama_istri] yang telah menikah pada tanggal [tanggal_nikah] di [tempat_nikah], dengan alasan [alasan].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama_suami', 'label' => 'Nama Suami', 'type' => 'text', 'required' => true],
@@ -74,6 +77,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SUP',
                 'name' => 'Surat Undangan/Pemberitahuan',
                 'description' => 'Undangan kegiatan atau pemberitahuan resmi.',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Undangan/Pemberitahuan untuk acara [acara] yang akan dilaksanakan pada tanggal [tanggal_acara] pukul [waktu_acara] bertempat di [tempat_acara].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama_undangan', 'label' => 'Nama Undangan', 'type' => 'text', 'required' => true],
@@ -93,6 +97,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SIN',
                 'name' => 'Surat Internal/Administrasi',
                 'description' => 'Nota dinas, surat tugas, dan surat administrasi internal KUA.',
+                'permohonan_body' => "Memohon agar diterbitkan [jenis_internal] atas nama [nama_pegawai] untuk melaksanakan tugas sebagai berikut:\n[uraian]\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama_pegawai', 'label' => 'Nama Pegawai', 'type' => 'text', 'required' => true],
@@ -111,6 +116,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SP',
                 'name' => 'Surat Pengantar',
                 'description' => 'Pengantar untuk keperluan SKCK, domisili, beasiswa, dan lainnya.',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Pengantar atas nama [nama] yang diperlukan untuk keperluan [keperluan].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -130,6 +136,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SPD',
                 'name' => 'Surat Permohonan Duplikat Akta Nikah',
                 'description' => 'Permohonan penggantian akta nikah yang hilang atau rusak.',
+                'permohonan_body' => "Memohon agar diterbitkan Duplikat Akta Nikah atas nama [nama] dengan Nomor Akta Nikah: [no_akta] tanggal: [tanggal_akta]. Duplikat Akta Nikah tersebut diperlukan karena [alasan].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => true,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -149,6 +156,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SPA',
                 'name' => 'Surat Permohonan Perubahan Akta',
                 'description' => 'Permohonan perbaikan/perubahan data pada akta nikah.',
+                'permohonan_body' => "Memohon agar diterbitkan Perubahan Data Akta Nikah atas nama [nama] dengan Nomor Akta Nikah: [no_akta] tanggal: [tanggal_akta]. Perubahan yang dimohon adalah [jenis_perubahan], dengan uraian sebagai berikut:\n[uraian]\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => true,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -168,6 +176,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SPM',
                 'name' => 'Surat Permohonan (Umum)',
                 'description' => 'Permohonan keterangan atau layanan lain secara umum.',
+                'permohonan_body' => "Memohon agar diterbitkan surat sesuai perihal berikut:\n[perihal]\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => false,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -187,6 +196,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'SKN',
                 'name' => 'Surat Keterangan Nikah',
                 'description' => 'Keterangan telah menikah untuk keperluan tunjangan, asuransi, BPJS, dan lainnya.',
+                'permohonan_body' => "Memohon agar diterbitkan Surat Keterangan Nikah atas nama [nama] yang telah menikah dengan [nama_pasangan] pada tanggal [tanggal_nikah] di [tempat_nikah], untuk keperluan [keperluan].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => true,
                 'fields' => [
                     ['name' => 'nama', 'label' => 'Nama Lengkap', 'type' => 'text', 'required' => true],
@@ -209,6 +219,7 @@ class LetterTypeSeeder extends Seeder
                 'code' => 'PNL',
                 'name' => 'Surat Permohonan Pencatatan Nikah Luar Negeri',
                 'description' => 'Permohonan pencatatan perkawinan Warga Negara Indonesia yang dilangsungkan di luar negeri.',
+                'permohonan_body' => "Memohon agar dicatatkan perkawinan yang telah dilangsungkan pada tanggal [tanggal_nikah] di [tempat_nikah], [negara], atas nama [nama_suami] dan [nama_istri].\n\nDemikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.",
                 'publik' => true,
                 'fields' => [
                     ['name' => 'nama_suami', 'label' => 'Nama Suami', 'type' => 'text', 'required' => true],

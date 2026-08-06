@@ -62,6 +62,7 @@ class LetterTypeController extends Controller
             'code' => ['required', 'string', 'max:50', Rule::unique('letter_types', 'code')->ignore($letterType)],
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
+            'permohonan_body' => ['nullable', 'string'],
             'fields' => ['nullable', 'array'],
             'fields.*.name' => ['required', 'string', 'max:50', 'distinct'],
             'fields.*.label' => ['required', 'string', 'max:150'],
