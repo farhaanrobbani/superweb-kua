@@ -47,7 +47,6 @@
                 </div>
             </div>
             <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
-            <a href="{{ route('pegawai.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Daftar Pegawai</a>
         </nav>
         <a href="{{ route('permohonan.create') }}"
            class="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 sm:hidden">
@@ -63,7 +62,6 @@
             </svg>
         </button>
         <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
-        <a href="{{ route('pegawai.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Daftar Pegawai</a>
         @if ($headerServices->isNotEmpty())
             <div x-show="layanan"
                  x-transition:enter="transition ease-out duration-100"
@@ -88,5 +86,13 @@
                 @endforeach
             </div>
         @endif
+    </nav>
+    <nav class="border-t border-teal-100 bg-teal-700">
+        <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-2 px-6 py-2 text-sm font-medium">
+            <a href="{{ route('pegawai.index') }}"
+               class="rounded-md px-3 py-1.5 text-teal-50 transition-colors duration-150 hover:bg-teal-600 hover:text-white">Daftar Pegawai</a>
+            <a href="{{ route('kritik-saran.create') }}"
+               class="rounded-md px-3 py-1.5 text-teal-50 transition-colors duration-150 hover:bg-teal-600 hover:text-white">Kritik & Saran</a>
+        </div>
     </nav>
 </header>
