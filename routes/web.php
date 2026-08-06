@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
+use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
@@ -21,6 +22,8 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index']);
+
+Route::get('/favicon.ico', FaviconController::class);
 
 Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name('pengumuman.index');
 Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
