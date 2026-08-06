@@ -15,13 +15,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
 use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+
+Route::get('/cari-akta', [LayananController::class, 'cariAkta'])->name('layanan.cari-akta');
 
 Route::get('/favicon.ico', FaviconController::class);
 

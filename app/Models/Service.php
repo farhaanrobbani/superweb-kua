@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'description', 'url', 'icon', 'sort_order', 'active'])]
+#[Fillable(['name', 'description', 'url', 'embed_url', 'icon', 'sort_order', 'active'])]
 class Service extends Model
 {
     use HasFactory;

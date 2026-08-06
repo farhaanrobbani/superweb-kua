@@ -74,6 +74,7 @@ class ServiceController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
             'url' => ['nullable', 'string', 'max:255', Rule::notIn(['#'])],
+            'embed_url' => ['nullable', 'url', 'max:255'],
             'icon' => ['nullable', 'string', 'max:50', Rule::in(array_keys(self::icons()))],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'active' => ['sometimes', 'boolean'],

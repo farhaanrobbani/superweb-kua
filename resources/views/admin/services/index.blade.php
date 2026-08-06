@@ -39,7 +39,11 @@
                                         <p class="text-xs text-gray-500 mt-0.5">{{ $service->description }}</p>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $service->url ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $service->url ?? '-' }}
+                                    @if ($service->embed_url)
+                                        <span class="ml-2 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-sans">embed</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $service->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                         {{ $service->active ? 'Aktif' : 'Nonaktif' }}
