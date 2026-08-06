@@ -6,7 +6,7 @@
     <style>
         @page { margin: 3cm 3cm 3cm 4cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
-        body { font-size: 12px; line-height: 1.6; color: #111; }
+        body { font-size: 12px; line-height: 1.5; color: #111; }
 
         /* Kop surat */
         .kop { text-align: center; margin-bottom: 4px; }
