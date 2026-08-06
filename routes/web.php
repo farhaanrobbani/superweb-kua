@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::post('letters/{letter}/tolak', [LetterController::class, 'tolak'])->name('letters.tolak')->middleware('role:kepala');
     Route::post('letters/{letter}/terbitkan', [LetterController::class, 'terbitkan'])->name('letters.terbitkan');
     Route::get('letters/{letter}/pdf', [LetterController::class, 'pdf'])->name('letters.pdf');
+    Route::get('letters/{letter}/preview', [LetterController::class, 'preview'])->name('letters.preview');
 
     Route::get('/submissions', [SubmissionAdminController::class, 'index'])->name('submissions.index');
     Route::get('/submissions/{submission}', [SubmissionAdminController::class, 'show'])->name('submissions.show');

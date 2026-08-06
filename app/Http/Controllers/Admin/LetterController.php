@@ -218,6 +218,20 @@ class LetterController extends Controller
     {
         abort_unless($letter->status === Letter::STATUS_TERBIT, 403, 'Surat dapat diunduh setelah diterbitkan.');
 
+        [$pdf, $fileName] = $this->buildPdf($letter);
+
+        return $pdf->download($fileName);
+    }
+
+    public function preview(Letter $letter)
+    {
+        [$pdf, $fileName] = $this->buildPdf($letter);
+
+        return $pdf->stream($fileName, ['Attachment' => false]);
+    }
+
+    private function buildPdf(Letter $letter): array
+    {
         PdfSupport::registerArialFonts();
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
@@ -243,7 +257,7 @@ class LetterController extends Controller
 
         $fileName = ($letter->nomor ? str_replace('/', '-', $letter->nomor) : 'surat') . '.pdf';
 
-        return $pdf->download($fileName);
+        return [$pdf, $fileName];
     }
 
     private function validateDynamic(Request $request, LetterType $letterType): array

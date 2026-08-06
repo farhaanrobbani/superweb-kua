@@ -185,6 +185,47 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('05 Agustus 2026', $html);
     }
 
+    public function test_preview_available_for_draft_letter(): void
+    {
+        $draft = Letter::create([
+            'letter_type_id' => $this->type->id,
+            'perihal' => 'Draft Preview',
+            'data' => ['nama' => 'A', 'alamat' => 'B'],
+            'status' => Letter::STATUS_DRAFT,
+            'created_by' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->user)
+            ->get(route('letters.preview', $draft))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf')
+            ->assertHeader('content-disposition', 'inline; filename=surat.pdf');
+    }
+
+    public function test_preview_available_for_published_letter(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('letters.preview', $this->letter))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
+
+    public function test_letter_show_page_embeds_preview_iframe(): void
+    {
+        $draft = Letter::create([
+            'letter_type_id' => $this->type->id,
+            'perihal' => 'Draft Preview',
+            'data' => ['nama' => 'A', 'alamat' => 'B'],
+            'status' => Letter::STATUS_DRAFT,
+            'created_by' => $this->user->id,
+        ]);
+
+        $this->actingAs($this->user)
+            ->get(route('letters.show', $draft))
+            ->assertOk()
+            ->assertSee(route('letters.preview', $draft), false);
+    }
+
     private function renderPdfHtml(): string
     {
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',

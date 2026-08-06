@@ -53,6 +53,13 @@
             </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+                <h3 class="font-semibold text-gray-800 mb-3">Preview Surat</h3>
+                <iframe src="{{ route('letters.preview', $letter) }}" title="Preview surat"
+                        class="w-full rounded-md border border-gray-200 bg-white"
+                        style="border:0; height:80vh; min-height:600px;"></iframe>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
                 <h3 class="font-semibold text-gray-800 mb-4">Data Surat</h3>
                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     @foreach ($letter->letterType->fields ?? [] as $field)
