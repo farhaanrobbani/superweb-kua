@@ -26,7 +26,8 @@ class KuaSettingController extends Controller
         'sk_kepala' => 'No. SK Pengangkatan Kepala KUA',
         'ttd_path' => 'File Tanda Tangan (path)',
         'logo_path' => 'Logo KUA (upload)',
-        'hero_path' => 'Gambar Hero Beranda (upload)',
+        'bg_path' => 'Foto Background Welcome (upload)',
+        'hero_path' => 'Banner Beranda (upload)',
         'hero_judul' => 'Judul Utama Beranda',
         'hero_subjudul' => 'Paragraf Deskripsi Beranda',
     ];
@@ -61,6 +62,8 @@ class KuaSettingController extends Controller
             'logo_hapus' => ['sometimes', 'in:1'],
             'hero' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
             'hero_hapus' => ['sometimes', 'in:1'],
+            'bg' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
+            'bg_hapus' => ['sometimes', 'in:1'],
             'hero_judul' => ['nullable', 'string', 'max:255'],
             'hero_subjudul' => ['nullable', 'string', 'max:500'],
         ]);
@@ -80,6 +83,23 @@ class KuaSettingController extends Controller
             }
 
             KuaSetting::set('hero_path', '');
+        }
+
+        if ($request->hasFile('bg')) {
+            $old = KuaSetting::get('bg_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $path = $request->file('bg')->store('welcome', 'public');
+            KuaSetting::set('bg_path', $path);
+        } elseif ($request->boolean('bg_hapus')) {
+            $old = KuaSetting::get('bg_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            KuaSetting::set('bg_path', '');
         }
 
         if ($request->hasFile('logo')) {

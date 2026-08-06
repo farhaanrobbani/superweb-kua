@@ -31,6 +31,11 @@ class KuaSetting extends Model
         return self::storedImageUrl('hero_path');
     }
 
+    public static function backgroundUrl(): ?string
+    {
+        return self::storedImageUrl('bg_path');
+    }
+
     private static function storedImageUrl(string $key): ?string
     {
         try {

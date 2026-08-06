@@ -23,7 +23,7 @@ class WelcomeController extends Controller
 
     private function kua(): array
     {
-        $keys = ['instansi', 'alamat', 'telepon', 'email', 'kecamatan', 'kabupaten', 'kode_pos', 'kepala_nama', 'logo_path', 'hero_path', 'hero_judul', 'hero_subjudul'];
+        $keys = ['instansi', 'alamat', 'telepon', 'email', 'kecamatan', 'kabupaten', 'kode_pos', 'kepala_nama', 'logo_path', 'hero_path', 'bg_path', 'hero_judul', 'hero_subjudul'];
 
         $values = [];
         foreach ($keys as $key) {
@@ -32,6 +32,7 @@ class WelcomeController extends Controller
 
         $values['logo_url'] = KuaSetting::logoUrl();
         $values['hero_url'] = KuaSetting::heroUrl();
+        $values['bg_url'] = KuaSetting::backgroundUrl();
 
         return $values;
     }
