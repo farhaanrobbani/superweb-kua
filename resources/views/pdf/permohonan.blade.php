@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Surat Permohonan {{ $submission->letterType->name }}</title>
     <style>
+        @page { margin: 4cm 3cm 3cm 4cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.6; color: #111; }
 
