@@ -24,7 +24,7 @@
 
         .meta { margin: 18px 0; }
         .meta div { display: block; margin-bottom: 2px; }
-        .meta .baris { padding-left: 4.5em; text-indent: -4.5em; }
+        .meta .label { display: inline-block; text-align: right; }
         .meta .nilai { display: inline-block; width: 2.2em; text-align: center; }
         .isi { text-align: justify; line-height: 1.5; }
         .isi p { margin: 0 0 12px 0; line-height: 1.5; }
@@ -91,10 +91,20 @@
     <hr class="garis-tipis">
     @endif
 
+    @php($metaRows = $letter->metaRows())
+    @php($metaIndent = 4.5)
+    @php($metaIndent = max($metaIndent, mb_strlen('Nomor') * 0.6 + 0.5))
+    @php($metaIndent = max($metaIndent, mb_strlen('Perihal') * 0.6 + 0.5))
+    @foreach ($metaRows as $metaRow)
+        @php($metaIndent = max($metaIndent, mb_strlen((string) ($metaRow['label'] ?? '')) * 0.6 + 0.5))
+    @endforeach
+
     <div class="meta">
-        <div class="baris">Nomor<span class="nilai">:</span>{{ $letter->nomor }}</div>
-        <div class="baris">Lampiran<span class="nilai">:</span>-</div>
-        <div class="baris">Perihal<span class="nilai">:</span>{{ $letter->perihal }}</div>
+        <div class="baris"><span class="label" style="width: {{ $metaIndent }}em;">Nomor</span><span class="nilai">:</span>{{ $letter->nomor }}</div>
+        @foreach ($metaRows as $metaRow)
+            <div class="baris"><span class="label" style="width: {{ $metaIndent }}em;">{{ $metaRow['label'] ?? '' }}</span><span class="nilai">:</span>{{ $metaRow['value'] ?? '' }}</div>
+        @endforeach
+        <div class="baris"><span class="label" style="width: {{ $metaIndent }}em;">Perihal</span><span class="nilai">:</span>{{ $letter->perihal }}</div>
     </div>
 
     <div style="text-align: right;">{{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>

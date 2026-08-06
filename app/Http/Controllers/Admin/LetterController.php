@@ -70,6 +70,7 @@ class LetterController extends Controller
             'selectedType' => $selectedType,
             'data' => $data,
             'dari' => $dari,
+            'metaRows' => old('meta', [['label' => 'Lampiran', 'value' => '-']]),
             'perihal' => old('perihal', $dari ? 'Permohonan Penerbitan ' . $selectedType->name : null),
         ]);
     }
@@ -84,6 +85,7 @@ class LetterController extends Controller
             'nomor' => $validated['nomor'],
             'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
+            'meta' => $validated['meta'],
             'data' => $validated['data'],
             'status' => Letter::STATUS_DRAFT,
             'created_by' => auth()->id(),
@@ -115,6 +117,7 @@ class LetterController extends Controller
         return view('admin.letters.edit', [
             'letter' => $letter,
             'data' => $letter->data,
+            'metaRows' => old('meta', $letter->meta ?? [['label' => 'Lampiran', 'value' => '-']]),
         ]);
     }
 
@@ -128,6 +131,7 @@ class LetterController extends Controller
             'nomor' => $validated['nomor'],
             'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
+            'meta' => $validated['meta'],
             'data' => $validated['data'],
         ]);
 
@@ -246,6 +250,9 @@ class LetterController extends Controller
             'nomor' => ['nullable', 'string', 'max:100'],
             'tanggal_surat' => ['nullable', 'date'],
             'perihal' => ['required', 'string', 'max:255'],
+            'meta' => ['nullable', 'array', 'max:20'],
+            'meta.*.label' => ['nullable', 'string', 'max:60'],
+            'meta.*.value' => ['nullable', 'string', 'max:255'],
         ];
 
         $fields = $letterType->fields ?? [];
@@ -266,10 +273,23 @@ class LetterController extends Controller
             $safeData[$field['name']] = $data[$field['name']] ?? null;
         }
 
+        $meta = [];
+        foreach ($request->input('meta', []) as $row) {
+            $label = trim((string) ($row['label'] ?? ''));
+            if ($label === '') {
+                continue;
+            }
+            $meta[] = [
+                'label' => $label,
+                'value' => trim((string) ($row['value'] ?? '')),
+            ];
+        }
+
         return [
             'nomor' => $validated['nomor'] ?? null,
             'tanggal_surat' => $validated['tanggal_surat'] ?? null,
             'perihal' => $validated['perihal'],
+            'meta' => $meta,
             'data' => $safeData,
         ];
     }

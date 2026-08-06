@@ -151,6 +151,19 @@ class LetterPdfTest extends TestCase
             ->assertHeader('content-type', 'application/pdf');
     }
 
+    public function test_pdf_downloads_with_custom_meta_rows(): void
+    {
+        $this->letter->update(['meta' => [
+            ['label' => 'Lampiran', 'value' => '2 lembar'],
+            ['label' => 'Sifat', 'value' => 'Penting'],
+        ]]);
+
+        $this->actingAs($this->user)
+            ->get(route('letters.pdf', $this->letter))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
+
     public function test_render_body_replaces_placeholders_and_escapes_html(): void
     {
         $body = $this->letter->renderBody();

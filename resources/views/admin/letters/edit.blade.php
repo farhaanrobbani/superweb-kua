@@ -41,6 +41,29 @@
                             <x-input-error :messages="$errors->get('perihal')" class="mt-2" />
                         </div>
 
+                        <div class="mt-6" x-data="metaRepeater({{ json_encode($metaRows) }})">
+                            <div class="flex items-center justify-between">
+                                <x-input-label value="Baris Header Tambahan" />
+                                <button type="button" @click="addRow()"
+                                        class="text-sm font-medium text-teal-600 hover:underline">+ Tambah Baris</button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Nomor, Perihal, dan Tanggal sudah otomatis. Tambah baris opsional seperti Lampiran, Sifat, atau Hal.</p>
+                            <div class="mt-3 space-y-2">
+                                <template x-for="(row, index) in rows" :key="index">
+                                    <div class="flex items-center gap-2">
+                                        <x-text-input x-bind:name="`meta[${index}][label]`" x-model="row.label"
+                                                      class="w-1/3" placeholder="Label (contoh: Lampiran)" />
+                                        <x-text-input x-bind:name="`meta[${index}][value]`" x-model="row.value"
+                                                      class="flex-1" placeholder="Isi (contoh: -)" />
+                                        <button type="button" @click="rows.splice(index, 1)"
+                                                class="text-sm text-red-600 hover:underline">Hapus</button>
+                                    </div>
+                                </template>
+                                <p x-show="rows.length === 0" class="text-sm text-gray-400">Belum ada baris tambahan.</p>
+                            </div>
+                            <x-input-error :messages="$errors->get('meta')" class="mt-2" />
+                        </div>
+
                         <div class="mt-6 space-y-4">
                             @php($internalShown = false)
                             @foreach ($letter->letterType->fields ?? [] as $field)
@@ -98,4 +121,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function metaRepeater(initialRows) {
+            return {
+                rows: (initialRows || []).map((row) => ({ label: row.label || '', value: row.value || '' })),
+                addRow() {
+                    this.rows.push({ label: '', value: '' });
+                },
+            };
+        }
+    </script>
 </x-app-layout>

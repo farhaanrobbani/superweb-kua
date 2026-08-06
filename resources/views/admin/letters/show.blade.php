@@ -51,6 +51,16 @@
                         </div>
                     @endforeach
                 </dl>
+                @if (count($letter->metaRows()) > 0)
+                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-4 border-t border-gray-100 pt-4">
+                        @foreach ($letter->metaRows() as $metaRow)
+                            <div>
+                                <dt class="text-gray-500">{{ $metaRow['label'] ?? '—' }}</dt>
+                                <dd class="font-medium text-gray-800">{{ $metaRow['value'] ?? '' }}</dd>
+                            </div>
+                        @endforeach
+                    </dl>
+                @endif
             </div>
 
             <div class="flex flex-wrap items-center gap-3">

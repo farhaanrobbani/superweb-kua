@@ -14,6 +14,7 @@ use App\Support\HtmlSanitizer;
     'nomor',
     'tanggal_surat',
     'perihal',
+    'meta',
     'data',
     'status',
     'created_by',
@@ -94,10 +95,20 @@ class Letter extends Model
         return HtmlSanitizer::sanitize($body);
     }
 
+    public function metaRows(): array
+    {
+        if ($this->meta === null) {
+            return [['label' => 'Lampiran', 'value' => '-']];
+        }
+
+        return $this->meta;
+    }
+
     protected function casts(): array
     {
         return [
             'data' => 'array',
+            'meta' => 'array',
             'tanggal_surat' => 'date',
             'approved_at' => 'datetime',
         ];
