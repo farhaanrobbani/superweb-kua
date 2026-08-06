@@ -14,7 +14,7 @@
     @include('partials.public-header')
 
     <main class="flex-1 py-10">
-        <div class="max-w-3xl mx-auto px-4">
+        <div class="max-w-5xl mx-auto px-4">
             <div class="mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Form Permohonan Surat</h2>
                 <p class="text-sm text-gray-500 mt-1">Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.</p>
