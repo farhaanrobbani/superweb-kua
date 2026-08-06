@@ -7,7 +7,6 @@ use App\Models\KuaSetting;
 use App\Models\Letter;
 use App\Models\LetterType;
 use App\Models\Submission;
-use App\Services\LetterNumberService;
 use App\Support\PdfSupport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
@@ -82,6 +81,8 @@ class LetterController extends Controller
 
         $letter = Letter::create([
             'letter_type_id' => $letterType->id,
+            'nomor' => $validated['nomor'],
+            'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
             'data' => $validated['data'],
             'status' => Letter::STATUS_DRAFT,
@@ -124,6 +125,8 @@ class LetterController extends Controller
         $validated = $this->validateDynamic($request, $letter->letterType);
 
         $letter->update([
+            'nomor' => $validated['nomor'],
+            'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
             'data' => $validated['data'],
         ]);
@@ -186,14 +189,18 @@ class LetterController extends Controller
             ->with('success', 'Surat ditolak dengan catatan.');
     }
 
-    public function terbitkan(Letter $letter, LetterNumberService $numberService): RedirectResponse
+    public function terbitkan(Letter $letter): RedirectResponse
     {
         abort_unless($letter->status === Letter::STATUS_DISETUJUI, 403, 'Hanya surat disetujui yang bisa diterbitkan.');
 
         if (! $letter->nomor) {
-            $letter->tanggal_surat = now()->toDateString();
-            $letter->nomor = $numberService->next($letter);
+            return back()->withErrors(['nomor' => 'Nomor surat wajib diisi sebelum surat diterbitkan.']);
         }
+
+        if (! $letter->tanggal_surat) {
+            return back()->withErrors(['tanggal_surat' => 'Tanggal surat wajib diisi sebelum surat diterbitkan.']);
+        }
+
         $letter->status = Letter::STATUS_TERBIT;
         $letter->save();
 
@@ -228,6 +235,8 @@ class LetterController extends Controller
     private function validateDynamic(Request $request, LetterType $letterType): array
     {
         $rules = [
+            'nomor' => ['nullable', 'string', 'max:100'],
+            'tanggal_surat' => ['nullable', 'date'],
             'perihal' => ['required', 'string', 'max:255'],
         ];
 
@@ -250,6 +259,8 @@ class LetterController extends Controller
         }
 
         return [
+            'nomor' => $validated['nomor'] ?? null,
+            'tanggal_surat' => $validated['tanggal_surat'] ?? null,
             'perihal' => $validated['perihal'],
             'data' => $safeData,
         ];

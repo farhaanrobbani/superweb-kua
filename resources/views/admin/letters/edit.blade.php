@@ -16,7 +16,25 @@
                         @csrf
                         @method('PUT')
 
-                        <div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <x-input-label for="nomor" value="Nomor Surat" />
+                                <x-text-input id="nomor" name="nomor" class="mt-1 block w-full"
+                                              value="{{ old('nomor', $letter->nomor) }}"
+                                              placeholder="Contoh: 001/KUA.10.02.07/VIII/2026" />
+                                <x-input-error :messages="$errors->get('nomor')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="tanggal_surat" value="Tanggal Surat" />
+                                <x-text-input id="tanggal_surat" name="tanggal_surat" type="date"
+                                              class="mt-1 block w-full"
+                                              value="{{ old('tanggal_surat', $letter->tanggal_surat?->format('Y-m-d')) }}" />
+                                <x-input-error :messages="$errors->get('tanggal_surat')" class="mt-2" />
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
                             <x-input-label for="perihal" value="Perihal Surat" />
                             <x-text-input id="perihal" name="perihal" class="mt-1 block w-full" required
                                           value="{{ old('perihal', $letter->perihal) }}" />

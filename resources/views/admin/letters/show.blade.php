@@ -31,6 +31,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div><span class="text-gray-500">Jenis Surat:</span> <span class="font-medium">{{ $letter->letterType->name }}</span></div>
                     <div><span class="text-gray-500">Perihal:</span> <span class="font-medium">{{ $letter->perihal }}</span></div>
+                    <div><span class="text-gray-500">Nomor Surat:</span> <span class="font-medium">{{ $letter->nomor ?? '—' }}</span></div>
+                    <div><span class="text-gray-500">Tanggal Surat:</span> <span class="font-medium">{{ $letter->tanggal_surat ? $letter->tanggal_surat->format('d M Y') : '—' }}</span></div>
                     <div><span class="text-gray-500">Dibuat oleh:</span> {{ $letter->creator?->name ?? '—' }} ({{ $letter->created_at->format('d M Y H:i') }})</div>
                     <div><span class="text-gray-500">Disetujui oleh:</span> {{ $letter->approver?->name ?? '—' }} {{ $letter->approved_at ? '(' . $letter->approved_at->format('d M Y H:i') . ')' : '' }}</div>
                     @if ($letter->keterangan)
@@ -71,7 +73,7 @@
                 @if ($letter->status === \App\Models\Letter::STATUS_DISETUJUI)
                     <form method="POST" action="{{ route('letters.terbitkan', $letter) }}">
                         @csrf
-                        <x-primary-button>Terbitkan & Nomori</x-primary-button>
+                        <x-primary-button>Terbitkan</x-primary-button>
                     </form>
                 @endif
 

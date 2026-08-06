@@ -55,6 +55,26 @@ class LetterWorkflowTest extends TestCase
         $this->assertDatabaseHas('letters', ['perihal' => 'Permohonan SK', 'status' => 'draft']);
     }
 
+    public function test_staff_can_create_letter_draft_with_manual_number(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'nomor' => '001/KUA.10.02.07/VIII/2026',
+                'tanggal_surat' => '2026-08-05',
+                'perihal' => 'Permohonan SK',
+                'data' => ['nama' => 'Budi', 'alamat' => 'Jl. Merdeka'],
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('letters', [
+            'perihal' => 'Permohonan SK',
+            'status' => 'draft',
+            'nomor' => '001/KUA.10.02.07/VIII/2026',
+            'tanggal_surat' => '2026-08-05 00:00:00',
+        ]);
+    }
+
     public function test_required_field_is_validated(): void
     {
         $this->actingAs($this->staff)
@@ -115,18 +135,50 @@ class LetterWorkflowTest extends TestCase
         $this->assertDatabaseHas('letters', ['id' => $letter->id, 'status' => 'ditolak']);
     }
 
-    public function test_publish_generates_sequential_number(): void
+    public function test_publish_requires_nomor(): void
     {
-        $first = $this->draftLetter();
-        $first->update(['status' => Letter::STATUS_DISETUJUI]);
-        $this->actingAs($this->staff)->post(route('letters.terbitkan', $first));
+        $letter = $this->draftLetter();
+        $letter->update(['status' => Letter::STATUS_DISETUJUI]);
 
-        $second = $this->draftLetter();
-        $second->update(['status' => Letter::STATUS_DISETUJUI]);
-        $this->actingAs($this->staff)->post(route('letters.terbitkan', $second));
+        $this->actingAs($this->staff)
+            ->post(route('letters.terbitkan', $letter))
+            ->assertSessionHasErrors('nomor');
 
-        $this->assertDatabaseHas('letters', ['id' => $first->id, 'nomor' => 'SKU.001/KUA.VIII/2026']);
-        $this->assertDatabaseHas('letters', ['id' => $second->id, 'nomor' => 'SKU.002/KUA.VIII/2026']);
+        $this->assertDatabaseHas('letters', ['id' => $letter->id, 'status' => 'disetujui']);
+    }
+
+    public function test_publish_requires_tanggal_surat(): void
+    {
+        $letter = $this->draftLetter();
+        $letter->update(['status' => Letter::STATUS_DISETUJUI, 'nomor' => '001/KUA.10.02.07/VIII/2026']);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.terbitkan', $letter))
+            ->assertSessionHasErrors('tanggal_surat');
+
+        $this->assertDatabaseHas('letters', ['id' => $letter->id, 'status' => 'disetujui']);
+    }
+
+    public function test_publish_uses_manual_number_and_date(): void
+    {
+        $letter = $this->draftLetter();
+        $letter->update([
+            'status' => Letter::STATUS_DISETUJUI,
+            'nomor' => '001/KUA.10.02.07/VIII/2026',
+            'tanggal_surat' => '2026-08-05',
+        ]);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.terbitkan', $letter))
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('letters', [
+            'id' => $letter->id,
+            'status' => 'terbit',
+            'nomor' => '001/KUA.10.02.07/VIII/2026',
+            'tanggal_surat' => '2026-08-05 00:00:00',
+        ]);
     }
 
     public function test_letter_create_prefills_data_from_submission(): void
