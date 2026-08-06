@@ -208,6 +208,34 @@ class SubmissionTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
+    public function test_permohonan_fields_filters_identity_fields(): void
+    {
+        $this->type->update([
+            'fields' => [
+                ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+                ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => true],
+            ],
+            'permohonan_fields' => ['nama'],
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi', 'nik' => '123'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $this->assertSame(['nama'], array_column($submission->permohonanFields(), 'name'));
+
+        $this->type->update(['permohonan_fields' => null]);
+        $submission->unsetRelation('letterType');
+        $this->assertSame(
+            ['nama', 'nik'],
+            array_column($submission->permohonanFields(), 'name')
+        );
+    }
+
     public function test_render_permohonan_body_replaces_tokens(): void
     {
         $this->type->update([

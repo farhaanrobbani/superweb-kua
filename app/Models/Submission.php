@@ -57,6 +57,21 @@ class Submission extends Model
         return $body;
     }
 
+    public function permohonanFields(): array
+    {
+        $fields = $this->letterType->fields ?? [];
+        $selected = $this->letterType->permohonan_fields ?? [];
+
+        if (empty($selected)) {
+            return $fields;
+        }
+
+        return array_values(array_filter(
+            $fields,
+            fn (array $field) => in_array($field['name'] ?? '', $selected)
+        ));
+    }
+
     private function formatNarrativeValue(mixed $value): mixed
     {
         if (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {

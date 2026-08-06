@@ -6,7 +6,7 @@
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form method="POST" action="{{ route('letter-types.store') }}" x-data="fieldRepeater({{ json_encode(old('fields', [])) }})">
+                <form method="POST" action="{{ route('letter-types.store') }}" x-data="fieldRepeater({{ json_encode(old('fields', [])) }}, {{ json_encode(old('permohonan_fields', [])) }})">
                     @csrf
 
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -35,7 +35,7 @@
                         <x-input-label for="permohonan_body" value="Narasi Surat Permohonan" />
                         <textarea id="permohonan_body" name="permohonan_body" rows="4"
                                   class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_body') }}</textarea>
-                        <p class="mt-1 text-xs text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>.</p>
+                        <p class="mt-1 text-xs text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>. Kalimat pembuka "Yang bertanda tangan di bawah ini, saya:" otomatis tampil di atas tabel identitas, tidak perlu ditulis ulang di sini.</p>
                         <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
                     </div>
 
@@ -105,6 +105,21 @@
                     </div>
 
                     <div class="mt-6">
+                        <x-input-label value="Field yang Tampil di Surat Permohonan" />
+                        <p class="text-xs text-gray-500 mt-1">Centang field yang dicetak pada tabel identitas di Surat Permohonan. Kosongkan semua berarti menampilkan semua field.</p>
+                        <div class="mt-3 space-y-2">
+                            <template x-for="(field, index) in fields" :key="index">
+                                <label class="flex items-center text-sm text-gray-700">
+                                    <input type="checkbox" :name="`permohonan_fields[]`" :value="field.name"
+                                           x-model="permohonanFields" class="rounded border-gray-300">
+                                    <span class="ms-2" x-text="field.label || field.name"></span>
+                                </label>
+                            </template>
+                            <p x-show="fields.length === 0" class="text-sm text-gray-400">Tambahkan field terlebih dahulu.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="publik" value="1" {{ old('publik') ? 'checked' : '' }} class="rounded border-gray-300">
                             <span class="ms-2 text-sm text-gray-700">Tampil di permohonan publik</span>
@@ -128,7 +143,7 @@
     </div>
 
     <script>
-        function fieldRepeater(initialFields) {
+        function fieldRepeater(initialFields, initialPermohonanFields) {
             const normalize = (f) => ({
                 name: f.name || '',
                 label: f.label || '',
@@ -139,6 +154,7 @@
 
             return {
                 fields: (initialFields || []).map(normalize),
+                permohonanFields: initialPermohonanFields || [],
                 draggingIndex: null,
                 addField() {
                     this.fields.push({ name: '', label: '', type: 'text', required: true, optionsText: '' });

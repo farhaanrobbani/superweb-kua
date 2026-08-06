@@ -118,6 +118,42 @@ class AdminMasterDataTest extends TestCase
         $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_body' => 'Narasi diperbarui.']);
     }
 
+    public function test_staff_can_save_permohonan_fields_on_letter_type(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SQP',
+                'name' => 'Surat Keterangan QP',
+                'description' => 'Tes field permohonan',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                    ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => 1],
+                ],
+                'permohonan_fields' => ['nama'],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $type = LetterType::where('code', 'SQP')->firstOrFail();
+        $this->assertSame(['nama'], $type->permohonan_fields);
+    }
+
+    public function test_letter_type_form_shows_permohonan_fields_checkboxes(): void
+    {
+        $type = LetterType::factory()->create(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+        ]]);
+
+        $this->actingAs($this->user)
+            ->get(route('letter-types.create'))
+            ->assertOk()
+            ->assertSee('Field yang Tampil di Surat Permohonan');
+
+        $this->actingAs($this->user)
+            ->get(route('letter-types.edit', $type))
+            ->assertOk()
+            ->assertSee('Field yang Tampil di Surat Permohonan');
+    }
+
     public function test_letter_type_edit_form_shows_permohonan_body_textarea(): void
     {
         $type = LetterType::factory()->create(['permohonan_body' => 'Narasi contoh.']);
