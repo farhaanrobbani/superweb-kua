@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Letter;
 use App\Models\LetterType;
+use App\Models\Submission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -126,6 +127,53 @@ class LetterWorkflowTest extends TestCase
 
         $this->assertDatabaseHas('letters', ['id' => $first->id, 'nomor' => 'SKU.001/KUA.VIII/2026']);
         $this->assertDatabaseHas('letters', ['id' => $second->id, 'nomor' => 'SKU.002/KUA.VIII/2026']);
+    }
+
+    public function test_letter_create_prefills_data_from_submission(): void
+    {
+        $submission = Submission::factory()->create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Budi Santoso',
+            'kontak' => '081234567890',
+            'data' => ['nama' => 'Budi Santoso', 'alamat' => 'Jl. Merdeka No. 1'],
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('letters.create', ['jenis' => 'SKU', 'dari' => $submission->id]))
+            ->assertOk()
+            ->assertSee('Data diisi otomatis dari permohonan')
+            ->assertSee('Budi Santoso')
+            ->assertSee('Permohonan Penerbitan ' . $this->type->name)
+            ->assertSee('value="Budi Santoso"', false);
+    }
+
+    public function test_letter_create_without_submission_is_empty(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('letters.create', ['jenis' => 'SKU']))
+            ->assertOk()
+            ->assertDontSee('Data diisi otomatis dari permohonan')
+            ->assertDontSee('value="Budi Santoso"', false);
+    }
+
+    public function test_letter_store_from_submission_marks_submission_diproses(): void
+    {
+        $submission = Submission::factory()->create([
+            'letter_type_id' => $this->type->id,
+            'data' => ['nama' => 'Budi', 'alamat' => 'Jl. X'],
+        ]);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.store'), [
+                'jenis' => 'SKU',
+                'perihal' => 'Permohonan SK',
+                'data' => ['nama' => 'Budi', 'alamat' => 'Jl. X'],
+                'dari' => $submission->id,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('letters', ['perihal' => 'Permohonan SK', 'status' => 'draft']);
+        $this->assertDatabaseHas('submissions', ['id' => $submission->id, 'status' => 'diproses']);
     }
 
     public function test_letter_list_is_searchable(): void
