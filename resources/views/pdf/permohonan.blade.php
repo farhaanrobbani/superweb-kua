@@ -19,18 +19,18 @@
 
         .ttd { margin-top: 48px; text-align: right; }
         .ttd .blok { display: inline-block; text-align: center; }
-        .kotak-materai { width: 96px; height: 48px; border: 2px solid #111; margin: 6px auto; }
-        .label-materai { font-size: 10px; }
+        .kotak-materai { width: 96px; height: 48px; border: 2px solid #111; margin: 6px auto; text-align: center; line-height: 48px; font-size: 10px; }
         .ttd .nama { font-weight: bold; text-decoration: underline; margin-top: 4px; }
-        .ttd .kontak { font-size: 11px; }
     </style>
 </head>
 <body>
     <div class="judul">PERMOHONAN PENERBITAN {{ strtoupper($submission->letterType->name) }}</div>
 
     <div class="isi">
+        <p>Yang bertanda tangan di bawah ini, saya:</p>
+
         <table class="data-tabel">
-            @foreach ($submission->letterType->fields ?? [] as $field)
+            @foreach ($submission->permohonanFields() as $field)
                 <tr>
                     <td class="label">{{ $field['label'] }}</td>
                     <td class="titik">:</td>
@@ -46,12 +46,8 @@
         <div class="blok">
             <div>{{ $kabupaten ? $kabupaten . ', ' : '' }}{{ tanggal_indonesia(now()->toDateString(), 'd F Y') }}</div>
             <div>Hormat saya</div>
-            <div class="kotak-materai"></div>
-            <div class="label-materai">MATERAI 10.000</div>
+            <div class="kotak-materai">MATERAI 10.000</div>
             <div class="nama">{{ $submission->nama_pemohon }}</div>
-            @if ($submission->kontak)
-                <div class="kontak">{{ $submission->kontak }}</div>
-            @endif
         </div>
     </div>
 </body>
