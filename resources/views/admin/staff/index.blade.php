@@ -25,7 +25,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pegawai</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIP</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bagian</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kontak</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                         </tr>
@@ -53,7 +53,7 @@
                                         <span class="block text-xs text-gray-500">{{ $staffMember->pangkat_golongan }}</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ $staffMember->bagian ?? '—' }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">{{ $staffMember->kontak ?? '—' }}</td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $staffMember->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                         {{ $staffMember->active ? 'Aktif' : 'Nonaktif' }}
