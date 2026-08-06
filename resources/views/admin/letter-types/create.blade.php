@@ -37,41 +37,58 @@
                             <button type="button" @click="addField()"
                                     class="text-sm text-blue-600 hover:underline">+ Tambah Field</button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat.</p>
+                        <p class="text-xs text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat. Seret ikon untuk mengurutkan field.</p>
 
                         <div class="mt-3 space-y-3">
                             <template x-for="(field, index) in fields" :key="index">
-                                <div class="border border-gray-200 rounded-md p-4 bg-gray-50">
+                                <div class="border border-gray-200 rounded-md p-4 bg-gray-50"
+                                     :class="index === draggingIndex ? 'opacity-50' : ''"
+                                     @dragover.prevent="dragOver($event)"
+                                     @drop.prevent="dropAt(index)">
                                     <input type="hidden" :name="`fields[${index}][required]`" :value="field.required ? 1 : 0">
-                                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-6">
-                                        <div class="sm:col-span-2">
-                                            <input :name="`fields[${index}][name]`" x-model="field.name" required
-                                                   placeholder="nama_field" class="w-full rounded-md border-gray-300 text-sm" />
+                                    <div class="flex items-start gap-3">
+                                        <button type="button"
+                                                draggable="true"
+                                                class="mt-1 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+                                                title="Seret untuk mengurutkan"
+                                                @dragstart="dragStart(index, $event)"
+                                                @dragend="dragEnd()">
+                                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M7 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                                            </svg>
+                                        </button>
+                                        <div class="flex-1">
+                                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-6">
+                                                <div class="sm:col-span-2">
+                                                    <input :name="`fields[${index}][name]`" x-model="field.name" required
+                                                           placeholder="nama_field" class="w-full rounded-md border-gray-300 text-sm" />
+                                                </div>
+                                                <div class="sm:col-span-2">
+                                                    <input :name="`fields[${index}][label]`" x-model="field.label" required
+                                                           placeholder="Label field" class="w-full rounded-md border-gray-300 text-sm" />
+                                                </div>
+                                                <div class="sm:col-span-1">
+                                                    <select :name="`fields[${index}][type]`" x-model="field.type"
+                                                            class="w-full rounded-md border-gray-300 text-sm">
+                                                        <option value="text">Text</option>
+                                                        <option value="textarea">Textarea</option>
+                                                        <option value="date">Tanggal</option>
+                                                        <option value="select">Pilihan</option>
+                                                    </select>
+                                                </div>
+                                                <div class="sm:col-span-1 flex items-center gap-3">
+                                                    <label class="flex items-center text-xs text-gray-600">
+                                                        <input type="checkbox" x-model="field.required" class="rounded border-gray-300"> Wajib
+                                                    </label>
+                                                    <button type="button" @click="fields.splice(index, 1)"
+                                                            class="text-red-600 text-sm hover:underline">Hapus</button>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2" x-show="field.type === 'select'">
+                                                <input :name="`fields[${index}][options][]`" x-model="field.optionsText" placeholder="Opsi pilihan, pisahkan dengan koma"
+                                                       class="w-full rounded-md border-gray-300 text-sm" />
+                                            </div>
                                         </div>
-                                        <div class="sm:col-span-2">
-                                            <input :name="`fields[${index}][label]`" x-model="field.label" required
-                                                   placeholder="Label field" class="w-full rounded-md border-gray-300 text-sm" />
-                                        </div>
-                                        <div class="sm:col-span-1">
-                                            <select :name="`fields[${index}][type]`" x-model="field.type"
-                                                    class="w-full rounded-md border-gray-300 text-sm">
-                                                <option value="text">Text</option>
-                                                <option value="textarea">Textarea</option>
-                                                <option value="date">Tanggal</option>
-                                                <option value="select">Pilihan</option>
-                                            </select>
-                                        </div>
-                                        <div class="sm:col-span-1 flex items-center gap-3">
-                                            <label class="flex items-center text-xs text-gray-600">
-                                                <input type="checkbox" x-model="field.required" class="rounded border-gray-300"> Wajib
-                                            </label>
-                                            <button type="button" @click="fields.splice(index, 1)"
-                                                    class="text-red-600 text-sm hover:underline">Hapus</button>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2" x-show="field.type === 'select'">
-                                        <input :name="`fields[${index}][options][]`" x-model="field.optionsText" placeholder="Opsi pilihan, pisahkan dengan koma"
-                                               class="w-full rounded-md border-gray-300 text-sm" />
                                     </div>
                                 </div>
                             </template>
@@ -114,8 +131,31 @@
 
             return {
                 fields: (initialFields || []).map(normalize),
+                draggingIndex: null,
                 addField() {
                     this.fields.push({ name: '', label: '', type: 'text', required: true, optionsText: '' });
+                },
+                dragStart(index, event) {
+                    this.draggingIndex = index;
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData('text/plain', String(index));
+                },
+                dragOver(event) {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                },
+                dropAt(index) {
+                    if (this.draggingIndex === null || this.draggingIndex === index) {
+                        this.draggingIndex = null;
+                        return;
+                    }
+                    const target = this.draggingIndex < index ? index - 1 : index;
+                    const [moved] = this.fields.splice(this.draggingIndex, 1);
+                    this.fields.splice(target, 0, moved);
+                    this.draggingIndex = null;
+                },
+                dragEnd() {
+                    this.draggingIndex = null;
                 },
             };
         }
