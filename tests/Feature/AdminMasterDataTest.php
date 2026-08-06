@@ -247,6 +247,45 @@ class AdminMasterDataTest extends TestCase
         $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'active' => false, 'publik' => false]);
     }
 
+    public function test_letter_type_required_flag_can_be_turned_off(): void
+    {
+        $type = LetterType::factory()->create(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+        ]]);
+
+        $this->actingAs($this->user)
+            ->put(route('letter-types.update', $type), [
+                'code' => $type->code,
+                'name' => $type->name,
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 0],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $type->refresh();
+        $this->assertFalse($type->fields[0]['required']);
+    }
+
+    public function test_letter_type_required_flag_accepts_on_value(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKW',
+                'name' => 'Surat Keterangan W',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 'on'],
+                    ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => 0],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $type = LetterType::where('code', 'SKW')->firstOrFail();
+        $this->assertTrue($type->fields[0]['required']);
+        $this->assertFalse($type->fields[1]['required']);
+    }
+
+
     public function test_letter_template_created_without_checkbox_is_inactive(): void
     {
         $type = LetterType::factory()->create(['active' => true]);
