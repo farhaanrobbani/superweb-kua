@@ -15,7 +15,6 @@ use App\Support\HtmlSanitizer;
     'tanggal_surat',
     'perihal',
     'header_html',
-    'header_spasi',
     'tampilkan_tanggal',
     'data',
     'status',

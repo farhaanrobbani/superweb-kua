@@ -166,24 +166,6 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('Sifat : Penting', $this->letter->renderHeader());
     }
 
-    public function test_pdf_uses_header_spasi_default_1_5(): void
-    {
-        $this->letter->update(['header_spasi' => '1.5', 'header_html' => '<p>Nomor : {nomor}</p>']);
-
-        $html = $this->renderPdfHtml();
-
-        $this->assertStringContainsString('<div class="header" style="line-height: 1.5;">', $html);
-    }
-
-    public function test_pdf_uses_selected_header_spasi_satu(): void
-    {
-        $this->letter->update(['header_spasi' => '1', 'header_html' => '<p>Nomor : {nomor}</p>']);
-
-        $html = $this->renderPdfHtml();
-
-        $this->assertStringContainsString('<div class="header" style="line-height: 1;">', $html);
-    }
-
     public function test_pdf_shows_top_date_by_default(): void
     {
         $this->letter->update(['tanggal_surat' => '2026-08-05', 'tampilkan_tanggal' => true]);

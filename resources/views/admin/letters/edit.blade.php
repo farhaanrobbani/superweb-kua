@@ -39,13 +39,6 @@
                         </div>
 
                         <div class="mt-4 flex flex-wrap items-center gap-6">
-                            <div>
-                                <x-input-label value="Spasi Baris Atas" />
-                                <select name="header_spasi" class="mt-1 rounded-md border-gray-300 text-sm">
-                                    <option value="1" {{ old('header_spasi', $letter->header_spasi ?? '1.5') === '1' ? 'selected' : '' }}>1</option>
-                                    <option value="1.5" {{ old('header_spasi', $letter->header_spasi ?? '1.5') === '1.5' ? 'selected' : '' }}>1,5</option>
-                                </select>
-                            </div>
                             <label class="flex items-center gap-2 text-sm text-gray-600">
                                 <input type="checkbox" name="tampilkan_tanggal" value="1"
                                        {{ old('tampilkan_tanggal', $letter->tampilkan_tanggal ?? true) ? 'checked' : '' }} class="rounded border-gray-300">

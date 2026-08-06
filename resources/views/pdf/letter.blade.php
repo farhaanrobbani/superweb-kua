@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Surat {{ $letter->nomor }}</title>
     <style>
-        @page { margin: 1.5cm 3cm 3cm 4cm; }
+        @page { margin: 0.8cm 3cm 3cm 4cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.5; color: #111; }
 
@@ -22,7 +22,7 @@
         .garis-tebal { border: none; border-top: 3px solid #111; margin: 4px 0 0 0; }
         .garis-tipis { border: none; border-top: 1.5px solid #111; margin: 1px 0 0 0; }
 
-        .header { margin: 18px 0; }
+        .header { margin: 18px 0; line-height: 1; }
         .header p { margin: 0 0 12px 0; }
         .header p:last-child { margin: 0; }
         .isi { text-align: justify; line-height: 1.5; }
@@ -90,7 +90,7 @@
     <hr class="garis-tipis">
     @endif
 
-    <div class="header" style="line-height: {{ $letter->header_spasi ?? '1.5' }};">
+    <div class="header">
         {!! $letter->renderHeader() !!}
     </div>
 
