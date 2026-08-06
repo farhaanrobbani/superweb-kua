@@ -8,6 +8,7 @@ use App\Models\Letter;
 use App\Models\LetterType;
 use App\Models\Submission;
 use App\Services\LetterNumberService;
+use App\Support\PdfSupport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -204,7 +205,7 @@ class LetterController extends Controller
     {
         abort_unless($letter->status === Letter::STATUS_TERBIT, 403, 'Surat dapat diunduh setelah diterbitkan.');
 
-        $this->registerArialFonts();
+        PdfSupport::registerArialFonts();
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
             'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path'];
@@ -222,29 +223,6 @@ class LetterController extends Controller
         $fileName = ($letter->nomor ? str_replace('/', '-', $letter->nomor) : 'surat') . '.pdf';
 
         return $pdf->download($fileName);
-    }
-
-    private function registerArialFonts(): void
-    {
-        $fonts = [
-            ['weight' => 'normal', 'style' => 'normal', 'file' => 'LiberationSans-Regular.ttf'],
-            ['weight' => 'bold', 'style' => 'normal', 'file' => 'LiberationSans-Bold.ttf'],
-            ['weight' => 'normal', 'style' => 'italic', 'file' => 'LiberationSans-Italic.ttf'],
-            ['weight' => 'bold', 'style' => 'italic', 'file' => 'LiberationSans-BoldItalic.ttf'],
-        ];
-
-        $metrics = Pdf::getDomPDF()->getFontMetrics();
-        foreach ($fonts as $font) {
-            $path = storage_path('fonts/' . $font['file']);
-            if (! file_exists($path)) {
-                continue;
-            }
-            $metrics->registerFont([
-                'family' => 'Arial',
-                'weight' => $font['weight'],
-                'style' => $font['style'],
-            ], $path);
-        }
     }
 
     private function validateDynamic(Request $request, LetterType $letterType): array
