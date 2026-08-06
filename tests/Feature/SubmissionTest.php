@@ -251,6 +251,28 @@ class SubmissionTest extends TestCase
         $this->assertSame('—', $submission->identityValue('tidak_ada'));
     }
 
+    public function test_permohonan_paragraphs_splits_narrative(): void
+    {
+        $this->type->update([
+            'permohonan_body' => "Memohon agar diterbitkan Surat atas nama [nama].\r\nDuplikat akan digunakan untuk keperluan.\n\nDemikian Surat Permohonan ini kami buat.",
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $paragraphs = $submission->permohonanParagraphs();
+
+        $this->assertCount(3, $paragraphs);
+        $this->assertStringContainsString('Memohon agar diterbitkan', $paragraphs[0]);
+        $this->assertStringContainsString('Duplikat akan digunakan', $paragraphs[1]);
+        $this->assertStringContainsString('Demikian Surat Permohonan', $paragraphs[2]);
+    }
+
     public function test_render_permohonan_body_replaces_tokens(): void
     {
         $this->type->update([
