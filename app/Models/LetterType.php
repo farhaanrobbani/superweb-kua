@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['code', 'name', 'description', 'fields', 'active'])]
+#[Fillable(['code', 'name', 'description', 'fields', 'active', 'publik'])]
 class LetterType extends Model
 {
     use HasFactory;
+
+    public function scopePublik($query)
+    {
+        return $query->where('publik', true);
+    }
+
     public function templates(): HasMany
     {
         return $this->hasMany(LetterTemplate::class);
@@ -26,6 +32,7 @@ class LetterType extends Model
         return [
             'fields' => 'array',
             'active' => 'boolean',
+            'publik' => 'boolean',
         ];
     }
 }

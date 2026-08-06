@@ -22,6 +22,7 @@ class LetterTypeFactory extends Factory
                 ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
             ],
             'active' => true,
+            'publik' => false,
         ];
     }
 }
