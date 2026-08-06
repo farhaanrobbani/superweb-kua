@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\KuaSettingController;
+use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
+use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
@@ -28,6 +30,9 @@ Route::get('/daftar-pegawai', [StaffPublicController::class, 'index'])->name('pe
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
 Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name('permohonan.sukses');
+
+Route::get('/kritik-saran', [KritikSaranPublicController::class, 'create'])->name('kritik-saran.create');
+Route::post('/kritik-saran', [KritikSaranPublicController::class, 'store'])->name('kritik-saran.store')->middleware('throttle:5,1');
 
 Route::post('/deploy', DeployController::class)->middleware('throttle:6,1');
 
@@ -47,6 +52,10 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::put('/submissions/{submission}', [SubmissionAdminController::class, 'updateStatus'])->name('submissions.update');
     Route::delete('/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])->name('submissions.destroy');
     Route::post('/submissions/{submission}/buat-surat', [SubmissionAdminController::class, 'buatSurat'])->name('submissions.buat-surat');
+
+    Route::get('/kelola-kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran.index');
+    Route::get('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'show'])->name('kritik-saran.show');
+    Route::delete('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'destroy'])->name('kritik-saran.destroy');
 
     Route::resource('letter-types', LetterTypeController::class);
     Route::resource('letter-templates', LetterTemplateController::class);
