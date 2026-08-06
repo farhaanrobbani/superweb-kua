@@ -207,4 +207,66 @@ class SubmissionTest extends TestCase
         $this->get(route('submissions.cetak-permohonan', $submission))
             ->assertRedirect(route('login'));
     }
+
+    public function test_render_permohonan_body_replaces_tokens(): void
+    {
+        $this->type->update([
+            'permohonan_body' => "Memohon agar diterbitkan Surat atas nama [nama].\n\nDemikian Surat Permohonan ini kami buat.",
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi Setiawan',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi Setiawan'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = $submission->renderPermohonanBody();
+
+        $this->assertStringContainsString('Surat atas nama Andi Setiawan', $body);
+        $this->assertStringContainsString('Demikian Surat Permohonan', $body);
+        $this->assertStringNotContainsString('[nama]', $body);
+    }
+
+    public function test_render_permohonan_body_formats_dates(): void
+    {
+        $this->type->update([
+            'fields' => [
+                ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+                ['name' => 'tanggal_akta', 'label' => 'Tanggal Akta', 'type' => 'date', 'required' => true],
+            ],
+            'permohonan_body' => 'Akta diterbitkan pada [tanggal_akta] atas nama [nama].',
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi Setiawan',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi Setiawan', 'tanggal_akta' => '2024-01-15'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = $submission->renderPermohonanBody();
+
+        $this->assertStringContainsString('Akta diterbitkan pada 15 Januari 2024', $body);
+    }
+
+    public function test_render_permohonan_body_falls_back_to_generic(): void
+    {
+        $this->type->update(['permohonan_body' => null]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = $submission->renderPermohonanBody();
+
+        $this->assertStringContainsString('Memohon agar diterbitkan ' . $this->type->name, $body);
+        $this->assertStringContainsString('Demikian Surat Permohonan', $body);
+    }
 }

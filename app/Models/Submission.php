@@ -31,6 +31,45 @@ class Submission extends Model
         return $this->belongsTo(LetterType::class);
     }
 
+    public function renderPermohonanBody(): string
+    {
+        $narrative = $this->letterType->permohonan_body;
+
+        if (blank($narrative)) {
+            $narrative = 'Memohon agar diterbitkan ' . $this->letterType->name
+                . " yang saya perlukan untuk kepentingan yang sah.\n\n"
+                . 'Demikian Surat Permohonan ini kami buat dengan sebenar-benarnya agar dapat menjadi maklum.';
+        }
+
+        $values = [];
+        foreach ($this->letterType->fields ?? [] as $field) {
+            $values[$field['name']] = $this->data[$field['name']] ?? '';
+        }
+        $values['nama_pemohon'] = $this->nama_pemohon;
+        $values['kontak'] = $this->kontak;
+
+        $body = $narrative;
+        foreach ($values as $key => $value) {
+            $value = $this->formatNarrativeValue($value);
+            $body = str_replace('[' . $key . ']', e((string) $value), $body);
+        }
+
+        return $body;
+    }
+
+    private function formatNarrativeValue(mixed $value): mixed
+    {
+        if (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            try {
+                return tanggal_indonesia($value);
+            } catch (\Throwable) {
+                return $value;
+            }
+        }
+
+        return $value;
+    }
+
     protected function casts(): array
     {
         return [
