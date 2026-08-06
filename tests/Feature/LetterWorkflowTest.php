@@ -208,6 +208,41 @@ class LetterWorkflowTest extends TestCase
         $this->assertDatabaseHas('letters', ['id' => $letter->id, 'status' => 'disetujui']);
     }
 
+    public function test_approved_letter_can_be_edited_to_fill_nomor_then_published(): void
+    {
+        $letter = $this->draftLetter();
+        $letter->update([
+            'status' => Letter::STATUS_DISETUJUI,
+            'tanggal_surat' => '2026-08-05',
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('letters.edit', $letter))
+            ->assertOk();
+
+        $this->actingAs($this->staff)
+            ->put(route('letters.update', $letter), [
+                'nomor' => '001/KUA.10.02.07/VIII/2026',
+                'tanggal_surat' => '2026-08-05',
+                'perihal' => $letter->perihal,
+                'data' => $letter->data,
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('letters', [
+            'id' => $letter->id,
+            'nomor' => '001/KUA.10.02.07/VIII/2026',
+            'status' => 'disetujui',
+        ]);
+
+        $this->actingAs($this->staff)
+            ->post(route('letters.terbitkan', $letter))
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('letters', ['id' => $letter->id, 'status' => 'terbit']);
+    }
+
     public function test_publish_uses_manual_number_and_date(): void
     {
         $letter = $this->draftLetter();

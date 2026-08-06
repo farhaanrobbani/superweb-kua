@@ -11,6 +11,17 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                    <strong>Periksa kembali:</strong>
+                    <ul class="list-disc ml-4 mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="mb-4 flex items-center gap-3">
                 @php
                     $color = match ($letter->status) {
@@ -82,6 +93,7 @@
                         @csrf
                         <x-primary-button>Terbitkan</x-primary-button>
                     </form>
+                    <a href="{{ route('letters.edit', $letter) }}" class="text-sm text-blue-600 hover:underline">Edit</a>
                 @endif
 
                 @if ($letter->status === \App\Models\Letter::STATUS_TERBIT)

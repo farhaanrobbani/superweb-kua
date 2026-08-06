@@ -112,7 +112,7 @@ class LetterController extends Controller
 
     public function edit(Letter $letter): View
     {
-        abort_unless(in_array($letter->status, [Letter::STATUS_DRAFT, Letter::STATUS_DITOLAK]), 403, 'Surat sudah diproses dan tidak bisa diubah.');
+        abort_unless(in_array($letter->status, [Letter::STATUS_DRAFT, Letter::STATUS_DITOLAK, Letter::STATUS_DISETUJUI]), 403, 'Surat sudah diproses dan tidak bisa diubah.');
 
         return view('admin.letters.edit', [
             'letter' => $letter,
@@ -123,7 +123,7 @@ class LetterController extends Controller
 
     public function update(Request $request, Letter $letter): RedirectResponse
     {
-        abort_unless(in_array($letter->status, [Letter::STATUS_DRAFT, Letter::STATUS_DITOLAK]), 403, 'Surat sudah diproses dan tidak bisa diubah.');
+        abort_unless(in_array($letter->status, [Letter::STATUS_DRAFT, Letter::STATUS_DITOLAK, Letter::STATUS_DISETUJUI]), 403, 'Surat sudah diproses dan tidak bisa diubah.');
 
         $validated = $this->validateDynamic($request, $letter->letterType);
 
