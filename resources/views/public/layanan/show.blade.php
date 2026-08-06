@@ -11,8 +11,8 @@
         @endif
 
         <div class="mt-6 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
-            <iframe src="{{ $service->embed_url }}" width="100%" height="600" frameborder="0"
-                    style="border:0" allowfullscreen
+            <iframe src="{{ $service->embed_url }}" width="100%" frameborder="0"
+                    class="h-[85vh] min-h-[480px]" style="border:0" allowfullscreen
                     sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
     </div>
