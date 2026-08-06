@@ -3,9 +3,31 @@
 namespace App\Support;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class PdfSupport
 {
+    public static function resolveLocalImages(?string $html): string
+    {
+        if ($html === null || $html === '') {
+            return '';
+        }
+
+        return preg_replace_callback('/src=(["\'])([^"\']+)\1/i', function (array $match) {
+            $url = html_entity_decode($match[2], ENT_QUOTES, 'UTF-8');
+            $path = (string) parse_url($url, PHP_URL_PATH);
+
+            if (str_starts_with($path, '/storage/')) {
+                $relative = substr($path, strlen('/storage/'));
+                $local = Storage::disk('public')->path($relative);
+
+                return 'src=' . $match[1] . $local . $match[1];
+            }
+
+            return $match[0];
+        }, $html) ?? $html;
+    }
+
     public static function parseKopTeks(?string $teks): array
     {
         $lines = [];

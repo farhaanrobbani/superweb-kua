@@ -40,9 +40,7 @@
             @endforeach
         </table>
 
-        @foreach ($submission->permohonanParagraphs() as $paragraf)
-            <p>{{ nl2br(e($paragraf)) }}</p>
-        @endforeach
+        {!! $body !!}
     </div>
 
     <div class="ttd">

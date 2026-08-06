@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Support\HtmlSanitizer;
 
 #[Fillable([
     'letter_type_id',
@@ -84,12 +85,12 @@ class Letter extends Model
             }
         }
 
-        $body = $template->body;
+        $body = HtmlSanitizer::toHtml($template->body);
         foreach ($values as $key => $value) {
             $body = str_replace('[' . $key . ']', e((string) $value), $body);
         }
 
-        return $body;
+        return HtmlSanitizer::sanitize($body);
     }
 
     protected function casts(): array

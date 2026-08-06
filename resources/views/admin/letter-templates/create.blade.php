@@ -3,8 +3,12 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Template Surat</h2>
     </x-slot>
 
+    @push('editor')
+        @vite(['resources/js/editor.js'])
+    @endpush
+
     <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('letter-templates.store') }}">
                     @csrf
@@ -34,8 +38,9 @@
                     <div class="mt-4">
                         <x-input-label for="body" value="Isi Template Surat" />
                         <p class="text-xs text-gray-500 mt-1">Gunakan placeholder <code>[nama_field]</code> sesuai field pada jenis surat. Body adalah isi surat setelah kepala/kop surat (otomatis ditambahkan di PDF).</p>
-                        <textarea id="body" name="body" rows="14"
-                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm font-mono text-sm">{{ old('body') }}</textarea>
+                        <textarea id="body" name="body" data-editor rows="14"
+                                  data-upload-url="{{ route('announcements.gambar') }}"
+                                  class="block w-full">{{ old('body') }}</textarea>
                         <x-input-error :messages="$errors->get('body')" class="mt-2" />
                     </div>
 

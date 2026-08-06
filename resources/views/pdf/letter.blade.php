@@ -99,7 +99,7 @@
     <div style="text-align: right;">{{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
 
     <div class="isi">
-        {!! nl2br(e($body)) !!}
+        {!! $body !!}
     </div>
 
     <div class="ttd">

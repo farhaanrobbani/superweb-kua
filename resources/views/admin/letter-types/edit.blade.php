@@ -3,8 +3,12 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Jenis Surat: {{ $letterType->name }}</h2>
     </x-slot>
 
+    @push('editor')
+        @vite(['resources/js/editor.js'])
+    @endpush
+
     <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('letter-types.update', $letterType) }}"
                       x-data="fieldRepeater({{ json_encode(old('fields', $letterType->fields ?? [])) }}, {{ json_encode(old('permohonan_fields', $letterType->permohonan_fields ?? [])) }})">
@@ -35,8 +39,9 @@
 
                     <div class="mt-4">
                         <x-input-label for="permohonan_body" value="Narasi Surat Permohonan" />
-                        <textarea id="permohonan_body" name="permohonan_body" rows="4"
-                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_body', $letterType->permohonan_body) }}</textarea>
+                        <textarea id="permohonan_body" name="permohonan_body" data-editor rows="4"
+                                  data-upload-url="{{ route('announcements.gambar') }}"
+                                  class="block w-full">{{ old('permohonan_body', $letterType->permohonan_body) }}</textarea>
                         <p class="mt-1 text-xs text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>. Kalimat pembuka "Yang bertanda tangan di bawah ini, saya:" otomatis tampil di atas tabel identitas, tidak perlu ditulis ulang di sini.</p>
                         <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
                     </div>

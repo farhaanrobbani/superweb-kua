@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Support\HtmlSanitizer;
 
 #[Fillable(['letter_type_id', 'nama_pemohon', 'kontak', 'data', 'status', 'catatan'])]
 class Submission extends Model
@@ -48,13 +49,13 @@ class Submission extends Model
         $values['nama_pemohon'] = $this->nama_pemohon;
         $values['kontak'] = $this->kontak;
 
-        $body = $narrative;
+        $body = HtmlSanitizer::toHtml($narrative);
         foreach ($values as $key => $value) {
             $value = $this->formatNarrativeValue($value);
             $body = str_replace('[' . $key . ']', e((string) $value), $body);
         }
 
-        return $body;
+        return HtmlSanitizer::sanitize($body);
     }
 
     public function permohonanFields(): array
@@ -85,10 +86,17 @@ class Submission extends Model
 
     public function permohonanParagraphs(): array
     {
-        return array_values(array_filter(
-            preg_split('/\R+/', $this->renderPermohonanBody()),
-            fn (string $paragraph) => trim($paragraph) !== ''
-        ));
+        $body = preg_replace('/<br\s*\/?>/i', '</p><p>', $this->renderPermohonanBody());
+
+        $paragraphs = [];
+        foreach (preg_split('/<\/p>/i', $body ?? '') as $chunk) {
+            $text = trim(strip_tags($chunk));
+            if ($text !== '') {
+                $paragraphs[] = $text;
+            }
+        }
+
+        return $paragraphs;
     }
 
     private function formatNarrativeValue(mixed $value): mixed

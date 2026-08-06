@@ -167,4 +167,28 @@ class LetterPdfTest extends TestCase
         $this->letter->update(['tanggal_surat' => '2026-08-05']);
         $this->assertStringContainsString('05 Agustus 2026', $this->letter->renderBody());
     }
+
+    public function test_render_body_preserves_html_in_template_and_strips_script(): void
+    {
+        LetterTemplate::where('letter_type_id', $this->type->id)->update(['active' => false]);
+        LetterTemplate::factory()->create([
+            'letter_type_id' => $this->type->id,
+            'name' => 'Template HTML',
+            'active' => true,
+            'body' => '<script></script><p>Dengan <strong>hormat</strong>, kami terangkan bahwa [nama].</p>',
+        ]);
+
+        $body = $this->letter->renderBody();
+
+        $this->assertStringContainsString('<p>Dengan <strong>hormat</strong>, kami terangkan bahwa Budi &lt;b&gt;Santoso&lt;/b&gt;.</p>', $body);
+        $this->assertStringNotContainsString('script', $body);
+    }
+
+    public function test_render_body_wraps_plain_text_in_paragraphs(): void
+    {
+        $body = $this->letter->renderBody();
+
+        $this->assertStringContainsString('<p>Menerangkan bahwa Budi &lt;b&gt;Santoso&lt;/b&gt; beralamat di Jl. Merdeka 1, Bogor.', $body);
+        $this->assertStringContainsString('Nomor surat SKU.001/KUA.VIII/2026, tanggal 06 Agustus 2026.</p>', $body);
+    }
 }

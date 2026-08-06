@@ -225,7 +225,7 @@ class LetterController extends Controller
         $pdf = Pdf::loadView('pdf.letter', [
             'letter' => $letter,
             'settings' => $settings,
-            'body' => $letter->renderBody(),
+            'body' => PdfSupport::resolveLocalImages($letter->renderBody()),
             'kopLines' => PdfSupport::parseKopTeks($settings['kop_teks']),
             'kopSizes' => [
                 'judul' => (float) ($settings['kop_ukuran_judul'] ?: 17),

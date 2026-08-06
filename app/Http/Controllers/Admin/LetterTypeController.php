@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LetterType;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -74,6 +75,12 @@ class LetterTypeController extends Controller
             'active' => ['sometimes', 'boolean'],
             'publik' => ['sometimes', 'boolean'],
         ]);
+
+        if (! blank($data['permohonan_body'] ?? null)) {
+            $data['permohonan_body'] = HtmlSanitizer::normalize($data['permohonan_body']);
+        } else {
+            $data['permohonan_body'] = null;
+        }
 
         $data['active'] = $request->boolean('active');
         $data['publik'] = $request->boolean('publik');

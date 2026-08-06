@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LetterTemplate;
 use App\Models\LetterType;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -68,6 +69,7 @@ class LetterTemplateController extends Controller
             'active' => ['sometimes', 'boolean'],
         ]);
 
+        $data['body'] = HtmlSanitizer::normalize($data['body']);
         $data['active'] = $request->boolean('active');
 
         return $data;

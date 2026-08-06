@@ -80,7 +80,7 @@ class SubmissionAdminController extends Controller
         $pdf = Pdf::loadView('pdf.permohonan', [
             'submission' => $submission,
             'kabupaten' => $kabupaten,
-            'body' => $submission->renderPermohonanBody(),
+            'body' => PdfSupport::resolveLocalImages($submission->renderPermohonanBody()),
         ])->setPaper('a4');
 
         $fileName = 'surat-permohonan-' . $submission->id . '.pdf';

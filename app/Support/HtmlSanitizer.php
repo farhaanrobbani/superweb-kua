@@ -47,6 +47,30 @@ class HtmlSanitizer
         'letter-spacing', 'text-indent', 'white-space',
     ];
 
+    public static function toHtml(?string $text): string
+    {
+        if ($text === null || $text === '') {
+            return '';
+        }
+
+        if (preg_match('/<[a-z!][a-z0-9]*[^>]*>/i', $text) === 1) {
+            return $text;
+        }
+
+        $escaped = htmlspecialchars(trim($text), ENT_QUOTES, 'UTF-8');
+        $blocks = preg_split('/\n\s*\n+/', $escaped);
+
+        return implode('', array_map(
+            fn (string $block) => '<p>' . nl2br($block) . '</p>',
+            $blocks
+        ));
+    }
+
+    public static function normalize(?string $text): string
+    {
+        return self::sanitize(self::toHtml($text));
+    }
+
     public static function sanitize(?string $html): string
     {
         if ($html === null || $html === '') {

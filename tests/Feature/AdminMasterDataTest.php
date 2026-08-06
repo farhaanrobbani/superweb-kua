@@ -115,7 +115,7 @@ class AdminMasterDataTest extends TestCase
             ])
             ->assertRedirect(route('letter-types.index'));
 
-        $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_body' => 'Narasi diperbarui.']);
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_body' => '<p>Narasi diperbarui.</p>']);
     }
 
     public function test_staff_can_save_permohonan_fields_on_letter_type(): void
@@ -210,6 +210,43 @@ class AdminMasterDataTest extends TestCase
             ->get(route('letter-templates.index'))
             ->assertOk()
             ->assertSee('Template Utama');
+    }
+
+    public function test_letter_template_body_is_sanitized(): void
+    {
+        $type = LetterType::factory()->create(['active' => true]);
+
+        $this->actingAs($this->user)
+            ->post(route('letter-templates.store'), [
+                'letter_type_id' => $type->id,
+                'name' => 'Template Sanitasi',
+                'body' => '<script></script><p>Halo <strong>dunia</strong> [nama].</p>',
+            ])
+            ->assertRedirect(route('letter-templates.index'));
+
+        $this->assertDatabaseHas('letter_templates', [
+            'name' => 'Template Sanitasi',
+            'body' => '<p>Halo <strong>dunia</strong> [nama].</p>',
+        ]);
+    }
+
+    public function test_letter_type_permohonan_body_is_sanitized(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKS',
+                'name' => 'Surat Keterangan S',
+                'permohonan_body' => '<script></script><p>Memohon surat atas nama [nama].</p>',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', [
+            'code' => 'SKS',
+            'permohonan_body' => '<p>Memohon surat atas nama [nama].</p>',
+        ]);
     }
 
     public function test_staff_can_view_kua_settings_page(): void

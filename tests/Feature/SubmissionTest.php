@@ -334,4 +334,45 @@ class SubmissionTest extends TestCase
         $this->assertStringContainsString('Memohon agar diterbitkan ' . $this->type->name, $body);
         $this->assertStringContainsString('Demikian Surat Permohonan', $body);
     }
+
+    public function test_render_permohonan_body_preserves_html_and_strips_script(): void
+    {
+        $this->type->update([
+            'permohonan_body' => '<script></script><p>Memohon atas nama <strong>[nama]</strong>.</p>',
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = $submission->renderPermohonanBody();
+
+        $this->assertStringContainsString('<p>Memohon atas nama <strong>Andi</strong>.</p>', $body);
+        $this->assertStringNotContainsString('script', $body);
+        $this->assertStringNotContainsString('[nama]', $body);
+    }
+
+    public function test_render_permohonan_body_escapes_html_in_values(): void
+    {
+        $this->type->update([
+            'permohonan_body' => '<p>Atas nama [nama].</p>',
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi <b>Setiawan</b>'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = $submission->renderPermohonanBody();
+
+        $this->assertStringContainsString('Andi &lt;b&gt;Setiawan&lt;/b&gt;', $body);
+        $this->assertStringNotContainsString('<b>Setiawan</b>', $body);
+    }
 }
