@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
 use App\Http\Controllers\KritikSaranPublicController;
+use App\Http\Controllers\PagePublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
@@ -33,6 +35,8 @@ Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name(
 
 Route::get('/kritik-saran', [KritikSaranPublicController::class, 'create'])->name('kritik-saran.create');
 Route::post('/kritik-saran', [KritikSaranPublicController::class, 'store'])->name('kritik-saran.store')->middleware('throttle:5,1');
+
+Route::get('/halaman/{page:slug}', [PagePublicController::class, 'show'])->name('halaman.show');
 
 Route::post('/deploy', DeployController::class)->middleware('throttle:6,1');
 
@@ -63,6 +67,8 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('staff', StaffController::class);
     Route::resource('announcements', AnnouncementController::class);
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
+    Route::resource('pages', PageController::class);
+    Route::post('pages/gambar', [PageController::class, 'uploadImage'])->name('pages.gambar');
     Route::resource('users', UserController::class)->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
