@@ -39,9 +39,15 @@ class ServicesAnnouncementsTest extends TestCase
     {
         $this->seed(\Database\Seeders\LetterTypeSeeder::class);
 
-        foreach (['SPN', 'SKU', 'SPC', 'SUP', 'SIN', 'SP', 'SPD', 'SPA', 'SPM'] as $code) {
+        foreach (['SPN', 'SKU', 'SPC', 'SUP', 'SIN', 'SP', 'SPD', 'SPA', 'SPM', 'SKN', 'PNL'] as $code) {
             $this->assertDatabaseHas('letter_types', ['code' => $code]);
         }
+
+        foreach (['SPD', 'SPA', 'SKN', 'PNL'] as $code) {
+            $this->assertDatabaseHas('letter_types', ['code' => $code, 'publik' => true]);
+        }
+
+        $this->assertDatabaseHas('letter_types', ['code' => 'SKU', 'publik' => false]);
     }
 
     public function test_announcement_seeder_creates_published_examples(): void

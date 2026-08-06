@@ -20,8 +20,9 @@ class SubmissionTest extends TestCase
         parent::setUp();
         $this->staff = User::factory()->create(['role' => User::ROLE_STAFF]);
         $this->type = LetterType::factory()->create([
-            'code' => 'SKU',
-            'name' => 'Surat Keterangan Umum',
+            'code' => 'SPD',
+            'name' => 'Surat Permohonan Duplikat Akta Nikah',
+            'publik' => true,
             'fields' => [
                 ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
             ],
@@ -33,13 +34,13 @@ class SubmissionTest extends TestCase
         $this->get(route('permohonan.create'))
             ->assertOk()
             ->assertSee('Form Permohonan Surat')
-            ->assertSee('Surat Keterangan Umum');
+            ->assertSee('Surat Permohonan Duplikat Akta Nikah');
     }
 
     public function test_public_can_submit_application(): void
     {
         $this->post(route('permohonan.store'), [
-            'jenis' => 'SKU',
+            'jenis' => 'SPD',
             'nama_pemohon' => 'Andi',
             'kontak' => '08123456789',
             'data' => ['nama' => 'Andi Setiawan'],
@@ -54,7 +55,7 @@ class SubmissionTest extends TestCase
     public function test_public_submission_requires_contact(): void
     {
         $this->post(route('permohonan.store'), [
-            'jenis' => 'SKU',
+            'jenis' => 'SPD',
             'nama_pemohon' => 'Andi',
             'data' => ['nama' => 'Andi'],
         ])->assertSessionHasErrors('kontak');
@@ -63,7 +64,7 @@ class SubmissionTest extends TestCase
     public function test_honeypot_blocks_bot_submissions(): void
     {
         $this->post(route('permohonan.store'), [
-            'jenis' => 'SKU',
+            'jenis' => 'SPD',
             'nama_pemohon' => 'Bot',
             'kontak' => 'x',
             'website' => 'http://spam.example',
@@ -119,9 +120,41 @@ class SubmissionTest extends TestCase
         $this->actingAs($this->staff)
             ->post(route('submissions.buat-surat', $submission))
             ->assertRedirect(route('letters.create', [
-                'jenis' => 'SKU',
+                'jenis' => 'SPD',
                 'dari' => $submission->id,
             ]));
+    }
+
+    public function test_public_form_hides_admin_only_types(): void
+    {
+        LetterType::factory()->create([
+            'code' => 'SKU',
+            'name' => 'Surat Keterangan Umum',
+            'publik' => false,
+        ]);
+
+        $this->get(route('permohonan.create'))
+            ->assertOk()
+            ->assertSee('Surat Permohonan Duplikat Akta Nikah')
+            ->assertDontSee('Surat Keterangan Umum');
+    }
+
+    public function test_public_cannot_submit_admin_only_type(): void
+    {
+        LetterType::factory()->create([
+            'code' => 'SKU',
+            'name' => 'Surat Keterangan Umum',
+            'publik' => false,
+        ]);
+
+        $this->post(route('permohonan.store'), [
+            'jenis' => 'SKU',
+            'nama_pemohon' => 'Andi',
+            'kontak' => '08123456789',
+            'data' => ['nama' => 'Andi'],
+        ])->assertNotFound();
+
+        $this->assertDatabaseMissing('submissions', ['nama_pemohon' => 'Andi']);
     }
 
     public function test_guest_cannot_access_admin_submissions(): void

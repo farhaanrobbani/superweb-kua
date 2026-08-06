@@ -41,10 +41,11 @@ class AdminMasterDataTest extends TestCase
                     ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
                 ],
                 'active' => 1,
+                'publik' => 1,
             ]);
 
         $response->assertRedirect(route('letter-types.index'));
-        $this->assertDatabaseHas('letter_types', ['code' => 'SKX']);
+        $this->assertDatabaseHas('letter_types', ['code' => 'SKX', 'publik' => true]);
     }
 
     public function test_staff_can_view_templates_list(): void
