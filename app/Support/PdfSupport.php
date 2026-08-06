@@ -6,6 +6,38 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfSupport
 {
+    public static function parseKopTeks(?string $teks): array
+    {
+        $lines = [];
+        if (! $teks) {
+            return $lines;
+        }
+
+        foreach (preg_split('/\r\n|\r|\n/', $teks) as $line) {
+            $line = trim($line);
+            if ($line === '') {
+                continue;
+            }
+
+            if (str_starts_with($line, '##')) {
+                $text = trim(substr($line, 2));
+                $class = 'sub';
+            } elseif (str_starts_with($line, '#')) {
+                $text = trim(substr($line, 1));
+                $class = 'judul';
+            } else {
+                $text = $line;
+                $class = 'baris';
+            }
+
+            if ($text !== '') {
+                $lines[] = ['text' => $text, 'class' => $class];
+            }
+        }
+
+        return $lines;
+    }
+
     public static function registerArialFonts(): void
     {
         $fonts = [

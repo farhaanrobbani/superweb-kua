@@ -91,6 +91,50 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('/Subtype /Image', $content);
     }
 
+    public function test_pdf_includes_second_logo_when_selected(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('logo2.png', 200, 200)->store('logos2', 'public');
+        KuaSetting::set('logo2_path', $path);
+        KuaSetting::set('kop_logo', 'logo2');
+
+        $response = $this->actingAs($this->user)->get(route('letters.pdf', $this->letter));
+
+        $response->assertOk();
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+        $this->assertStringContainsString('/Subtype /Image', $content);
+    }
+
+    public function test_pdf_falls_back_to_logo1_when_logo2_selected_but_missing(): void
+    {
+        Storage::fake('public');
+
+        KuaSetting::set('kop_logo', 'logo2');
+
+        $response = $this->actingAs($this->user)->get(route('letters.pdf', $this->letter));
+
+        $response->assertOk();
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+        $this->assertStringNotContainsString('/Subtype /Image', $content);
+    }
+
+    public function test_pdf_downloads_with_custom_kop_text(): void
+    {
+        Storage::fake('public');
+
+        KuaSetting::set('kop_teks', "#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\nJl. Contoh No. 1");
+
+        $this->actingAs($this->user)
+            ->get(route('letters.pdf', $this->letter))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+    }
+
     public function test_render_body_replaces_placeholders_and_escapes_html(): void
     {
         $body = $this->letter->renderBody();

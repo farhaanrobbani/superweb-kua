@@ -85,23 +85,79 @@
                     <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Logo KUA</h3>
                     <div class="grid grid-cols-1 gap-4">
                         <div>
-                            <x-input-label for="logo" value="Logo KUA (PNG/JPG/WEBP, maks 2MB)" />
+                            <x-input-label for="logo" value="Logo 1 (KUA) (PNG/JPG/WEBP, maks 2MB)" />
                             <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp"
                                    class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800" />
-                            <p class="text-xs text-gray-500 mt-1">Gunakan PNG dengan latar transparan untuk hasil terbaik. Logo tampil di beranda, halaman login, dan kop surat PDF.</p>
+                            <p class="text-xs text-gray-500 mt-1">Gunakan PNG dengan latar transparan. Logo 1 tampil di beranda, halaman login, dan favicon.</p>
                             <x-input-error :messages="$errors->get('logo')" class="mt-2" />
 
                             @if (! empty($settings['logo_path']['value']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings['logo_path']['value']))
                                 <div class="mt-4 flex items-center gap-4">
                                     <img src="{{ \Illuminate\Support\Facades\Storage::url($settings['logo_path']['value']) }}"
-                                         alt="Logo KUA" class="h-20 w-20 rounded-md border border-gray-200 object-contain p-1 bg-gray-50" />
+                                         alt="Logo 1 (KUA)" class="h-20 w-20 rounded-md border border-gray-200 object-contain p-1 bg-gray-50" />
                                     <label class="flex items-center gap-2 text-sm text-gray-600">
                                         <input type="checkbox" name="logo_hapus" value="1"
                                                class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
-                                        Hapus logo
+                                        Hapus logo 1
                                     </label>
                                 </div>
                             @endif
+                        </div>
+
+                        <div>
+                            <x-input-label for="logo2" value="Logo 2 (PNG/JPG/WEBP, maks 2MB)" />
+                            <input id="logo2" name="logo2" type="file" accept="image/png,image/jpeg,image/webp"
+                                   class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800" />
+                            <p class="text-xs text-gray-500 mt-1">Gunakan PNG dengan latar transparan. Logo 2 hanya dipakai untuk kop surat PDF jika dipilih.</p>
+                            <x-input-error :messages="$errors->get('logo2')" class="mt-2" />
+
+                            @if (! empty($settings['logo2_path']['value']) && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings['logo2_path']['value']))
+                                <div class="mt-4 flex items-center gap-4">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($settings['logo2_path']['value']) }}"
+                                         alt="Logo 2" class="h-20 w-20 rounded-md border border-gray-200 object-contain p-1 bg-gray-50" />
+                                    <label class="flex items-center gap-2 text-sm text-gray-600">
+                                        <input type="checkbox" name="logo2_hapus" value="1"
+                                               class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                                        Hapus logo 2
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div>
+                            <x-input-label value="Logo yang Dipakai di Kop Surat" />
+                            <div class="mt-1 space-y-2">
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="radio" name="kop_logo" value="logo1"
+                                           class="rounded-full border-gray-300 text-teal-600 focus:ring-teal-500"
+                                           {{ (old('kop_logo', $settings['kop_logo']['value'] ?: 'logo1') === 'logo1') ? 'checked' : '' }}>
+                                    Logo 1 (KUA)
+                                </label>
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="radio" name="kop_logo" value="logo2"
+                                           class="rounded-full border-gray-300 text-teal-600 focus:ring-teal-500"
+                                           {{ (old('kop_logo', $settings['kop_logo']['value'] ?: 'logo1') === 'logo2') ? 'checked' : '' }}>
+                                    Logo 2
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Satu logo terpilih tampil di sisi kiri kop surat PDF.</p>
+                            <x-input-error :messages="$errors->get('kop_logo')" class="mt-2" />
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Kop Surat (Teks)</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <x-input-label for="kop_teks" value="Isi Teks Kop Surat" />
+                            <textarea id="kop_teks" name="kop_teks" rows="5"
+                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm font-mono text-sm"
+                                      placeholder="#KUA KECAMATAN CONTOH&#10;##KECAMATAN CONTOH KABUPATEN CONTOH&#10;Jl. Contoh No. 1, Telp. (021) 123456">{{ old('kop_teks', $settings['kop_teks']['value']) }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">
+                                Tiap baris menjadi satu baris di kop surat. Penanda:
+                                <code>#</code> = besar dan tebal (nama instansi), <code>##</code> = tebal (sub), tanpa penanda = baris biasa (alamat, dll).
+                                Kosongkan untuk memakai field Instansi/Kecamatan/Alamat yang sudah diisi di atas.
+                            </p>
+                            <x-input-error :messages="$errors->get('kop_teks')" class="mt-2" />
                         </div>
                     </div>
 

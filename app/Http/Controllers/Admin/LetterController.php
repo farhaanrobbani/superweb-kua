@@ -215,7 +215,8 @@ class LetterController extends Controller
         PdfSupport::registerArialFonts();
 
         $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
-            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path'];
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'ttd_path', 'logo_path',
+            'logo2_path', 'kop_logo', 'kop_teks'];
         $settings = [];
         foreach ($settingKeys as $key) {
             $settings[$key] = KuaSetting::get($key) ?? '';
@@ -225,6 +226,7 @@ class LetterController extends Controller
             'letter' => $letter,
             'settings' => $settings,
             'body' => $letter->renderBody(),
+            'kopLines' => PdfSupport::parseKopTeks($settings['kop_teks']),
         ])->setPaper('a4');
 
         $fileName = ($letter->nomor ? str_replace('/', '-', $letter->nomor) : 'surat') . '.pdf';

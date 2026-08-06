@@ -13,6 +13,8 @@
         .kop .instansi { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
         .kop .sub { font-size: 13px; font-weight: bold; }
         .kop .alamat { font-size: 10.5px; }
+        .kop .judul { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
+        .kop .baris { font-size: 10.5px; }
         .kop-dengan-logo { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
         .kop-dengan-logo td { vertical-align: middle; }
         .kop-dengan-logo .logo { width: 100px; text-align: center; }
@@ -21,6 +23,8 @@
         .kop-dengan-logo .instansi { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
         .kop-dengan-logo .sub { font-size: 13px; font-weight: bold; }
         .kop-dengan-logo .alamat { font-size: 10.5px; }
+        .kop-dengan-logo .judul { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
+        .kop-dengan-logo .baris { font-size: 10.5px; }
         .garis-tebal { border: none; border-top: 3px solid #111; margin: 4px 0 0 0; }
         .garis-tipis { border: none; border-top: 1.5px solid #111; margin: 1px 0 0 0; }
 
@@ -38,24 +42,33 @@
     </style>
 </head>
 <body>
-    @php($logoPath = $settings['logo_path'] ?? '')
-    @php($hasLogo = ! empty($logoPath) && \Illuminate\Support\Facades\Storage::disk('public')->exists($logoPath))
+    @php($selectedLogo = ($settings['kop_logo'] ?? 'logo1') === 'logo2' && ! empty($settings['logo2_path']) ? $settings['logo2_path'] : $settings['logo_path'])
+    @php($hasLogo = ! empty($selectedLogo) && \Illuminate\Support\Facades\Storage::disk('public')->exists($selectedLogo))
+    @php($hasKopTeks = ! empty($kopLines))
 
-    @if ($hasLogo)
+    @if ($hasLogo || $hasKopTeks)
         <table class="kop-dengan-logo">
             <tr>
-                <td class="logo">
-                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->path($logoPath) }}">
-                </td>
+                @if ($hasLogo)
+                    <td class="logo">
+                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->path($selectedLogo) }}">
+                    </td>
+                @endif
                 <td class="teks">
-                    <div class="instansi">{{ $settings['instansi'] }}</div>
-                    <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
-                    <div class="alamat">
-                        {{ $settings['alamat'] }}
-                        @if ($settings['telepon']) &bull; Telp. {{ $settings['telepon'] }} @endif
-                        @if ($settings['email']) &bull; Email: {{ $settings['email'] }} @endif
-                        @if ($settings['kode_pos']) &bull; Kode Pos {{ $settings['kode_pos'] }} @endif
-                    </div>
+                    @if ($hasKopTeks)
+                        @foreach ($kopLines as $kopLine)
+                            <div class="{{ $kopLine['class'] }}">{{ $kopLine['text'] }}</div>
+                        @endforeach
+                    @else
+                        <div class="instansi">{{ $settings['instansi'] }}</div>
+                        <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
+                        <div class="alamat">
+                            {{ $settings['alamat'] }}
+                            @if ($settings['telepon']) &bull; Telp. {{ $settings['telepon'] }} @endif
+                            @if ($settings['email']) &bull; Email: {{ $settings['email'] }} @endif
+                            @if ($settings['kode_pos']) &bull; Kode Pos {{ $settings['kode_pos'] }} @endif
+                        </div>
+                    @endif
                 </td>
             </tr>
         </table>
@@ -63,14 +76,20 @@
         <hr class="garis-tipis">
     @else
     <div class="kop">
-        <div class="instansi">{{ $settings['instansi'] }}</div>
-        <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
-        <div class="alamat">
-            {{ $settings['alamat'] }}
-            @if ($settings['telepon']) &bull; Telp. {{ $settings['telepon'] }} @endif
-            @if ($settings['email']) &bull; Email: {{ $settings['email'] }} @endif
-            @if ($settings['kode_pos']) &bull; Kode Pos {{ $settings['kode_pos'] }} @endif
-        </div>
+        @if ($hasKopTeks)
+            @foreach ($kopLines as $kopLine)
+                <div class="{{ $kopLine['class'] }}">{{ $kopLine['text'] }}</div>
+            @endforeach
+        @else
+            <div class="instansi">{{ $settings['instansi'] }}</div>
+            <div class="sub">KECAMATAN {{ $settings['kecamatan'] }} KABUPATEN {{ $settings['kabupaten'] }}</div>
+            <div class="alamat">
+                {{ $settings['alamat'] }}
+                @if ($settings['telepon']) &bull; Telp. {{ $settings['telepon'] }} @endif
+                @if ($settings['email']) &bull; Email: {{ $settings['email'] }} @endif
+                @if ($settings['kode_pos']) &bull; Kode Pos {{ $settings['kode_pos'] }} @endif
+            </div>
+        @endif
     </div>
     <hr class="garis-tebal">
     <hr class="garis-tipis">

@@ -25,7 +25,10 @@ class KuaSettingController extends Controller
         'kepala_pangkat' => 'Pangkat/Golongan Kepala KUA',
         'sk_kepala' => 'No. SK Pengangkatan Kepala KUA',
         'ttd_path' => 'File Tanda Tangan (path)',
-        'logo_path' => 'Logo KUA (upload)',
+        'logo_path' => 'Logo 1 (KUA) (upload)',
+        'logo2_path' => 'Logo 2 (upload)',
+        'kop_logo' => 'Logo Kop Surat (pilih)',
+        'kop_teks' => 'Teks Kop Surat (bebas)',
         'bg_path' => 'Foto Background Welcome (upload)',
         'hero_path' => 'Banner Beranda (upload)',
         'hero_judul' => 'Judul Utama Beranda',
@@ -60,6 +63,10 @@ class KuaSettingController extends Controller
             'ttd_path' => ['nullable', 'string', 'max:255'],
             'logo' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
             'logo_hapus' => ['sometimes', 'in:1'],
+            'logo2' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
+            'logo2_hapus' => ['sometimes', 'in:1'],
+            'kop_logo' => ['nullable', 'in:logo1,logo2'],
+            'kop_teks' => ['nullable', 'string', 'max:2000'],
             'hero' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
             'hero_hapus' => ['sometimes', 'in:1'],
             'bg' => ['sometimes', 'image', 'mimes:png,jpg,jpeg,webp', 'max:3072'],
@@ -117,6 +124,23 @@ class KuaSettingController extends Controller
             }
 
             KuaSetting::set('logo_path', '');
+        }
+
+        if ($request->hasFile('logo2')) {
+            $old = KuaSetting::get('logo2_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            $path = $request->file('logo2')->store('logos2', 'public');
+            KuaSetting::set('logo2_path', $path);
+        } elseif ($request->boolean('logo2_hapus')) {
+            $old = KuaSetting::get('logo2_path');
+            if ($old && Storage::disk('public')->exists($old)) {
+                Storage::disk('public')->delete($old);
+            }
+
+            KuaSetting::set('logo2_path', '');
         }
 
         foreach ($validated as $key => $value) {

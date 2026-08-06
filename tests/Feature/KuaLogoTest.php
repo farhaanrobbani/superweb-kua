@@ -74,6 +74,70 @@ class KuaLogoTest extends TestCase
         Storage::disk('public')->assertMissing($path);
     }
 
+    public function test_staff_can_upload_logo2(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'logo2' => UploadedFile::fake()->image('logo2.png', 300, 300),
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $path = KuaSetting::get('logo2_path');
+
+        $this->assertNotNull($path);
+        Storage::disk('public')->assertExists($path);
+    }
+
+    public function test_staff_can_delete_logo2(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('logo2.png', 300, 300)->store('logos2', 'public');
+        KuaSetting::set('logo2_path', $path);
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'logo2_hapus' => '1',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('', KuaSetting::get('logo2_path'));
+        Storage::disk('public')->assertMissing($path);
+    }
+
+    public function test_invalid_logo2_is_rejected(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'logo2' => UploadedFile::fake()->create('logo2.txt', 100),
+            ]))
+            ->assertSessionHasErrors('logo2');
+
+        $this->assertNull(KuaSetting::get('logo2_path'));
+    }
+
+    public function test_staff_can_choose_kop_logo_and_set_kop_text(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('logo2.png', 300, 300)->store('logos2', 'public');
+        KuaSetting::set('logo2_path', $path);
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_logo' => 'logo2',
+                'kop_teks' => "#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\nJl. Contoh No. 1",
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('logo2', KuaSetting::get('kop_logo'));
+        $this->assertSame("#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\nJl. Contoh No. 1", KuaSetting::get('kop_teks'));
+    }
+
     public function test_invalid_logo_is_rejected(): void
     {
         Storage::fake('public');
