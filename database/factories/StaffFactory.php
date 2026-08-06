@@ -14,6 +14,7 @@ class StaffFactory extends Factory
         return [
             'nama' => fake()->name(),
             'nip' => fake()->numerify('################'),
+            'kontak' => fake()->numerify('08##########'),
             'jabatan' => 'Staf',
             'pangkat_golongan' => fake()->randomElement(['Penata Muda', 'Penata', 'Penata Tingkat I', null]),
             'bagian' => fake()->randomElement(['Pimpinan', 'Tata Usaha', 'Jabatan Fungsional', 'Tenaga Non PNS', null]),

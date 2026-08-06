@@ -25,6 +25,13 @@
                     </div>
 
                     <div class="mt-4">
+                        <x-input-label for="kontak" value="Kontak (opsional)" />
+                        <x-text-input id="kontak" name="kontak" class="mt-1 block w-full" maxlength="100"
+                                      value="{{ old('kontak', $staff->kontak) }}" placeholder="08xx-xxxx-xxxx / email@..." />
+                        <x-input-error :messages="$errors->get('kontak')" class="mt-2" />
+                    </div>
+
+                    <div class="mt-4">
                         <x-input-label for="jabatan" value="Jabatan" />
                         <x-text-input id="jabatan" name="jabatan" class="mt-1 block w-full" required maxlength="150"
                                       value="{{ old('jabatan', $staff->jabatan) }}" placeholder="Kepala KUA, Penghulu, ..." />

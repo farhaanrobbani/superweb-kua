@@ -61,6 +61,7 @@ class StaffController extends Controller
         $data = $request->validate([
             'nama' => ['required', 'string', 'max:150'],
             'nip' => ['nullable', 'string', 'max:50'],
+            'kontak' => ['nullable', 'string', 'max:100'],
             'jabatan' => ['required', 'string', 'max:150'],
             'pangkat_golongan' => ['nullable', 'string', 'max:100'],
             'bagian' => ['nullable', 'string', 'max:150'],

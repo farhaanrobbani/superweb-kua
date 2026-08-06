@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['nama', 'nip', 'jabatan', 'pangkat_golongan', 'bagian', 'foto', 'sort_order', 'active'])]
+#[Fillable(['nama', 'nip', 'kontak', 'jabatan', 'pangkat_golongan', 'bagian', 'foto', 'sort_order', 'active'])]
 class Staff extends Model
 {
     use HasFactory;
