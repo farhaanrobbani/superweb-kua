@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\KuaSetting;
 use App\Models\Letter;
 use App\Models\LetterType;
+use App\Models\Submission;
 use App\Services\LetterNumberService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
@@ -56,10 +57,10 @@ class LetterController extends Controller
 
         $dari = null;
         if ($request->filled('dari') && $selectedType) {
-            $dari = \App\Models\Submission::find($request->input('dari'));
+            $dari = Submission::find($request->input('dari'));
             if ($dari && $dari->letter_type_id === $selectedType->id) {
-                foreach ($data as $key => $value) {
-                    $data[$key] = $dari->data[$key] ?? $value;
+                foreach ($dari->data ?? [] as $key => $value) {
+                    $data[$key] ??= $value;
                 }
             }
         }
@@ -69,6 +70,7 @@ class LetterController extends Controller
             'selectedType' => $selectedType,
             'data' => $data,
             'dari' => $dari,
+            'perihal' => old('perihal', $dari ? 'Permohonan Penerbitan ' . $selectedType->name : null),
         ]);
     }
 
@@ -84,6 +86,14 @@ class LetterController extends Controller
             'status' => Letter::STATUS_DRAFT,
             'created_by' => auth()->id(),
         ]);
+
+        if ($request->filled('dari')) {
+            $submission = Submission::find($request->input('dari'));
+            if ($submission && $submission->letter_type_id === $letterType->id
+                && $submission->status !== Submission::STATUS_DIPROSES) {
+                $submission->update(['status' => Submission::STATUS_DIPROSES]);
+            }
+        }
 
         return redirect()->route('letters.show', $letter)
             ->with('success', 'Surat draft berhasil dibuat.');
