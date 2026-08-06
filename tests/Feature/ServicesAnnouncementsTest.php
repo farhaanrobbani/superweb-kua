@@ -307,7 +307,7 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertSee('Pencarian Akta')
             ->assertSee('https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF')
             ->assertSee('sandbox')
-            ->assertSee('h-[85vh]');
+            ->assertSee('height:85vh');
     }
 
     public function test_cari_akta_page_without_embed_redirects_home(): void
