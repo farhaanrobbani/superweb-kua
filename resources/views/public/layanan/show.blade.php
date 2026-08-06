@@ -12,7 +12,7 @@
 
         <div class="mt-6 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
             <iframe src="{{ $service->embed_url }}" width="100%" frameborder="0"
-                    style="border:0; height:85vh; min-height:480px" allowfullscreen
+                    style="border:0; height:100vh; min-height:480px" allowfullscreen
                     sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
     </div>
