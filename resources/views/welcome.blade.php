@@ -13,27 +13,35 @@
         @include('partials.public-header')
 
         <main>
-            <section class="mx-auto max-w-5xl px-6 pb-14 pt-16 text-center">
-                <p class="text-sm font-medium uppercase tracking-widest text-teal-700">
-                    {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
-                </p>
-                <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
-                    {!! ! empty($kua['hero_judul']) ? nl2br(e($kua['hero_judul'])) : 'Layanan Surat Digital<br>Tanpa Antre, Kapan Saja' !!}
-                </h1>
-                <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#1b1b1870]">
-                    {{ ! empty($kua['hero_subjudul']) ? $kua['hero_subjudul'] : 'Ajukan permohonan surat keterangan dan surat pengantar secara online.
-Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.' }}
-                </p>
-                @if (! empty($kua['hero_url']))
-                    <img src="{{ $kua['hero_url'] }}" alt="Banner {{ $kua['instansi'] ?? 'KUA' }}"
-                         class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
+            @php($hasBg = ! empty($kua['bg_url']))
+            <section @if ($hasBg) style="background-image: url('{{ $kua['bg_url'] }}')" @endif
+                     class="relative @if ($hasBg) bg-cover bg-center @else bg-gradient-to-br from-teal-50 via-emerald-50 to-white @endif">
+                @if ($hasBg)
+                    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
                 @endif
-                <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                    <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
-                        Ajukan Permohonan Surat
-                    </a>
+                <div class="relative mx-auto max-w-5xl px-6 pb-16 pt-16 text-center sm:pt-20">
+                    <p class="text-sm font-medium uppercase tracking-widest {{ $hasBg ? 'text-teal-100' : 'text-teal-700' }}">
+                        {{ $kua['kecamatan'] ? 'Kantor Urusan Agama Kecamatan '.$kua['kecamatan'] : 'Kantor Urusan Agama' }}
+                    </p>
+                    <h1 class="mx-auto mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl {{ $hasBg ? 'text-white' : '' }}">
+                        {!! ! empty($kua['hero_judul']) ? nl2br(e($kua['hero_judul'])) : 'Layanan Surat Digital<br>Tanpa Antre, Kapan Saja' !!}
+                    </h1>
+                    <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed {{ $hasBg ? 'text-white/85' : 'text-[#1b1b1870]' }}">
+                        {{ ! empty($kua['hero_subjudul']) ? $kua['hero_subjudul'] : 'Ajukan permohonan surat keterangan dan surat pengantar secara online.
+Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.' }}
+                    </p>
+                    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                        <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
+                            Ajukan Permohonan Surat
+                        </a>
+                    </div>
                 </div>
             </section>
+
+            @if (! empty($kua['hero_url']))
+                <img src="{{ $kua['hero_url'] }}" alt="Banner {{ $kua['instansi'] ?? 'KUA' }}"
+                     class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
+            @endif
 
             @if ($services->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pb-16">
