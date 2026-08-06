@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\LetterTemplate;
 use App\Models\LetterType;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -385,6 +386,25 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Surat')
             ->assertSee('Layanan')
             ->assertSee('Media Sosial');
+    }
+
+    public function test_layanan_delete_form_is_not_nested_inside_settings_form(): void
+    {
+        Service::factory()->create(['name' => 'Contoh Layanan']);
+
+        $html = $this->actingAs($this->user)
+            ->get(route('kua-settings.edit'))
+            ->assertOk()
+            ->getContent();
+
+        $formStart = strpos($html, route('kua-settings.update'));
+        $formClose = strpos($html, '</form>', $formStart);
+        $deleteInput = strpos($html, '_method" value="DELETE"', $formStart);
+
+        $this->assertNotFalse($formStart, 'Form pengaturan tidak ditemukan.');
+        $this->assertNotFalse($formClose, 'Penutup form pengaturan tidak ditemukan.');
+        $this->assertNotFalse($deleteInput, 'Form hapus layanan tidak ditemukan.');
+        $this->assertLessThan($deleteInput, $formClose, 'Form hapus layanan masih bersarang di dalam form pengaturan.');
     }
 
     public function test_staff_can_update_kua_settings(): void
