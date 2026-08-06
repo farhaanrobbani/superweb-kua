@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KuaSetting;
 use App\Models\Submission;
+use App\Support\PdfSupport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -64,5 +67,23 @@ class SubmissionAdminController extends Controller
             'jenis' => $submission->letterType->code,
             'dari' => $submission->id,
         ]);
+    }
+
+    public function cetakPermohonan(Submission $submission)
+    {
+        $submission->load('letterType');
+
+        PdfSupport::registerArialFonts();
+
+        $kabupaten = KuaSetting::get('kabupaten') ?? '';
+
+        $pdf = Pdf::loadView('pdf.permohonan', [
+            'submission' => $submission,
+            'kabupaten' => $kabupaten,
+        ])->setPaper('a4');
+
+        $fileName = 'surat-permohonan-' . $submission->id . '.pdf';
+
+        return $pdf->download($fileName);
     }
 }

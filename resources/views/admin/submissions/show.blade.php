@@ -75,13 +75,19 @@
 
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                         <h3 class="font-semibold text-gray-800 mb-2">Buat Surat</h3>
-                        <p class="text-xs text-gray-500 mb-4">Buat draft surat dengan data permohonan yang sudah terisi otomatis.</p>
-                        <form method="POST" action="{{ route('submissions.buat-surat', $submission) }}">
-                            @csrf
-                            <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                                Buat Surat dari Permohonan
-                            </button>
-                        </form>
+                        <p class="text-xs text-gray-500 mb-4">Cetak surat permohonan untuk arsip KUA, lalu buat draft surat dengan data permohonan yang sudah terisi otomatis.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('submissions.cetak-permohonan', $submission) }}"
+                               class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500">
+                                Cetak Surat Permohonan (arsip)
+                            </a>
+                            <form method="POST" action="{{ route('submissions.buat-surat', $submission) }}">
+                                @csrf
+                                <button class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                                    Buat Surat dari Permohonan
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

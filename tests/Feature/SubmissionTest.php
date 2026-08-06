@@ -161,4 +161,50 @@ class SubmissionTest extends TestCase
     {
         $this->get(route('submissions.index'))->assertRedirect(route('login'));
     }
+
+    public function test_submission_show_displays_cetak_surat_permohonan_button(): void
+    {
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('submissions.show', $submission))
+            ->assertOk()
+            ->assertSee('Cetak Surat Permohonan (arsip)');
+    }
+
+    public function test_staff_can_download_surat_permohonan_pdf(): void
+    {
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi Setiawan',
+            'kontak' => '08123456789',
+            'data' => ['nama' => 'Andi Setiawan'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('submissions.cetak-permohonan', $submission))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_guest_cannot_download_surat_permohonan_pdf(): void
+    {
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $this->get(route('submissions.cetak-permohonan', $submission))
+            ->assertRedirect(route('login'));
+    }
 }

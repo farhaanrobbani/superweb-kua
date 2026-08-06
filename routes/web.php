@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::put('/submissions/{submission}', [SubmissionAdminController::class, 'updateStatus'])->name('submissions.update');
     Route::delete('/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])->name('submissions.destroy');
     Route::post('/submissions/{submission}/buat-surat', [SubmissionAdminController::class, 'buatSurat'])->name('submissions.buat-surat');
+    Route::get('/submissions/{submission}/cetak-permohonan', [SubmissionAdminController::class, 'cetakPermohonan'])->name('submissions.cetak-permohonan');
 
     Route::get('/kelola-kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran.index');
     Route::get('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'show'])->name('kritik-saran.show');
