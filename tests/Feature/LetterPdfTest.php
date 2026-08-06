@@ -151,17 +151,19 @@ class LetterPdfTest extends TestCase
             ->assertHeader('content-type', 'application/pdf');
     }
 
-    public function test_pdf_downloads_with_custom_meta_rows(): void
+    public function test_pdf_downloads_with_custom_header_html(): void
     {
-        $this->letter->update(['meta' => [
-            ['label' => 'Lampiran', 'value' => '2 lembar'],
-            ['label' => 'Sifat', 'value' => 'Penting'],
-        ]]);
+        $this->letter->update([
+            'header_html' => '<p>Nomor : {nomor}</p><p>Lampiran : 2 lembar</p><p>Sifat : Penting</p><p>Perihal : {perihal}</p>',
+        ]);
 
         $this->actingAs($this->user)
             ->get(route('letters.pdf', $this->letter))
             ->assertOk()
             ->assertHeader('content-type', 'application/pdf');
+
+        $this->assertStringContainsString('Lampiran : 2 lembar', $this->letter->renderHeader());
+        $this->assertStringContainsString('Sifat : Penting', $this->letter->renderHeader());
     }
 
     public function test_render_body_replaces_placeholders_and_escapes_html(): void

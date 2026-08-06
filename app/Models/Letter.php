@@ -14,7 +14,7 @@ use App\Support\HtmlSanitizer;
     'nomor',
     'tanggal_surat',
     'perihal',
-    'meta',
+    'header_html',
     'data',
     'status',
     'created_by',
@@ -95,20 +95,38 @@ class Letter extends Model
         return HtmlSanitizer::sanitize($body);
     }
 
-    public function metaRows(): array
+    public static function defaultHeader(): string
     {
-        if ($this->meta === null) {
-            return [['label' => 'Lampiran', 'value' => '-']];
+        return '<p>Nomor : {nomor}</p><p>Lampiran : -</p><p>Perihal : {perihal}</p>';
+    }
+
+    public function headerHtml(): string
+    {
+        $header = trim((string) ($this->header_html ?? ''));
+
+        return $header === '' ? self::defaultHeader() : $header;
+    }
+
+    public function renderHeader(): string
+    {
+        $values = [
+            'nomor' => $this->nomor ?? '',
+            'perihal' => $this->perihal ?? '',
+            'tanggal_surat' => $this->tanggal_surat ? tanggal_indonesia($this->tanggal_surat) : '',
+        ];
+
+        $header = $this->headerHtml();
+        foreach ($values as $key => $value) {
+            $header = str_replace('{' . $key . '}', e((string) $value), $header);
         }
 
-        return $this->meta;
+        return HtmlSanitizer::sanitize($header);
     }
 
     protected function casts(): array
     {
         return [
             'data' => 'array',
-            'meta' => 'array',
             'tanggal_surat' => 'date',
             'approved_at' => 'datetime',
         ];

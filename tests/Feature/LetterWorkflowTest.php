@@ -287,81 +287,67 @@ class LetterWorkflowTest extends TestCase
             ->assertSee('Permohonan Surat Keterangan');
     }
 
-    public function test_staff_can_create_letter_with_custom_meta_rows(): void
+    public function test_staff_can_create_letter_with_custom_header_html(): void
     {
         $this->actingAs($this->staff)
             ->post(route('letters.store'), [
                 'jenis' => 'SKU',
+                'nomor' => '001/KUA.10.02.07/VIII/2026',
                 'perihal' => 'Permohonan SK',
                 'data' => ['nama' => 'Budi', 'alamat' => 'Jl. Merdeka'],
-                'meta' => [
-                    ['label' => 'Lampiran', 'value' => '2 lembar'],
-                    ['label' => 'Sifat', 'value' => 'Penting'],
-                ],
+                'header_html' => '<p>Nomor : {nomor}</p><p>Sifat : Segera</p><p>Lampiran : 1 lembar</p><p>Perihal : {perihal}</p>',
             ])
             ->assertRedirect();
 
         $letter = Letter::where('perihal', 'Permohonan SK')->firstOrFail();
-        $this->assertSame([
-            ['label' => 'Lampiran', 'value' => '2 lembar'],
-            ['label' => 'Sifat', 'value' => 'Penting'],
-        ], $letter->meta);
+        $this->assertStringContainsString('Sifat : Segera', $letter->header_html);
     }
 
-    public function test_meta_rows_default_to_lampiran_when_null(): void
+    public function test_header_html_defaults_to_automatic_rows_when_empty(): void
     {
         $letter = $this->draftLetter();
+        $letter->update(['nomor' => '001/KUA.10.02.07/VIII/2026']);
 
-        $this->assertSame([['label' => 'Lampiran', 'value' => '-']], $letter->metaRows());
+        $header = $letter->renderHeader();
+
+        $this->assertStringContainsString('Nomor : 001/KUA.10.02.07/VIII/2026', $header);
+        $this->assertStringContainsString('Lampiran : -', $header);
+        $this->assertStringContainsString('Perihal : Permohonan Surat Keterangan', $header);
     }
 
-    public function test_meta_rows_empty_array_removes_default_lampiran(): void
+    public function test_header_html_placeholders_are_replaced_and_escaped(): void
     {
         $letter = $this->draftLetter();
-        $letter->update(['meta' => []]);
+        $letter->update([
+            'nomor' => '001/KUA.10.02.07/VIII/2026',
+            'perihal' => 'Permohonan <b>SK</b>',
+            'header_html' => '<p>Nomor : {nomor}</p><p>Perihal : {perihal}</p><script></script>',
+        ]);
 
-        $this->assertSame([], $letter->metaRows());
+        $header = $letter->renderHeader();
+
+        $this->assertStringContainsString('Nomor : 001/KUA.10.02.07/VIII/2026', $header);
+        $this->assertStringContainsString('Perihal : Permohonan &lt;b&gt;SK&lt;/b&gt;', $header);
+        $this->assertStringNotContainsString('script', $header);
     }
 
-    public function test_meta_rows_with_empty_label_are_skipped_and_order_preserved(): void
-    {
-        $this->actingAs($this->staff)
-            ->post(route('letters.store'), [
-                'jenis' => 'SKU',
-                'perihal' => 'Permohonan SK',
-                'data' => ['nama' => 'Budi', 'alamat' => 'Jl. Merdeka'],
-                'meta' => [
-                    ['label' => 'Lampiran', 'value' => '1 lembar'],
-                    ['label' => '   ', 'value' => 'harus diabaikan'],
-                    ['label' => 'Sifat', 'value' => 'Biasa'],
-                ],
-            ])
-            ->assertRedirect();
-
-        $letter = Letter::where('perihal', 'Permohonan SK')->firstOrFail();
-        $this->assertSame([
-            ['label' => 'Lampiran', 'value' => '1 lembar'],
-            ['label' => 'Sifat', 'value' => 'Biasa'],
-        ], $letter->meta);
-    }
-
-    public function test_letter_create_form_shows_meta_repeater(): void
+    public function test_letter_create_form_shows_header_editor(): void
     {
         $this->actingAs($this->staff)
             ->get(route('letters.create', ['jenis' => 'SKU']))
             ->assertOk()
-            ->assertSee('Baris Header Tambahan')
-            ->assertSee('Lampiran');
+            ->assertSee('Baris Atas Surat (Bebas)')
+            ->assertSee('data-editor');
     }
 
-    public function test_letter_edit_form_prefills_meta_rows(): void
+    public function test_letter_edit_form_prefills_header_html(): void
     {
         $letter = $this->draftLetter();
-        $letter->update(['meta' => [['label' => 'Sifat', 'value' => 'Penting']]]);
+        $letter->update(['header_html' => '<p>Sifat : Penting</p>']);
 
         $this->actingAs($this->staff)
             ->get(route('letters.edit', $letter))
             ->assertOk()
-            ->assertSee('Sifat');
+            ->assertSee('Sifat : Penting');
     }
 }

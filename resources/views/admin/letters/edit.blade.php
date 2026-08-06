@@ -3,6 +3,10 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Surat</h2>
     </x-slot>
 
+    @push('editor')
+        @vite(['resources/js/editor.js'])
+    @endpush
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -41,27 +45,12 @@
                             <x-input-error :messages="$errors->get('perihal')" class="mt-2" />
                         </div>
 
-                        <div class="mt-6" x-data="metaRepeater({{ json_encode($metaRows) }})">
-                            <div class="flex items-center justify-between">
-                                <x-input-label value="Baris Header Tambahan" />
-                                <button type="button" @click="addRow()"
-                                        class="text-sm font-medium text-teal-600 hover:underline">+ Tambah Baris</button>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Nomor, Perihal, dan Tanggal sudah otomatis. Tambah baris opsional seperti Lampiran, Sifat, atau Hal.</p>
-                            <div class="mt-3 space-y-2">
-                                <template x-for="(row, index) in rows" :key="index">
-                                    <div class="flex items-center gap-2">
-                                        <x-text-input x-bind:name="`meta[${index}][label]`" x-model="row.label"
-                                                      class="w-1/3" placeholder="Label (contoh: Lampiran)" />
-                                        <x-text-input x-bind:name="`meta[${index}][value]`" x-model="row.value"
-                                                      class="flex-1" placeholder="Isi (contoh: -)" />
-                                        <button type="button" @click="rows.splice(index, 1)"
-                                                class="text-sm text-red-600 hover:underline">Hapus</button>
-                                    </div>
-                                </template>
-                                <p x-show="rows.length === 0" class="text-sm text-gray-400">Belum ada baris tambahan.</p>
-                            </div>
-                            <x-input-error :messages="$errors->get('meta')" class="mt-2" />
+                        <div class="mt-6">
+                            <x-input-label for="header_html" value="Baris Atas Surat (Bebas)" />
+                            <textarea id="header_html" name="header_html" data-editor rows="4"
+                                      class="block w-full">{{ old('header_html', $headerHtml) }}</textarea>
+                            <p class="text-xs text-gray-500 mt-1">Tulis baris atas surat (Nomor, Lampiran, Perihal, dll.) secara bebas. Gunakan <code>{nomor}</code>, <code>{perihal}</code>, <code>{tanggal_surat}</code> agar otomatis mengikuti kolom di atas saat PDF dirender. Kosongkan untuk memakai baris otomatis.</p>
+                            <x-input-error :messages="$errors->get('header_html')" class="mt-2" />
                         </div>
 
                         <div class="mt-6 space-y-4">
@@ -121,15 +110,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function metaRepeater(initialRows) {
-            return {
-                rows: (initialRows || []).map((row) => ({ label: row.label || '', value: row.value || '' })),
-                addRow() {
-                    this.rows.push({ label: '', value: '' });
-                },
-            };
-        }
-    </script>
 </x-app-layout>
