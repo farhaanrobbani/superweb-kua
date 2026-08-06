@@ -135,6 +135,91 @@ class KuaHeroTest extends TestCase
             ->assertSee('Ajukan permohonan surat keterangan');
     }
 
+    public function test_staff_can_upload_background(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'bg' => UploadedFile::fake()->image('bg.png', 1600, 900),
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $path = KuaSetting::get('bg_path');
+
+        $this->assertNotNull($path);
+        Storage::disk('public')->assertExists($path);
+    }
+
+    public function test_staff_can_replace_background_and_old_file_is_deleted(): void
+    {
+        Storage::fake('public');
+
+        $oldPath = UploadedFile::fake()->image('lama.png', 1600, 900)->store('welcome', 'public');
+        KuaSetting::set('bg_path', $oldPath);
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'bg' => UploadedFile::fake()->image('baru.png', 1600, 900),
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $newPath = KuaSetting::get('bg_path');
+
+        $this->assertNotSame($oldPath, $newPath);
+        Storage::disk('public')->assertMissing($oldPath);
+        Storage::disk('public')->assertExists($newPath);
+    }
+
+    public function test_staff_can_delete_background(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('bg.png', 1600, 900)->store('welcome', 'public');
+        KuaSetting::set('bg_path', $path);
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'bg_hapus' => '1',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('', KuaSetting::get('bg_path'));
+        Storage::disk('public')->assertMissing($path);
+    }
+
+    public function test_invalid_background_is_rejected(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'bg' => UploadedFile::fake()->create('bg.txt', 100),
+            ]))
+            ->assertSessionHasErrors('bg');
+
+        $this->assertNull(KuaSetting::get('bg_path'));
+    }
+
+    public function test_landing_page_shows_background_when_available(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('bg.png', 1600, 900)->store('welcome', 'public');
+        KuaSetting::set('bg_path', $path);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('storage/welcome/', false);
+    }
+
+    public function test_landing_page_hides_background_when_absent(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('storage/welcome/', false);
+    }
+
     private function basePayload(array $extra = []): array
     {
         return array_merge([
