@@ -84,6 +84,54 @@ class AdminMasterDataTest extends TestCase
         );
     }
 
+    public function test_letter_type_select_options_are_split_by_comma(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKO',
+                'name' => 'Surat Keterangan Opsi',
+                'fields' => [
+                    ['name' => 'jenis', 'label' => 'Jenis', 'type' => 'select', 'required' => 1, 'options' => ['Pria, Wanita']],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $fields = LetterType::where('code', 'SKO')->firstOrFail()->fields;
+        $this->assertSame(['Pria', 'Wanita'], $fields[0]['options']);
+    }
+
+    public function test_letter_type_select_options_trim_and_dedupe(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKP',
+                'name' => 'Surat Keterangan Opsi Bersih',
+                'fields' => [
+                    ['name' => 'alasan', 'label' => 'Alasan', 'type' => 'select', 'required' => 1, 'options' => ['Ekonomi,  Ekonomi , Perselisihan', '']],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $fields = LetterType::where('code', 'SKP')->firstOrFail()->fields;
+        $this->assertSame(['Ekonomi', 'Perselisihan'], $fields[0]['options']);
+    }
+
+    public function test_letter_type_non_select_field_options_are_cleared(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKQ2',
+                'name' => 'Surat Keterangan Tanpa Opsi',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1, 'options' => ['']],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $fields = LetterType::where('code', 'SKQ2')->firstOrFail()->fields;
+        $this->assertArrayNotHasKey('options', $fields[0]);
+    }
+
     public function test_staff_can_save_permohonan_body_on_letter_type(): void
     {
         $this->actingAs($this->user)

@@ -82,6 +82,10 @@ class LetterTypeController extends Controller
             $data['permohonan_body'] = null;
         }
 
+        if (isset($data['fields'])) {
+            $data['fields'] = LetterType::normalizeFieldOptions($data['fields']);
+        }
+
         $data['active'] = $request->boolean('active');
         $data['publik'] = $request->boolean('publik');
 

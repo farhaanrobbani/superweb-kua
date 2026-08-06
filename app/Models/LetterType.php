@@ -27,6 +27,31 @@ class LetterType extends Model
         return $this->hasMany(Letter::class);
     }
 
+    public static function normalizeFieldOptions(array $fields): array
+    {
+        return array_values(array_map(function (array $field) {
+            if (($field['type'] ?? null) !== 'select') {
+                unset($field['options']);
+
+                return $field;
+            }
+
+            $options = [];
+            foreach ($field['options'] ?? [] as $item) {
+                foreach (explode(',', (string) $item) as $option) {
+                    $option = trim($option);
+                    if ($option !== '') {
+                        $options[] = $option;
+                    }
+                }
+            }
+
+            $field['options'] = array_values(array_unique($options));
+
+            return $field;
+        }, $fields));
+    }
+
     protected function casts(): array
     {
         return [
