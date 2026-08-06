@@ -166,6 +166,67 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('Sifat : Penting', $this->letter->renderHeader());
     }
 
+    public function test_pdf_uses_header_spasi_default_1_5(): void
+    {
+        $this->letter->update(['header_spasi' => '1.5', 'header_html' => '<p>Nomor : {nomor}</p>']);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringContainsString('<div class="header" style="line-height: 1.5;">', $html);
+    }
+
+    public function test_pdf_uses_selected_header_spasi_satu(): void
+    {
+        $this->letter->update(['header_spasi' => '1', 'header_html' => '<p>Nomor : {nomor}</p>']);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringContainsString('<div class="header" style="line-height: 1;">', $html);
+    }
+
+    public function test_pdf_shows_top_date_by_default(): void
+    {
+        $this->letter->update(['tanggal_surat' => '2026-08-05', 'tampilkan_tanggal' => true]);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringContainsString('<div style="text-align: right;">05 Agustus 2026</div>', $html);
+    }
+
+    public function test_pdf_hides_top_date_when_disabled(): void
+    {
+        $this->letter->update(['tanggal_surat' => '2026-08-05', 'tampilkan_tanggal' => false]);
+
+        $html = $this->renderPdfHtml();
+
+        $this->assertStringNotContainsString('<div style="text-align: right;">', $html);
+        $this->assertStringContainsString('05 Agustus 2026', $html);
+    }
+
+    private function renderPdfHtml(): string
+    {
+        $settingKeys = ['instansi', 'alamat', 'kecamatan', 'kabupaten', 'kode_pos', 'telepon', 'email',
+            'kepala_nama', 'kepala_nip', 'kepala_pangkat', 'sk_kepala', 'kop_anchor', 'logo_path',
+            'logo2_path', 'kop_logo', 'kop_teks', 'kop_ukuran_judul', 'kop_ukuran_sub', 'kop_ukuran_sub2', 'kop_ukuran_baris'];
+        $settings = [];
+        foreach ($settingKeys as $key) {
+            $settings[$key] = KuaSetting::get($key) ?? '';
+        }
+
+        return view('pdf.letter', [
+            'letter' => $this->letter,
+            'settings' => $settings,
+            'body' => $this->letter->renderBody(),
+            'kopLines' => [],
+            'kopSizes' => [
+                'judul' => 17,
+                'sub' => 13,
+                'sub2' => 11.5,
+                'baris' => 10.5,
+            ],
+        ])->render();
+    }
+
     public function test_render_body_replaces_placeholders_and_escapes_html(): void
     {
         $body = $this->letter->renderBody();

@@ -86,6 +86,8 @@ class LetterController extends Controller
             'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
             'header_html' => $validated['header_html'],
+            'header_spasi' => $validated['header_spasi'],
+            'tampilkan_tanggal' => $validated['tampilkan_tanggal'],
             'data' => $validated['data'],
             'status' => Letter::STATUS_DRAFT,
             'created_by' => auth()->id(),
@@ -132,6 +134,8 @@ class LetterController extends Controller
             'tanggal_surat' => $validated['tanggal_surat'],
             'perihal' => $validated['perihal'],
             'header_html' => $validated['header_html'],
+            'header_spasi' => $validated['header_spasi'],
+            'tampilkan_tanggal' => $validated['tampilkan_tanggal'],
             'data' => $validated['data'],
         ]);
 
@@ -251,6 +255,8 @@ class LetterController extends Controller
             'tanggal_surat' => ['nullable', 'date'],
             'perihal' => ['required', 'string', 'max:255'],
             'header_html' => ['nullable', 'string', 'max:65535'],
+            'header_spasi' => ['nullable', 'in:1,1.5'],
+            'tampilkan_tanggal' => ['boolean'],
         ];
 
         $fields = $letterType->fields ?? [];
@@ -276,6 +282,8 @@ class LetterController extends Controller
             'tanggal_surat' => $validated['tanggal_surat'] ?? null,
             'perihal' => $validated['perihal'],
             'header_html' => $validated['header_html'] ?? null,
+            'header_spasi' => $validated['header_spasi'] ?? '1.5',
+            'tampilkan_tanggal' => $request->boolean('tampilkan_tanggal'),
             'data' => $safeData,
         ];
     }
