@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <title>Surat Permohonan {{ $submission->letterType->name }}</title>
     <style>
-        @page { margin: 4cm 3cm 3cm 4cm; }
+        @page { margin: 3cm 3cm 3cm 4cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.6; color: #111; }
 
-        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 12px; margin-bottom: 24px; }
+        .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 14px; margin-bottom: 24px; }
 
         .isi { text-align: justify; }
         .isi p { margin: 0 0 12px 0; }
@@ -45,7 +45,7 @@
 
     <div class="ttd">
         <div class="blok">
-            <div>{{ $kabupaten ? $kabupaten . ', ' : '' }}{{ tanggal_indonesia(now()->toDateString(), 'd F Y') }}</div>
+            <div>{{ $kabupaten ? Str::title($kabupaten) . ', ' : '' }}{{ tanggal_indonesia(now()->toDateString(), 'd F Y') }}</div>
             <div>Hormat saya</div>
             <div class="kotak-materai">MATERAI 10.000</div>
             <div class="nama">{{ $submission->nama_pemohon }}</div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Surat {{ $letter->nomor }}</title>
     <style>
-        @page { margin: 4cm 3cm 3cm 4cm; }
+        @page { margin: 3cm 3cm 3cm 4cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.6; color: #111; }
 
@@ -89,7 +89,7 @@
     </div>
 
     <div class="ttd">
-        <div class="kota">{{ $settings['kabupaten'] }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+        <div class="kota">{{ Str::title($settings['kabupaten']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
         <div>Kepala {{ $settings['instansi'] }},</div>
         @if ($settings['ttd_path'] && \Illuminate\Support\Facades\Storage::exists($settings['ttd_path']))
             <div>
