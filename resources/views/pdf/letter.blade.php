@@ -33,7 +33,7 @@
         .ttd .kota { margin-bottom: 0; }
         .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
-        .ttd .nip { font-size: 11px; }
+        .ttd .nip { font-size: 11px; line-height: 1; }
     </style>
 </head>
 <body>
