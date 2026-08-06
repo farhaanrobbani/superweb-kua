@@ -10,21 +10,14 @@
 
         /* Kop surat */
         .kop { text-align: center; margin-bottom: 4px; }
-        .kop .instansi { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
-        .kop .sub { font-size: 13px; font-weight: bold; }
-        .kop .alamat { font-size: 10.5px; }
-        .kop .judul { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
-        .kop .baris { font-size: 10.5px; }
+        .kop .instansi, .kop-dengan-logo .instansi, .kop .judul, .kop-dengan-logo .judul { font-size: {{ $kopSizes['judul'] }}px; font-weight: bold; letter-spacing: 0.5px; }
+        .kop .sub, .kop-dengan-logo .sub { font-size: {{ $kopSizes['sub'] }}px; font-weight: bold; }
+        .kop .alamat, .kop-dengan-logo .alamat, .kop .baris, .kop-dengan-logo .baris { font-size: {{ $kopSizes['baris'] }}px; }
         .kop-dengan-logo { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
         .kop-dengan-logo td { vertical-align: middle; }
         .kop-dengan-logo .logo { width: 100px; text-align: center; }
         .kop-dengan-logo .logo img { width: 90px; height: auto; }
         .kop-dengan-logo .teks { text-align: center; padding-left: 6px; }
-        .kop-dengan-logo .instansi { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
-        .kop-dengan-logo .sub { font-size: 13px; font-weight: bold; }
-        .kop-dengan-logo .alamat { font-size: 10.5px; }
-        .kop-dengan-logo .judul { font-size: 17px; font-weight: bold; letter-spacing: 0.5px; }
-        .kop-dengan-logo .baris { font-size: 10.5px; }
         .garis-tebal { border: none; border-top: 3px solid #111; margin: 4px 0 0 0; }
         .garis-tipis { border: none; border-top: 1.5px solid #111; margin: 1px 0 0 0; }
 

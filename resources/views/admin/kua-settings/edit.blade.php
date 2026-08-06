@@ -161,6 +161,31 @@
                         </div>
                     </div>
 
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                        <div>
+                            <x-input-label for="kop_ukuran_judul" value="Ukuran Font Judul (px)" />
+                            <x-text-input id="kop_ukuran_judul" name="kop_ukuran_judul" type="number" min="6" max="72" step="0.5"
+                                          class="mt-1 block w-full" placeholder="17"
+                                          value="{{ old('kop_ukuran_judul', $settings['kop_ukuran_judul']['value']) }}" />
+                            <x-input-error :messages="$errors->get('kop_ukuran_judul')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="kop_ukuran_sub" value="Ukuran Font Sub (px)" />
+                            <x-text-input id="kop_ukuran_sub" name="kop_ukuran_sub" type="number" min="6" max="72" step="0.5"
+                                          class="mt-1 block w-full" placeholder="13"
+                                          value="{{ old('kop_ukuran_sub', $settings['kop_ukuran_sub']['value']) }}" />
+                            <x-input-error :messages="$errors->get('kop_ukuran_sub')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="kop_ukuran_baris" value="Ukuran Font Baris (px)" />
+                            <x-text-input id="kop_ukuran_baris" name="kop_ukuran_baris" type="number" min="6" max="72" step="0.5"
+                                          class="mt-1 block w-full" placeholder="10.5"
+                                          value="{{ old('kop_ukuran_baris', $settings['kop_ukuran_baris']['value']) }}" />
+                            <x-input-error :messages="$errors->get('kop_ukuran_baris')" class="mt-2" />
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Kosongkan untuk memakai ukuran bawaan (Judul 17, Sub 13, Baris 10.5 px).</p>
+
                     <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">Data Instansi</h3>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div class="sm:col-span-2">

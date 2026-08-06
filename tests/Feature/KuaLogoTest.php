@@ -138,6 +138,32 @@ class KuaLogoTest extends TestCase
         $this->assertSame("#KUA KECAMATAN CONTOH\n##KECAMATAN CONTOH KABUPATEN CONTOH\nJl. Contoh No. 1", KuaSetting::get('kop_teks'));
     }
 
+    public function test_staff_can_set_kop_font_sizes(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_ukuran_judul' => '20',
+                'kop_ukuran_sub' => '14',
+                'kop_ukuran_baris' => '12',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertSame('20', KuaSetting::get('kop_ukuran_judul'));
+        $this->assertSame('14', KuaSetting::get('kop_ukuran_sub'));
+        $this->assertSame('12', KuaSetting::get('kop_ukuran_baris'));
+    }
+
+    public function test_kop_font_size_out_of_range_is_rejected(): void
+    {
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'kop_ukuran_judul' => '5',
+            ]))
+            ->assertSessionHasErrors('kop_ukuran_judul');
+
+        $this->assertNull(KuaSetting::get('kop_ukuran_judul'));
+    }
+
     public function test_invalid_logo_is_rejected(): void
     {
         Storage::fake('public');
