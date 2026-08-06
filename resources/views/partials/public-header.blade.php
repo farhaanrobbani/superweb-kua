@@ -70,10 +70,6 @@
                 </div>
             </div>
         </nav>
-        <a href="{{ route('permohonan.create') }}"
-           class="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 sm:hidden">
-            Ajukan Surat
-        </a>
     </div>
     <nav x-data="{ layanan: false, tentang: false }" class="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
         <a href="{{ url('/') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Beranda</a>

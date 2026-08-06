@@ -30,11 +30,6 @@
                         {{ ! empty($kua['hero_subjudul']) ? $kua['hero_subjudul'] : 'Ajukan permohonan surat keterangan dan surat pengantar secara online.
 Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara digital.' }}
                     </p>
-                    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-                        <a href="{{ route('permohonan.create') }}" class="rounded-md bg-teal-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-800">
-                            Ajukan Permohonan Surat
-                        </a>
-                    </div>
                 </div>
             </section>
 
