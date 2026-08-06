@@ -18,7 +18,7 @@
         .data-tabel .label { width: 190px; }
         .data-tabel .titik { width: 16px; }
 
-        .ttd { margin-top: 48px; text-align: right; }
+        .ttd { margin-top: 24px; text-align: right; }
         .ttd .blok { display: inline-block; text-align: center; }
         .kotak-materai { width: 96px; height: 48px; border: 2px solid #111; margin: 6px auto; text-align: center; line-height: 48px; font-size: 10px; }
         .ttd .nama { font-weight: bold; text-decoration: underline; margin-top: 4px; }
