@@ -75,6 +75,7 @@ class KritikSaranTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
+            ->assertSee('Tentang Kami')
             ->assertSee('Daftar Pegawai')
             ->assertSee('Kritik & Saran', false);
     }
