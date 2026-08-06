@@ -27,7 +27,7 @@ class ServiceController extends Controller
     {
         Service::create($this->validateData($request));
 
-        return redirect()->route('services.index')
+        return redirect()->route('kua-settings.edit', ['tab' => 'layanan'])
             ->with('success', 'Layanan berhasil ditambahkan.');
     }
 
@@ -40,7 +40,7 @@ class ServiceController extends Controller
     {
         $service->update($this->validateData($request));
 
-        return redirect()->route('services.index')
+        return redirect()->route('kua-settings.edit', ['tab' => 'layanan'])
             ->with('success', 'Layanan berhasil diperbarui.');
     }
 
@@ -48,7 +48,7 @@ class ServiceController extends Controller
     {
         $service->delete();
 
-        return redirect()->route('services.index')
+        return redirect()->route('kua-settings.edit', ['tab' => 'layanan'])
             ->with('success', 'Layanan berhasil dihapus.');
     }
 

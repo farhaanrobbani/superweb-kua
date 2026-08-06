@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KuaSetting;
+use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -68,7 +69,10 @@ class KuaSettingController extends Controller
             }
         }
 
-        return view('admin.kua-settings.edit', compact('settings'));
+        return view('admin.kua-settings.edit', [
+            'settings' => $settings,
+            'services' => Service::ordered()->get(),
+        ]);
     }
 
     public function update(Request $request): RedirectResponse

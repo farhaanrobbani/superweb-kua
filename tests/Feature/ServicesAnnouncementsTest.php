@@ -163,7 +163,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'sort_order' => 2,
                 'active' => 1,
             ])
-            ->assertRedirect(route('services.index'));
+            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
 
         $service = Service::where('name', 'Layanan Konsultasi')->first();
         $this->assertNotNull($service);
@@ -178,7 +178,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'sort_order' => 2,
                 'active' => 0,
             ])
-            ->assertRedirect(route('services.index'));
+            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
 
         $this->assertDatabaseHas('services', [
             'id' => $service->id,
@@ -209,7 +209,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'name' => 'Layanan Diubah',
                 'description' => 'Tanpa centang aktif',
             ])
-            ->assertRedirect(route('services.index'));
+            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
 
         $this->assertDatabaseHas('services', [
             'id' => $service->id,
@@ -224,7 +224,7 @@ class ServicesAnnouncementsTest extends TestCase
 
         $this->actingAs($this->user)
             ->delete(route('services.destroy', $service))
-            ->assertRedirect(route('services.index'));
+            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
 
         $this->assertDatabaseMissing('services', ['id' => $service->id]);
     }
@@ -287,7 +287,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'icon' => 'document',
                 'active' => 1,
             ])
-            ->assertRedirect(route('services.index'));
+            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
 
         $this->assertDatabaseHas('services', [
             'name' => 'Pencarian Akta',
