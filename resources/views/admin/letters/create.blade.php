@@ -36,11 +36,14 @@
                         <form method="POST" action="{{ route('letters.store') }}">
                             @csrf
                             <input type="hidden" name="jenis" value="{{ $selectedType->code }}">
+                            @if (isset($dari) && $dari)
+                                <input type="hidden" name="dari" value="{{ $dari->id }}">
+                            @endif
 
                             <div>
                                 <x-input-label for="perihal" value="Perihal Surat" />
                                 <x-text-input id="perihal" name="perihal" class="mt-1 block w-full" required
-                                              value="{{ old('perihal') }}" placeholder="Contoh: Permohonan Penerbitan Surat Keterangan" />
+                                              value="{{ $perihal }}" placeholder="Contoh: Permohonan Penerbitan Surat Keterangan" />
                                 <x-input-error :messages="$errors->get('perihal')" class="mt-2" />
                             </div>
 
