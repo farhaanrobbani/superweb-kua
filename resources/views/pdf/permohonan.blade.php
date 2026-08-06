@@ -10,8 +10,9 @@
 
         .judul { text-align: center; font-weight: bold; text-decoration: underline; font-size: 14px; margin-bottom: 24px; }
 
-        .isi { text-align: justify; }
-        .isi p { margin: 0 0 12px 0; }
+        .isi { text-align: justify; line-height: 1.5; }
+        .isi p { margin: 0 0 12px 0; line-height: 1.5; }
+        .isi table { line-height: 1.5; }
 
         .data-tabel { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
         .data-tabel td { vertical-align: top; padding: 1px 0; }

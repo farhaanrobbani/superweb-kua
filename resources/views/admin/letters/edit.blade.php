@@ -90,7 +90,7 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 h-fit">
                     <h3 class="font-semibold text-gray-800 mb-3">Template Surat</h3>
                     @if ($letter->letterType->templates->first())
-                        <div class="text-sm text-gray-800 bg-gray-50 rounded-md p-3">{!! \App\Support\HtmlSanitizer::normalize($letter->letterType->templates->first()->body) !!}</div>
+                        <div class="text-sm text-gray-800 bg-gray-50 rounded-md p-3">{!! \App\Support\ColonTableFormatter::format(\App\Support\HtmlSanitizer::normalize($letter->letterType->templates->first()->body)) !!}</div>
                     @else
                         <p class="text-sm text-gray-400">Belum ada template untuk jenis surat ini.</p>
                     @endif

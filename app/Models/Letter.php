@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Support\ColonTableFormatter;
 use App\Support\HtmlSanitizer;
 
 #[Fillable([
@@ -85,7 +86,7 @@ class Letter extends Model
             }
         }
 
-        $body = HtmlSanitizer::toHtml($template->body);
+        $body = ColonTableFormatter::format(HtmlSanitizer::toHtml($template->body));
         foreach ($values as $key => $value) {
             $body = str_replace('[' . $key . ']', e((string) $value), $body);
         }

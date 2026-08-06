@@ -26,8 +26,9 @@
         .meta div { display: block; margin-bottom: 2px; }
         .meta .baris { padding-left: 4.5em; text-indent: -4.5em; }
         .meta .nilai { display: inline-block; width: 2.2em; text-align: center; }
-        .isi { text-align: justify; }
-        .isi p { margin: 0 0 12px 0; }
+        .isi { text-align: justify; line-height: 1.5; }
+        .isi p { margin: 0 0 12px 0; line-height: 1.5; }
+        .isi table { line-height: 1.5; }
         .ttd { margin-top: 40px; text-align: right; padding-right: 8px; }
         .ttd .blok { display: inline-block; text-align: left; }
         .ttd .kota { margin-bottom: 0; }

@@ -191,4 +191,21 @@ class LetterPdfTest extends TestCase
         $this->assertStringContainsString('<p>Menerangkan bahwa Budi &lt;b&gt;Santoso&lt;/b&gt; beralamat di Jl. Merdeka 1, Bogor.', $body);
         $this->assertStringContainsString('Nomor surat SKU.001/KUA.VIII/2026, tanggal 06 Agustus 2026.</p>', $body);
     }
+
+    public function test_render_body_aligns_colon_rows_into_table(): void
+    {
+        LetterTemplate::where('letter_type_id', $this->type->id)->update(['active' => false]);
+        LetterTemplate::factory()->create([
+            'letter_type_id' => $this->type->id,
+            'name' => 'Template Identitas',
+            'active' => true,
+            'body' => "Menerangkan bahwa:\n\nNama : [nama]\nAlamat : [alamat]",
+        ]);
+
+        $body = $this->letter->renderBody();
+
+        $this->assertStringContainsString('<table', $body);
+        $this->assertStringContainsString('Budi &lt;b&gt;Santoso&lt;/b&gt;', $body);
+        $this->assertStringContainsString('<p>Menerangkan bahwa:</p>', $body);
+    }
 }
