@@ -20,7 +20,7 @@ if (! function_exists('kua_services')) {
     function kua_services(): Collection
     {
         try {
-            return Service::query()->active()->ordered()->get(['name', 'slug', 'description', 'content', 'url', 'icon']);
+            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
         } catch (\Throwable) {
             return collect();
         }

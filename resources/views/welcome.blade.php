@@ -45,7 +45,7 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                     <h2 class="text-center text-xl font-bold">Layanan Kami</h2>
                     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($services as $service)
-                            <a href="{{ $service->linkUrl() }}"
+                            <a href="{{ $service->url ? url($service->url) : '#' }}"
                                class="rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
                                 <div class="flex items-center gap-3">
                                     <span class="text-teal-700">@include('partials.service-icon', ['icon' => $service->icon, 'class' => 'h-7 w-7'])</span>

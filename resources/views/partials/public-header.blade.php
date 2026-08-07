@@ -31,7 +31,7 @@
                      x-cloak
                      class="absolute start-1/2 mt-2 w-72 -translate-x-1/2 rounded-lg border border-teal-100 bg-white p-2 shadow-lg">
                     @forelse ($headerServices as $service)
-                        <a href="{{ $service->linkUrl() }}"
+                        <a href="{{ $service->url ? url($service->url) : '#' }}"
                            class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
                             <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
                             <span>
@@ -95,7 +95,7 @@
                  x-cloak
                  class="w-full border-t border-teal-100 pt-1">
                 @foreach ($headerServices as $service)
-                    <a href="{{ $service->linkUrl() }}"
+                    <a href="{{ $service->url ? url($service->url) : '#' }}"
                        class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
                         <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => $service->icon])</span>
                         <span>
