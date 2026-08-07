@@ -78,7 +78,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
-    Route::resource('services', ServiceController::class)->except('show');
+    Route::resource('services', ServiceController::class)->except(['show', 'index']);
     Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
     Route::get('/navbar/{navbarItem}/edit', [NavbarController::class, 'edit'])->name('navbar.edit');
     Route::put('/navbar/{navbarItem}', [NavbarController::class, 'update'])->name('navbar.update');

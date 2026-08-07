@@ -11,13 +11,6 @@ use Illuminate\View\View;
 
 class ServiceController extends Controller
 {
-    public function index(): View
-    {
-        return view('admin.services.index', [
-            'services' => Service::ordered()->paginate(15),
-        ]);
-    }
-
     public function create(): View
     {
         return view('admin.services.create');
