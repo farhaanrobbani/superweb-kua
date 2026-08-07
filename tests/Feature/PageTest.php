@@ -153,6 +153,7 @@ class PageTest extends TestCase
 
         $this->get(route('layanan.wakaf'))
             ->assertOk()
+            ->assertSee('Wakaf')
             ->assertDontSee('<iframe');
     }
 
@@ -162,7 +163,54 @@ class PageTest extends TestCase
 
         $this->get(route('layanan.keagamaan'))
             ->assertOk()
+            ->assertSee('Keagamaan')
             ->assertDontSee('<iframe');
+    }
+
+    public function test_public_wakaf_page_shows_custom_page_title(): void
+    {
+        Page::factory()->create([
+            'key' => 'wakaf',
+            'title' => 'Program Wakaf KUA',
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.wakaf'))
+            ->assertOk()
+            ->assertSee('Program Wakaf KUA');
+    }
+
+    public function test_public_keagamaan_page_shows_custom_page_title(): void
+    {
+        Page::factory()->create([
+            'key' => 'keagamaan',
+            'title' => 'Binaan Keagamaan',
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.keagamaan'))
+            ->assertOk()
+            ->assertSee('Binaan Keagamaan');
+    }
+
+    public function test_public_permohonan_page_shows_custom_page_title(): void
+    {
+        Page::factory()->create([
+            'key' => 'layanan-permohonan',
+            'title' => 'Ajukan Surat Online',
+            'active' => true,
+        ]);
+
+        $this->get(route('permohonan.create'))
+            ->assertOk()
+            ->assertSee('Ajukan Surat Online');
+    }
+
+    public function test_public_permohonan_page_falls_back_to_default_title(): void
+    {
+        $this->get(route('permohonan.create'))
+            ->assertOk()
+            ->assertSee('Form Permohonan Surat');
     }
 
     public function test_public_wakaf_page_renders_content_when_filled(): void
