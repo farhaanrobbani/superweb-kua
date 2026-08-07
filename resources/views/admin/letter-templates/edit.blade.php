@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Template: {{ $letterTemplate->name }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Edit Template: {{ $letterTemplate->name }}</h2>
     </x-slot>
 
     @push('editor')
@@ -9,7 +9,7 @@
 
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('letter-templates.update', $letterTemplate) }}">
                     @csrf
                     @method('PUT')
@@ -38,7 +38,7 @@
 
                     <div class="mt-4">
                         <x-input-label for="body" value="Isi Template Surat" />
-                        <p class="text-xs text-gray-500 mt-1">Gunakan placeholder <code>[nama_field]</code> sesuai field pada jenis surat. Body adalah isi surat setelah kepala/kop surat (otomatis ditambahkan di PDF).</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Gunakan placeholder <code>[nama_field]</code> sesuai field pada jenis surat. Body adalah isi surat setelah kepala/kop surat (otomatis ditambahkan di PDF).</p>
                         <textarea id="body" name="body" data-editor rows="14"
                                   data-upload-url="{{ route('announcements.gambar') }}"
                                   class="block w-full">{{ old('body', $letterTemplate->body) }}</textarea>
@@ -48,13 +48,13 @@
                     <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="active" value="1" {{ old('active', $letterTemplate->active) ? 'checked' : '' }} class="rounded border-gray-300">
-                            <span class="ms-2 text-sm text-gray-700">Aktif</span>
+                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Aktif</span>
                         </label>
                     </div>
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('letter-templates.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('letter-templates.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>

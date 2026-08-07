@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Jenis Surat</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Jenis Surat</h2>
     </x-slot>
 
     @push('editor')
@@ -9,9 +9,9 @@
 
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 @if ($errors->any())
-                    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300 px-4 py-3 rounded-md text-sm">
                         <strong>Periksa kembali isian:</strong>
                         <ul class="list-disc ml-4 mt-1">
                             @foreach ($errors->all() as $error)
@@ -50,7 +50,7 @@
                         <textarea id="permohonan_body" name="permohonan_body" data-editor rows="4"
                                   data-upload-url="{{ route('announcements.gambar') }}"
                                   class="block w-full">{{ old('permohonan_body') }}</textarea>
-                        <p class="mt-1 text-xs text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>. Kalimat pembuka "Yang bertanda tangan di bawah ini, saya:" otomatis tampil di atas tabel identitas, tidak perlu ditulis ulang di sini.</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Isi kalimat permohonan untuk dicetak di Surat Permohonan (arsip). Gunakan placeholder <code>[nama_field]</code> dari field di atas; tersedia juga <code>[nama_pemohon]</code> dan <code>[kontak]</code>. Kalimat pembuka "Yang bertanda tangan di bawah ini, saya:" otomatis tampil di atas tabel identitas, tidak perlu ditulis ulang di sini.</p>
                         <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
                     </div>
 
@@ -58,7 +58,7 @@
                         <x-input-label for="permohonan_informasi" value="Informasi di Bawah Form Permohonan (Berkas yang Dibawa)" />
                         <textarea id="permohonan_informasi" name="permohonan_informasi" rows="4"
                                   class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_informasi') }}</textarea>
-                        <p class="mt-1 text-xs text-gray-500">Ditampilkan di bawah form permohonan di halaman publik untuk jenis surat ini. Baris baru menjadi baris baru. Contoh: daftar berkas yang harus dibawa ke KUA. Kosongkan untuk menyembunyikan.</p>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Ditampilkan di bawah form permohonan di halaman publik untuk jenis surat ini. Baris baru menjadi baris baru. Contoh: daftar berkas yang harus dibawa ke KUA. Kosongkan untuk menyembunyikan.</p>
                         <x-input-error :messages="$errors->get('permohonan_informasi')" class="mt-2" />
                     </div>
 
@@ -66,13 +66,13 @@
                         <div class="flex items-center justify-between">
                             <x-input-label value="Field / Data Surat" />
                             <button type="button" @click="addField()"
-                                    class="text-sm text-blue-600 hover:underline">+ Tambah Field</button>
+                                    class="text-sm text-blue-600 dark:text-blue-400 hover:underline">+ Tambah Field</button>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Centang <strong>Internal</strong> bila field hanya diisi petugas (tidak tampil di permohonan publik). Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat. Seret ikon untuk mengurutkan field.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Field ini menjadi form pengisian saat membuat surat. Centang <strong>Internal</strong> bila field hanya diisi petugas (tidak tampil di permohonan publik). Gunakan nama field sebagai placeholder <code>[nama_field]</code> di template surat. Seret ikon untuk mengurutkan field.</p>
 
                         <div class="mt-3 space-y-3">
                             <template x-for="(field, index) in fields" :key="index">
-                                <div class="border border-gray-200 rounded-md p-4 bg-gray-50"
+                                <div class="border border-gray-200 dark:border-gray-700 rounded-md p-4 bg-gray-50 dark:bg-gray-700/40"
                                      :class="index === draggingIndex ? 'opacity-50' : ''"
                                      @dragover.prevent="dragOver($event)"
                                      @drop.prevent="dropAt(index)">
@@ -81,7 +81,7 @@
                                     <div class="flex items-start gap-3">
                                         <button type="button"
                                                 draggable="true"
-                                                class="mt-1 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600"
+                                                class="mt-1 cursor-grab active:cursor-grabbing text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-300 dark:text-gray-500"
                                                 title="Seret untuk mengurutkan"
                                                 @dragstart="dragStart(index, $event)"
                                                 @dragend="dragEnd()">
@@ -109,14 +109,14 @@
                                                     </select>
                                                 </div>
                                                 <div class="sm:col-span-1 flex items-center gap-3">
-                                                    <label class="flex items-center text-xs text-gray-600">
+                                                    <label class="flex items-center text-xs text-gray-600 dark:text-gray-300 dark:text-gray-500">
                                                         <input type="checkbox" x-model="field.required" class="rounded border-gray-300"> Wajib
                                                     </label>
-                                                    <label class="flex items-center text-xs text-gray-600" title="Hanya ditampilkan saat petugas membuat surat, tidak tampil di permohonan publik">
+                                                    <label class="flex items-center text-xs text-gray-600 dark:text-gray-300 dark:text-gray-500" title="Hanya ditampilkan saat petugas membuat surat, tidak tampil di permohonan publik">
                                                         <input type="checkbox" x-model="field.internal" class="rounded border-gray-300"> Internal
                                                     </label>
                                                     <button type="button" @click="fields.splice(index, 1)"
-                                                            class="text-red-600 text-sm hover:underline">Hapus</button>
+                                                            class="text-red-600 dark:text-red-400 text-sm hover:underline">Hapus</button>
                                                 </div>
                                             </div>
                                             <div class="mt-2" x-show="field.type === 'select'">
@@ -127,42 +127,42 @@
                                     </div>
                                 </div>
                             </template>
-                            <p x-show="fields.length === 0" class="text-sm text-gray-400">Belum ada field. Klik "+ Tambah Field".</p>
+                            <p x-show="fields.length === 0" class="text-sm text-gray-400 dark:text-gray-500">Belum ada field. Klik "+ Tambah Field".</p>
                         </div>
                     </div>
 
                     <div class="mt-6">
                         <x-input-label value="Field yang Tampil di Surat Permohonan" />
-                        <p class="text-xs text-gray-500 mt-1">Centang field yang dicetak pada tabel identitas di Surat Permohonan. Kosongkan semua berarti menampilkan semua field.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Centang field yang dicetak pada tabel identitas di Surat Permohonan. Kosongkan semua berarti menampilkan semua field.</p>
                         <div class="mt-3 space-y-2">
                             <template x-for="(field, index) in fields" :key="index">
-                                <label class="flex items-center text-sm text-gray-700">
+                                <label class="flex items-center text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">
                                     <input type="checkbox" :name="`permohonan_fields[]`" :value="field.name"
                                            x-model="permohonanFields" class="rounded border-gray-300">
                                     <span class="ms-2" x-text="field.label || field.name"></span>
                                 </label>
                             </template>
-                            <p x-show="fields.length === 0" class="text-sm text-gray-400">Tambahkan field terlebih dahulu.</p>
+                            <p x-show="fields.length === 0" class="text-sm text-gray-400 dark:text-gray-500">Tambahkan field terlebih dahulu.</p>
                         </div>
                     </div>
 
                     <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="publik" value="1" {{ old('publik') ? 'checked' : '' }} class="rounded border-gray-300">
-                            <span class="ms-2 text-sm text-gray-700">Tampil di permohonan publik</span>
+                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Tampil di permohonan publik</span>
                         </label>
                     </div>
 
                     <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="active" value="1" checked class="rounded border-gray-300">
-                            <span class="ms-2 text-sm text-gray-700">Aktif (bisa dipilih saat membuat surat)</span>
+                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Aktif (bisa dipilih saat membuat surat)</span>
                         </label>
                     </div>
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('letter-types.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('letter-types.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>

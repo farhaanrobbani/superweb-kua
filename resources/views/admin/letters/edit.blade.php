@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Surat</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Edit Surat</h2>
     </x-slot>
 
     @push('editor')
@@ -10,10 +10,10 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="lg:col-span-2 bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                     <div class="mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ $letter->letterType->name }}</h3>
-                        <p class="text-xs text-gray-500">Perihal saat ini: {{ $letter->perihal }}</p>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">{{ $letter->letterType->name }}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Perihal saat ini: {{ $letter->perihal }}</p>
                     </div>
 
                     <form method="POST" action="{{ route('letters.update', $letter) }}">
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="mt-4 flex flex-wrap items-center gap-6">
-                            <label class="flex items-center gap-2 text-sm text-gray-600">
+                            <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
                                 <input type="checkbox" name="tampilkan_tanggal" value="1"
                                        {{ old('tampilkan_tanggal', $letter->tampilkan_tanggal ?? true) ? 'checked' : '' }} class="rounded border-gray-300">
                                 Tampilkan tanggal di baris atas
@@ -57,7 +57,7 @@
                             <x-input-label for="header_html" value="Baris Atas Surat (Bebas)" />
                             <textarea id="header_html" name="header_html" data-editor rows="4"
                                       class="block w-full">{{ old('header_html', $headerHtml) }}</textarea>
-                            <p class="text-xs text-gray-500 mt-1">Tulis baris atas surat (Nomor, Lampiran, Perihal, dll.) secara bebas. Gunakan <code>{nomor}</code>, <code>{perihal}</code>, <code>{tanggal_surat}</code> agar otomatis mengikuti kolom di atas saat PDF dirender. Kosongkan untuk memakai baris otomatis.</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Tulis baris atas surat (Nomor, Lampiran, Perihal, dll.) secara bebas. Gunakan <code>{nomor}</code>, <code>{perihal}</code>, <code>{tanggal_surat}</code> agar otomatis mengikuti kolom di atas saat PDF dirender. Kosongkan untuk memakai baris otomatis.</p>
                             <x-input-error :messages="$errors->get('header_html')" class="mt-2" />
                         </div>
 
@@ -67,9 +67,9 @@
                                 @if (! empty($field['internal']))
                                     @if (! $internalShown)
                                         @php($internalShown = true)
-                                        <div class="border-t border-gray-200 pt-4">
-                                            <h4 class="font-semibold text-gray-700">Data tambahan (diisi petugas)</h4>
-                                            <p class="text-xs text-gray-500 mt-1">Field berikut hanya diisi oleh petugas saat membuat surat.</p>
+                                        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                                            <h4 class="font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-500">Data tambahan (diisi petugas)</h4>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Field berikut hanya diisi oleh petugas saat membuat surat.</p>
                                         </div>
                                     @endif
                                 @endif
@@ -102,17 +102,17 @@
 
                         <div class="mt-6 flex items-center gap-4">
                             <x-primary-button>Simpan Perubahan</x-primary-button>
-                            <a href="{{ route('letters.show', $letter) }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                            <a href="{{ route('letters.show', $letter) }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                         </div>
                     </form>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 h-fit">
-                    <h3 class="font-semibold text-gray-800 mb-3">Template Surat</h3>
+                <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6 h-fit">
+                    <h3 class="font-semibold text-gray-800 dark:text-gray-100 mb-3">Template Surat</h3>
                     @if ($letter->letterType->templates->first())
-                        <div class="text-sm text-gray-800 bg-gray-50 rounded-md p-3">{!! \App\Support\ColonTableFormatter::format(\App\Support\HtmlSanitizer::normalize($letter->letterType->templates->first()->body)) !!}</div>
+                        <div class="text-sm text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-700/40 rounded-md p-3">{!! \App\Support\ColonTableFormatter::format(\App\Support\HtmlSanitizer::normalize($letter->letterType->templates->first()->body)) !!}</div>
                     @else
-                        <p class="text-sm text-gray-400">Belum ada template untuk jenis surat ini.</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Belum ada template untuk jenis surat ini.</p>
                     @endif
                 </div>
             </div>

@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tolak Surat</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tolak Surat</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="mb-4 text-sm text-gray-600">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
+                <div class="mb-4 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
                     Surat: <strong>{{ $letter->perihal }}</strong> ({{ $letter->letterType->name }})
                 </div>
 
@@ -20,7 +20,7 @@
                     </div>
                     <div class="mt-6 flex items-center gap-4">
                         <x-danger-button type="submit">Tolak Surat</x-danger-button>
-                        <a href="{{ route('letters.show', $letter) }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('letters.show', $letter) }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>
