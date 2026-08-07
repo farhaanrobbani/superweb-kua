@@ -52,6 +52,64 @@ class SubmissionTest extends TestCase
         ]);
     }
 
+    public function test_public_submission_generates_download_token(): void
+    {
+        $this->post(route('permohonan.store'), [
+            'jenis' => 'SPD',
+            'nama_pemohon' => 'Andi',
+            'kontak' => '08123456789',
+            'data' => ['nama' => 'Andi Setiawan'],
+        ])->assertRedirect(route('permohonan.sukses'));
+
+        $submission = Submission::where('nama_pemohon', 'Andi')->firstOrFail();
+
+        $this->assertNotNull($submission->token);
+        $this->assertEquals(40, strlen($submission->token));
+    }
+
+    public function test_sukses_page_shows_download_button_after_submit(): void
+    {
+        $this->post(route('permohonan.store'), [
+            'jenis' => 'SPD',
+            'nama_pemohon' => 'Andi',
+            'kontak' => '08123456789',
+            'data' => ['nama' => 'Andi Setiawan'],
+        ])->assertRedirect(route('permohonan.sukses'));
+
+        $this->get(route('permohonan.sukses'))
+            ->assertOk()
+            ->assertSee('Download Surat Permohonan (PDF)');
+    }
+
+    public function test_sukses_page_hides_download_button_without_flash(): void
+    {
+        $this->get(route('permohonan.sukses'))
+            ->assertOk()
+            ->assertDontSee('Download Surat Permohonan (PDF)');
+    }
+
+    public function test_public_can_download_permohonan_pdf_with_token(): void
+    {
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi Setiawan',
+            'kontak' => '08123456789',
+            'data' => ['nama' => 'Andi Setiawan'],
+            'status' => Submission::STATUS_BARU,
+            'token' => 'token-valid-contoh',
+        ]);
+
+        $this->get(route('permohonan.download', 'token-valid-contoh'))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_public_cannot_download_permohonan_with_unknown_token(): void
+    {
+        $this->get(route('permohonan.download', 'token-tidak-ada'))
+            ->assertNotFound();
+    }
+
     public function test_public_submission_requires_contact(): void
     {
         $this->post(route('permohonan.store'), [
