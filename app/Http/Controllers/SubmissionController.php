@@ -6,8 +6,10 @@ use App\Models\KuaSetting;
 use App\Models\LetterType;
 use App\Models\Service;
 use App\Models\Submission;
+use App\Support\SubmissionPdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SubmissionController extends Controller
@@ -74,15 +76,25 @@ class SubmissionController extends Controller
             $safeData[$field['name']] = $request->input('data.' . $field['name']);
         }
 
-        Submission::create([
+        $submission = Submission::create([
             'letter_type_id' => $letterType->id,
             'nama_pemohon' => $request->input('nama_pemohon'),
             'kontak' => $request->input('kontak'),
             'data' => $safeData,
             'status' => Submission::STATUS_BARU,
+            'token' => Str::random(40),
         ]);
 
-        return redirect()->route('permohonan.sukses');
+        return redirect()->route('permohonan.sukses')->with('unduh', $submission->token);
+    }
+
+    public function download(string $token)
+    {
+        $submission = Submission::where('token', $token)->firstOrFail();
+
+        [$pdf, $fileName] = SubmissionPdf::build($submission);
+
+        return $pdf->download($fileName);
     }
 
     public function sukses(): View
