@@ -94,6 +94,24 @@ class PageTest extends TestCase
             ->assertSee('Pencarian Akta');
     }
 
+    public function test_page_tabs_show_navbar_labels_not_page_titles(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        Page::where('key', 'pernikahan')->delete();
+        Page::factory()->create([
+            'key' => 'pernikahan',
+            'title' => 'Halaman Nikah',
+            'active' => true,
+        ]);
+
+        $this->actingAs($this->user)
+            ->get(route('pages.index'))
+            ->assertOk()
+            ->assertSee('Pernikahan')
+            ->assertDontSee('Halaman Nikah');
+    }
+
     public function test_admin_pages_index_auto_creates_page_for_navbar_item(): void
     {
         $this->seed(NavbarItemSeeder::class);

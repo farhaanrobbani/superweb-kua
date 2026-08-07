@@ -16,7 +16,7 @@
                     @foreach ($pages as $tab)
                         <a href="{{ route('pages.index', ['tab' => $tab->key]) }}"
                            class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold {{ $page->key === $tab->key ? 'border-teal-700 text-teal-700' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                            {{ $tab->title }}
+                            {{ $tab->navbar_label ?? $tab->title }}
                         </a>
                     @endforeach
                 </div>

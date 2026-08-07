@@ -25,6 +25,7 @@ class PageController extends Controller
                 ]
             );
             $page->navbar_order = $item->sort_order;
+            $page->navbar_label = $item->label;
 
             $pages->push($page);
         }
