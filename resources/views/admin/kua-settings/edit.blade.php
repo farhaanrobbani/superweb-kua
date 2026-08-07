@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Pengaturan Web</h2>
     </x-slot>
 
-    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'kepala', 'layanan'], true) ? request('tab') : 'web')
+    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'kepala'], true) ? request('tab') : 'web')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -34,11 +34,6 @@
                             :class="tab === 'kepala' ? 'border-teal-700 text-teal-700' : 'border-transparent text-gray-500 hover:text-gray-700'"
                             class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
                         Kepala &amp; Tanda Tangan
-                    </button>
-                    <button type="button" @click="tab = 'layanan'"
-                            :class="tab === 'layanan' ? 'border-teal-700 text-teal-700' : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
-                        Layanan
                     </button>
                 </div>
 
@@ -358,63 +353,11 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-center gap-4" x-show="tab !== 'layanan'">
+                    <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
                         <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
                     </div>
                 </form>
-
-                <div x-show="tab === 'layanan'" x-cloak>
-                    <div class="mb-4 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800">Layanan</h3>
-                        <a href="{{ route('services.create') }}"
-                           class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
-                            + Tambah Layanan
-                        </a>
-                    </div>
-                    <div class="overflow-x-auto border border-gray-200 rounded-md">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Urutan</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">URL</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse ($services as $service)
-                                    <tr>
-                                        <td class="px-4 py-3 text-sm text-gray-500">{{ $service->sort_order }}</td>
-                                        <td class="px-4 py-3 text-sm text-gray-900">
-                                            <span class="font-medium">{{ $service->name }}</span>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm font-mono text-gray-500">{{ $service->url ?? '-' }}</td>
-                                        <td class="px-4 py-3">
-                                            <span class="px-2 py-1 text-xs rounded-full {{ $service->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
-                                                {{ $service->active ? 'Aktif' : 'Nonaktif' }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm space-x-2">
-                                            <a href="{{ route('services.edit', $service) }}" class="text-blue-600 hover:underline">Edit</a>
-                                            <form action="{{ route('services.destroy', $service) }}" method="POST" class="inline"
-                                                  onsubmit="return confirm('Hapus layanan ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="text-red-600 hover:underline">Hapus</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="px-4 py-8 text-center text-sm text-gray-500">Belum ada layanan.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
