@@ -183,7 +183,12 @@ class KuaSettingController extends Controller
             KuaSetting::set('logo2_path', '');
         }
 
+        $ignored = ['hero', 'hero_hapus', 'bg', 'bg_hapus', 'logo', 'logo_hapus', 'logo2', 'logo2_hapus'];
         foreach ($validated as $key => $value) {
+            if (in_array($key, $ignored, true)) {
+                continue;
+            }
+
             KuaSetting::set($key, $value);
         }
 

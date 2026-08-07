@@ -254,6 +254,23 @@ class KuaHeroTest extends TestCase
             ->assertSessionHasErrors(['sosmed_instagram', 'sosmed_whatsapp']);
     }
 
+    public function test_update_does_not_persist_file_or_hapus_flag_keys(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->user)
+            ->put(route('kua-settings.update'), $this->basePayload([
+                'hero' => UploadedFile::fake()->image('hero.png', 1280, 540),
+                'hero_hapus' => '1',
+                'logo_hapus' => '1',
+            ]))
+            ->assertRedirect(route('kua-settings.edit'));
+
+        $this->assertNull(KuaSetting::where('key', 'hero')->first());
+        $this->assertNull(KuaSetting::where('key', 'hero_hapus')->first());
+        $this->assertNull(KuaSetting::where('key', 'logo_hapus')->first());
+    }
+
     private function basePayload(array $extra = []): array
     {
         return array_merge([
