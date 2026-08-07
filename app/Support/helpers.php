@@ -2,6 +2,7 @@
 
 use App\Models\KuaSetting;
 use App\Models\NavbarItem;
+use App\Models\Page;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -56,6 +57,17 @@ if (! function_exists('kua_navbar')) {
         }
 
         return $items->isEmpty() ? $defaults : $items;
+    }
+}
+
+if (! function_exists('kua_page')) {
+    function kua_page(string $key): ?Page
+    {
+        try {
+            return Page::active()->where('key', $key)->first();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }
 
