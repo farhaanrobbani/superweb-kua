@@ -90,6 +90,13 @@
             {{ __('Daftar Staf') }}
         </x-nav-link>
 
+        <x-nav-link :href="route('navbar.index')" :active="request()->routeIs('navbar.*')">
+            <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            {{ __('Navbar') }}
+        </x-nav-link>
+
         <x-nav-link :href="route('kritik-saran.index')" :active="request()->routeIs('kritik-saran.*')">
             <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />

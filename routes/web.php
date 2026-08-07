@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\MarriageServiceController;
+use App\Http\Controllers\Admin\NavbarController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
@@ -78,6 +79,9 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
     Route::resource('services', ServiceController::class)->except('show');
+    Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
+    Route::get('/navbar/{navbarItem}/edit', [NavbarController::class, 'edit'])->name('navbar.edit');
+    Route::put('/navbar/{navbarItem}', [NavbarController::class, 'update'])->name('navbar.update');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::resource('download-items', DownloadItemController::class)->except('show');
