@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NavbarItem;
+use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -10,12 +10,16 @@ class LayananController extends Controller
 {
     public function cariAkta(): View|RedirectResponse
     {
-        $service = NavbarItem::query()->where('url', '/cari-akta')->first();
+        try {
+            $page = Page::active()->where('key', 'cari-akta')->first();
+        } catch (\Throwable) {
+            $page = null;
+        }
 
-        if (! $service?->embed_url) {
+        if (! $page?->embed_url) {
             return redirect()->route('welcome');
         }
 
-        return view('public.layanan.show', compact('service'));
+        return view('public.layanan.show', compact('page'));
     }
 }
