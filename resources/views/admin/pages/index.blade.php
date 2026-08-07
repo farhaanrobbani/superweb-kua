@@ -1,21 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Page</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Page</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300 px-4 py-3 rounded-md text-sm">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="mb-6 flex flex-wrap gap-1 border-b border-gray-200">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
+                <div class="mb-6 flex flex-wrap gap-1 border-b border-gray-200 dark:border-gray-700">
                     @foreach ($pages as $tab)
                         <a href="{{ route('pages.index', ['tab' => $tab->key]) }}"
-                           class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold {{ $page->key === $tab->key ? 'border-teal-700 text-teal-700' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                           class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold {{ $page->key === $tab->key ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500' }}">
                             {{ $tab->navbar_label ?? $tab->title }}
                         </a>
                     @endforeach
@@ -25,7 +25,7 @@
                     @csrf
                     @method('PUT')
 
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Judul &amp; Deskripsi Halaman</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Judul &amp; Deskripsi Halaman</h3>
 
                     <div class="space-y-4">
                         <div>
@@ -47,7 +47,7 @@
                             <x-text-input id="embed_url" name="embed_url" type="url" class="mt-1 block w-full" maxlength="255"
                                           value="{{ old('embed_url', $page->embed_url) }}"
                                           placeholder="https://datastudio.google.com/embed/reporting/..." />
-                            <p class="text-xs text-gray-500 mt-1">Tempel URL <code>src</code> dari bagikan Google Looker Studio (laporan/data studio) yang akan ditampilkan di halaman ini.</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Tempel URL <code>src</code> dari bagikan Google Looker Studio (laporan/data studio) yang akan ditampilkan di halaman ini.</p>
                             <x-input-error :messages="$errors->get('embed_url')" class="mt-2" />
                         </div>
 
@@ -62,7 +62,7 @@
 
                 @if ($page->key === 'pernikahan')
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Topik Layanan Pernikahan</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Topik Layanan Pernikahan</h3>
                         @include('admin.marriage-services._table', ['marriageServices' => $marriageServices])
                     </div>
                 @endif

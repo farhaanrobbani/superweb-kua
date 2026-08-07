@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Berkas</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Edit Berkas</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
-                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300 px-4 py-3 rounded-md text-sm">
                     Periksa kembali isian yang disorot di bawah.
                 </div>
             @endif
@@ -15,7 +15,7 @@
                 @csrf
                 @method('PUT')
 
-                <div class="bg-white rounded-lg shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                     <div class="p-6 space-y-5">
                         <div>
                             <x-input-label for="title" value="Judul *" />
@@ -39,25 +39,25 @@
                             <x-input-error :messages="$errors->get('category')" class="mt-2" />
                         </div>
 
-                        <div class="border-t border-gray-100 pt-5">
-                            <h3 class="text-sm font-semibold text-gray-700">Sumber Berkas</h3>
-                            <p class="text-xs text-gray-500 mt-1">Pilih salah satu: unggah file langsung atau isi URL eksternal.</p>
+                        <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-500">Sumber Berkas</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Pilih salah satu: unggah file langsung atau isi URL eksternal.</p>
 
                             <div class="mt-4">
                                 <x-input-label for="file" value="Unggah File Baru (kosongkan jika tidak diubah)" />
                                 @if ($downloadItem->file)
-                                    <div class="mt-2 flex items-center gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                                    <div class="mt-2 flex items-center gap-3 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">
                                         <span class="truncate">{{ $downloadItem->fileName() }} ({{ $downloadItem->fileSize() ?? '—' }})</span>
                                     </div>
-                                    <label class="mt-3 flex items-center gap-2 text-sm text-gray-600">
-                                        <input type="checkbox" name="file_hapus" value="1" class="rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
+                                    <label class="mt-3 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
+                                        <input type="checkbox" name="file_hapus" value="1" class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500" />
                                         Hapus file ini
                                     </label>
                                 @endif
                                 <input type="file" name="file" id="file"
                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.webp,.zip"
-                                       class="mt-2 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-teal-50 file:text-teal-700 file:font-semibold hover:file:bg-teal-100" />
-                                <p class="text-xs text-gray-500 mt-1">PDF, Word, Excel, PowerPoint, gambar, ZIP. Maks 10 MB.</p>
+                                       class="mt-2 block w-full text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-teal-50 file:text-teal-700 dark:text-teal-400 file:font-semibold hover:file:bg-teal-100" />
+                                <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">PDF, Word, Excel, PowerPoint, gambar, ZIP. Maks 10 MB.</p>
                                 <x-input-error :messages="$errors->get('file')" class="mt-2" />
                             </div>
 
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                     <div class="px-4 py-4 space-y-4">
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
@@ -91,9 +91,9 @@
                             </div>
                         </div>
 
-                        <div class="pt-2 border-t border-gray-100 flex items-center gap-3">
+                        <div class="pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center gap-3">
                             <x-primary-button>Simpan</x-primary-button>
-                            <a href="{{ route('download-items.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                            <a href="{{ route('download-items.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                         </div>
                     </div>
                 </div>

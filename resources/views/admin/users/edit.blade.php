@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Akun</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Edit Akun</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -52,7 +52,7 @@
                     <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $user->is_active)) class="rounded border-gray-300">
-                            <span class="ms-2 text-sm text-gray-700">Akun aktif (bisa login)</span>
+                            <span class="ms-2 text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Akun aktif (bisa login)</span>
                         </label>
                     </div>
 
@@ -60,7 +60,7 @@
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('users.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('users.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>

@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Sub Menu {{ $navbarItem->label }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Sub Menu {{ $navbarItem->label }}</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-4">
                 <a href="{{ route('navbar.index') }}"
-                   class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 hover:text-teal-700">
+                   class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-500 shadow-sm hover:bg-gray-50 dark:bg-gray-700/40 hover:text-teal-700 dark:text-teal-400">
                     &larr; Kembali
                 </a>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('navbar.sub.store', $navbarItem) }}">
                     @csrf
 
@@ -26,7 +26,7 @@
                         <x-input-label for="url" value="URL (opsional)" />
                         <x-text-input id="url" name="url" class="mt-1 block w-full" maxlength="255"
                                       value="{{ old('url') }}" placeholder="/halaman" />
-                        <p class="text-xs text-gray-500 mt-1">Tujuan tautan sub menu, misalnya /permohonan atau tautan eksternal.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Tujuan tautan sub menu, misalnya /permohonan atau tautan eksternal.</p>
                         <x-input-error :messages="$errors->get('url')" class="mt-2" />
                     </div>
 
@@ -53,14 +53,14 @@
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="active" value="1"
                                    @checked(old('active', true))
-                                   class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
-                            <span class="ms-2 text-sm text-gray-600">Aktif</span>
+                                   class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
+                            <span class="ms-2 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">Aktif</span>
                         </label>
                     </div>
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('navbar.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('navbar.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>

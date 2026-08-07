@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Topik Pernikahan</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Topik Pernikahan</h2>
     </x-slot>
 
     @push('editor')
@@ -10,7 +10,7 @@
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
-                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300 px-4 py-3 rounded-md text-sm">
                     Periksa kembali isian yang disorot di bawah.
                 </div>
             @endif
@@ -18,7 +18,7 @@
             <form method="POST" action="{{ route('marriage-services.store') }}" class="space-y-6">
                 @csrf
 
-                <div class="bg-white rounded-lg shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                     <div class="p-6 space-y-5">
                         <div>
                             <x-input-label for="name" value="Nama Topik *" />
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                     <div class="p-6 space-y-5">
                         <div class="grid gap-4 sm:grid-cols-3">
                             <div>
@@ -73,7 +73,7 @@
                                 <x-input-error :messages="$errors->get('sop_label')" class="mt-2" />
                             </div>
                         </div>
-                        <p class="text-xs text-gray-500 -mt-3">Kosongkan untuk memakai judul bawaan.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 -mt-3">Kosongkan untuk memakai judul bawaan.</p>
 
                         <div>
                             <x-input-label for="persyaratan" value="Persyaratan" />
@@ -101,7 +101,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                     <div class="px-4 py-4 space-y-4">
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div>
@@ -120,9 +120,9 @@
                             </div>
                         </div>
 
-                        <div class="pt-2 border-t border-gray-100 flex items-center gap-3">
+                        <div class="pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center gap-3">
                             <x-primary-button>Simpan</x-primary-button>
-                            <a href="{{ route('pages.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                            <a href="{{ route('pages.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                         </div>
                     </div>
                 </div>

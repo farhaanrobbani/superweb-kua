@@ -1,6 +1,6 @@
-<div class="mt-6 pt-6 border-t border-gray-200">
-    <h3 class="text-sm font-semibold text-gray-700">Data Pegawai</h3>
-    <p class="text-xs text-gray-500 mt-0.5">Digunakan untuk laporan kinerja pegawai.</p>
+<div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-500">Data Pegawai</h3>
+    <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-0.5">Digunakan untuk laporan kinerja pegawai.</p>
 
     <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
@@ -65,13 +65,13 @@
         <div class="mt-1 flex items-center gap-4">
             @if (isset($user) && $user->fotoUrl())
                 <img src="{{ $user->fotoUrl() }}" alt="Foto profil"
-                     class="h-20 w-20 rounded-full object-cover border border-gray-200" />
+                     class="h-20 w-20 rounded-full object-cover border border-gray-200 dark:border-gray-700" />
             @endif
             <input type="file" name="foto_profil" id="foto_profil" accept="image/jpeg,image/png,image/webp"
-                   class="text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-teal-600" />
+                   class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-teal-600" />
             @if (isset($user) && $user->fotoUrl())
-                <label class="flex items-center gap-1 text-sm text-gray-600">
-                    <input type="checkbox" name="foto_hapus" value="1" class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                <label class="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
+                    <input type="checkbox" name="foto_hapus" value="1" class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
                     Hapus foto
                 </label>
             @endif

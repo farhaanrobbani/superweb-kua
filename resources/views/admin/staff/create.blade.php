@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Pegawai</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Pegawai</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('staff.store') }}" enctype="multipart/form-data">
                     @csrf
 
@@ -48,7 +48,7 @@
                         <x-input-label for="bagian" value="Bagian / Unit (opsional)" />
                         <x-text-input id="bagian" name="bagian" class="mt-1 block w-full" maxlength="150"
                                       value="{{ old('bagian') }}" placeholder="Pimpinan, Tata Usaha, Jabatan Fungsional, ..." />
-                        <p class="text-xs text-gray-500 mt-1">Dipakai untuk mengelompokkan Struktur Organisasi di halaman publik.</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Dipakai untuk mengelompokkan Struktur Organisasi di halaman publik.</p>
                         <x-input-error :messages="$errors->get('bagian')" class="mt-2" />
                     </div>
 
@@ -62,10 +62,10 @@
                     <div class="mt-4" x-data="{ preview: null }">
                         <x-input-label for="foto" value="Foto (opsional, PNG/JPG/WEBP, maks 2MB)" />
                         <input id="foto" name="foto" type="file" accept="image/png,image/jpeg,image/webp"
-                               class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800"
+                               class="mt-1 block w-full text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-800"
                                @change="const f = $event.target.files[0]; if (f) { const r = new FileReader(); r.onload = e => preview = e.target.result; r.readAsDataURL(f); }" />
                         <img x-show="preview" :src="preview" alt="Pratinjau foto"
-                             class="mt-3 h-32 w-32 rounded-full border border-gray-200 object-cover" />
+                             class="mt-3 h-32 w-32 rounded-full border border-gray-200 dark:border-gray-700 object-cover" />
                         <x-input-error :messages="$errors->get('foto')" class="mt-2" />
                     </div>
 
@@ -73,14 +73,14 @@
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="active" value="1"
                                    @checked(old('active', true))
-                                   class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
-                            <span class="ms-2 text-sm text-gray-600">Aktif (tampil di halaman publik)</span>
+                                   class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
+                            <span class="ms-2 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">Aktif (tampil di halaman publik)</span>
                         </label>
                     </div>
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('staff.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('staff.index') }}" class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>
