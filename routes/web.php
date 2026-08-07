@@ -31,6 +31,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/cari-akta', [LayananController::class, 'cariAkta'])->name('layanan.cari-akta');
+Route::get('/wakaf', [LayananController::class, 'wakaf'])->name('layanan.wakaf');
+Route::get('/keagamaan', [LayananController::class, 'keagamaan'])->name('layanan.keagamaan');
 
 Route::get('/favicon.ico', FaviconController::class);
 
