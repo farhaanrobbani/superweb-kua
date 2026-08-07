@@ -49,7 +49,7 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                                class="rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
                                 <div class="flex items-center gap-3">
                                     <span class="text-teal-700">@include('partials.service-icon', ['icon' => $service->icon, 'class' => 'h-7 w-7'])</span>
-                                    <h3 class="font-semibold text-teal-900">{{ $service->name }}</h3>
+                                    <h3 class="font-semibold text-teal-900">{{ $service->label }}</h3>
                                 </div>
                             </a>
                         @endforeach

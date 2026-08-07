@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\NavbarItem;
 use App\Models\User;
 use Database\Seeders\NavbarItemSeeder;
+use DOMDocument;
+use DOMXPath;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -220,6 +222,26 @@ class NavbarTest extends TestCase
             ->assertOk()
             ->assertSee('Home')
             ->assertDontSee('Beranda');
+    }
+
+    public function test_landing_service_cards_show_navbar_item_labels(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        $permohonan = NavbarItem::where('key', 'layanan-permohonan')->firstOrFail();
+        $permohonan->update(['label' => 'Ajukan Surat Online']);
+
+        $response = $this->get(route('welcome'));
+        $response->assertOk();
+
+        $dom = new DOMDocument;
+        @$dom->loadHTML($response->getContent());
+        $xpath = new DOMXPath($dom);
+
+        $node = $xpath->query('//a[contains(@href, "/permohonan")]//h3')->item(0);
+
+        $this->assertNotNull($node, 'Kartu layanan /permohonan tidak ditemukan.');
+        $this->assertSame('Ajukan Surat Online', trim($node->textContent), 'Kartu layanan tidak menampilkan label.');
     }
 
     public function test_inactive_main_item_is_hidden_from_public_header(): void
