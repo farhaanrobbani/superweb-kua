@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Announcement;
 use App\Models\NavbarItem;
+use App\Models\Page;
 use App\Models\User;
 use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -300,45 +301,12 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertSessionHasErrors(['title', 'content']);
     }
 
-    public function test_admin_can_set_sub_menu_embed_url(): void
+    public function test_cari_akta_page_renders_embed_iframe_from_page(): void
     {
-        $parent = $this->layanan();
-
-        $this->actingAs($this->user)
-            ->post(route('navbar.sub.store', $parent), [
-                'label' => 'Pencarian Akta',
-                'url' => '/cari-akta',
-                'embed_url' => 'https://datastudio.google.com/embed/reporting/abc123/page/x',
-                'icon' => 'document',
-                'active' => 1,
-            ])
-            ->assertRedirect(route('navbar.index'));
-
-        $this->assertDatabaseHas('navbar_items', [
-            'label' => 'Pencarian Akta',
-            'embed_url' => 'https://datastudio.google.com/embed/reporting/abc123/page/x',
-        ]);
-    }
-
-    public function test_sub_menu_embed_url_validated_as_url(): void
-    {
-        $parent = $this->layanan();
-
-        $this->actingAs($this->user)
-            ->post(route('navbar.sub.store', $parent), [
-                'label' => 'Embed Salah',
-                'embed_url' => 'bukan-url',
-            ])
-            ->assertSessionHasErrors('embed_url');
-
-        $this->assertDatabaseMissing('navbar_items', ['label' => 'Embed Salah']);
-    }
-
-    public function test_cari_akta_page_renders_embed_iframe(): void
-    {
-        NavbarItem::factory()->create([
-            'label' => 'Pencarian Akta',
-            'url' => '/cari-akta',
+        Page::factory()->create([
+            'key' => 'cari-akta',
+            'title' => 'Pencarian Akta',
+            'description' => 'Cek data akta nikah secara online.',
             'embed_url' => 'https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF',
             'active' => true,
         ]);
@@ -346,15 +314,16 @@ class ServicesAnnouncementsTest extends TestCase
         $this->get(route('layanan.cari-akta'))
             ->assertOk()
             ->assertSee('Pencarian Akta')
+            ->assertSee('Cek data akta nikah secara online.')
             ->assertSee('https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF')
             ->assertSee('sandbox');
     }
 
     public function test_cari_akta_page_without_embed_redirects_home(): void
     {
-        NavbarItem::factory()->create([
-            'label' => 'Pencarian Akta',
-            'url' => '/cari-akta',
+        Page::factory()->create([
+            'key' => 'cari-akta',
+            'title' => 'Pencarian Akta',
             'embed_url' => null,
             'active' => true,
         ]);
