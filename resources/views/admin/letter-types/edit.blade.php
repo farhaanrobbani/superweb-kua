@@ -56,6 +56,14 @@
                         <x-input-error :messages="$errors->get('permohonan_body')" class="mt-2" />
                     </div>
 
+                    <div class="mt-4">
+                        <x-input-label for="permohonan_informasi" value="Informasi di Bawah Form Permohonan (Berkas yang Dibawa)" />
+                        <textarea id="permohonan_informasi" name="permohonan_informasi" rows="4"
+                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">{{ old('permohonan_informasi', $letterType->permohonan_informasi) }}</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Ditampilkan di bawah form permohonan di halaman publik untuk jenis surat ini. Baris baru menjadi baris baru. Contoh: daftar berkas yang harus dibawa ke KUA. Kosongkan untuk menyembunyikan.</p>
+                        <x-input-error :messages="$errors->get('permohonan_informasi')" class="mt-2" />
+                    </div>
+
                     <div class="mt-6">
                         <div class="flex items-center justify-between">
                             <x-input-label value="Field / Data Surat" />
