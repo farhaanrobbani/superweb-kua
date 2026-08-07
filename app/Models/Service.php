@@ -7,10 +7,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'description', 'url', 'embed_url', 'icon', 'sort_order', 'active'])]
+#[Fillable(['name', 'slug', 'description', 'content', 'url', 'embed_url', 'icon', 'sort_order', 'active'])]
 class Service extends Model
 {
     use HasFactory;
+
+    public function linkUrl(): string
+    {
+        if (! empty($this->content) && $this->slug) {
+            return route('layanan.show', $this->slug);
+        }
+
+        return $this->url ? url($this->url) : '#';
+    }
 
     public function scopeActive(Builder $query): Builder
     {
