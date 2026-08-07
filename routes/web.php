@@ -78,10 +78,17 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
-    Route::resource('services', ServiceController::class)->except(['show', 'index']);
     Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
+    Route::get('/navbar/create', [NavbarController::class, 'create'])->name('navbar.create');
+    Route::post('/navbar', [NavbarController::class, 'store'])->name('navbar.store');
     Route::get('/navbar/{navbarItem}/edit', [NavbarController::class, 'edit'])->name('navbar.edit');
     Route::put('/navbar/{navbarItem}', [NavbarController::class, 'update'])->name('navbar.update');
+    Route::delete('/navbar/{navbarItem}', [NavbarController::class, 'destroy'])->name('navbar.destroy');
+    Route::get('/navbar/{navbarItem}/sub/create', [NavbarController::class, 'createSub'])->name('navbar.sub.create');
+    Route::post('/navbar/{navbarItem}/sub', [NavbarController::class, 'storeSub'])->name('navbar.sub.store');
+    Route::get('/navbar/sub/{subItem}/edit', [NavbarController::class, 'editSub'])->name('navbar.sub.edit');
+    Route::put('/navbar/sub/{subItem}', [NavbarController::class, 'updateSub'])->name('navbar.sub.update');
+    Route::delete('/navbar/sub/{subItem}', [NavbarController::class, 'destroySub'])->name('navbar.sub.destroy');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::resource('download-items', DownloadItemController::class)->except('show');

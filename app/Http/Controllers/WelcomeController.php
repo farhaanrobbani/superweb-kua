@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use App\Models\KuaSetting;
 use App\Models\LetterType;
-use App\Models\Service;
+use App\Models\NavbarItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -58,7 +58,11 @@ class WelcomeController extends Controller
     private function services(): Collection
     {
         try {
-            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
+            $layanan = NavbarItem::query()->where('key', 'layanan')->active()->first();
+
+            return $layanan
+                ? $layanan->children()->active()->ordered()->get()
+                : collect();
         } catch (\Throwable) {
             return collect();
         }
