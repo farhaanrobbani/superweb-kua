@@ -7,6 +7,14 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <script>
+            (function () {
+                const stored = localStorage.getItem('theme');
+                const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.classList.toggle('dark', dark);
+            })();
+        </script>
+
         <link rel="icon" href="{{ \App\Models\KuaSetting::logoUrl() ?: asset('favicon.ico') }}">
 
         <!-- Fonts -->
@@ -16,8 +24,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-teal-50 via-emerald-50 to-white">
+    <body class="font-sans text-gray-900 antialiased dark:text-gray-100">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-teal-50 via-emerald-50 to-white dark:from-gray-900 dark:via-gray-900 dark:to-teal-950">
             <div>
                 <a href="/">
                     @php($logoUrl = \App\Models\KuaSetting::logoUrl())
@@ -29,7 +37,7 @@
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white border border-teal-100 shadow-sm overflow-hidden sm:rounded-lg">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white border border-teal-100 shadow-sm overflow-hidden sm:rounded-lg dark:bg-gray-800 dark:border-teal-900">
                 {{ $slot }}
             </div>
         </div>

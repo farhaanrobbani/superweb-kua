@@ -165,6 +165,22 @@
             <div class="truncate text-xs text-teal-200">{{ Auth::user()->email }}</div>
         </div>
         <div class="space-y-1">
+            <button type="button"
+                    x-data="{ dark: document.documentElement.classList.contains('dark') }"
+                    @click="dark = ! dark; document.documentElement.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light')"
+                    class="flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium text-teal-100 transition hover:bg-teal-800/40 hover:text-white">
+                <template x-if="dark">
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1.5m6.364 1.636l-1.06 1.06M21 12h-1.5m-1.636 6.364l-1.06-1.06M12 19.5V21m-4.773-4.773l-1.06 1.06M4.5 12H3m4.773-4.773l-1.06-1.06M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" />
+                    </svg>
+                </template>
+                <template x-if="! dark">
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                </template>
+                <span x-text="dark ? 'Mode Terang' : 'Mode Gelap'"></span>
+            </button>
             <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')">
                 <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -7,6 +7,23 @@
 }
 
 @layer components {
+    .dark input:not([type='checkbox']):not([type='radio']):not([type='file']),
+    .dark select,
+    .dark textarea {
+        background-color: #111827;
+        color: #f1f5f9;
+        border-color: #4b5563;
+    }
+
+    .dark input[type='checkbox'],
+    .dark input[type='radio'] {
+        background-color: #111827;
+        border-color: #4b5563;
+        color: #0d9488;
+    }
+}
+
+@layer components {
     .konten-pengumuman p { margin: 0 0 1em 0; }
     .konten-pengumuman h2, .konten-pengumuman h3, .konten-pengumuman h4 {
         font-weight: 700; margin: 1.4em 0 0.6em 0; line-height: 1.3;
