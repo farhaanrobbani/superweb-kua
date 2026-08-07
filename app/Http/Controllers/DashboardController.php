@@ -20,12 +20,19 @@ class DashboardController extends Controller
             'permohonan_baru' => Submission::where('status', Submission::STATUS_BARU)->count(),
         ];
 
-        $perStatus = collect(Letter::statuses())->map(function ($label, $key) {
-            return [
-                'label' => $label,
-                'count' => Letter::where('status', $key)->count(),
-            ];
-        })->values();
+        $counts = Letter::query()
+            ->selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $perStatus = collect(Letter::statuses())
+            ->map(function ($label, $key) use ($counts) {
+                return [
+                    'label' => $label,
+                    'count' => $counts[$key] ?? 0,
+                ];
+            })
+            ->values();
 
         $perJenis = LetterType::withCount('letters')->orderBy('letters_count', 'desc')->take(5)->get();
 
