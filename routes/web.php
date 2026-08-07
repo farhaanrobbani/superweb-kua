@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\DownloadItemController;
 use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
+use App\Http\Controllers\DownloadPublicController;
 use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
@@ -32,6 +34,9 @@ Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name(
 Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
 
 Route::get('/daftar-pegawai', [StaffPublicController::class, 'index'])->name('pegawai.index');
+
+Route::get('/unduhan', [DownloadPublicController::class, 'index'])->name('unduhan.index');
+Route::get('/unduhan/{downloadItem}/unduh', [DownloadPublicController::class, 'download'])->name('unduhan.unduh')->middleware('throttle:10,1');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -71,6 +76,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('services', ServiceController::class)->except('show');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
+    Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
