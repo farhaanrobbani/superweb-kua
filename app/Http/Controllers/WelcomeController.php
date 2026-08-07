@@ -58,7 +58,7 @@ class WelcomeController extends Controller
     private function services(): Collection
     {
         try {
-            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
+            return Service::query()->active()->ordered()->get(['name', 'slug', 'description', 'content', 'url', 'icon']);
         } catch (\Throwable) {
             return collect();
         }
