@@ -285,6 +285,7 @@ class LetterPdfTest extends TestCase
 
     public function test_render_body_wraps_plain_text_in_paragraphs(): void
     {
+        $this->letter->update(['tanggal_surat' => '2026-08-06']);
         $body = $this->letter->renderBody();
 
         $this->assertStringContainsString('<p>Menerangkan bahwa Budi &lt;b&gt;Santoso&lt;/b&gt; beralamat di Jl. Merdeka 1, Bogor.', $body);
