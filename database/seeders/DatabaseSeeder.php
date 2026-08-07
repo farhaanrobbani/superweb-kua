@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserSeeder::class);
         $this->call(KuaSettingSeeder::class);
+        $this->call(NavbarItemSeeder::class);
         $this->call(LetterTypeSeeder::class);
         $this->call(ServiceSeeder::class);
         $this->call(MarriageServiceSeeder::class);
