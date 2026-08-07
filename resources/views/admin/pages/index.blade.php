@@ -13,10 +13,15 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="mb-6 flex flex-wrap gap-1 border-b border-gray-200">
-                    <span class="-mb-px border-b-2 border-teal-700 px-4 py-2 text-sm font-semibold text-teal-700">Pernikahan</span>
+                    @foreach ($pages as $tab)
+                        <a href="{{ route('pages.index', ['tab' => $tab->key]) }}"
+                           class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold {{ $page->key === $tab->key ? 'border-teal-700 text-teal-700' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
+                            {{ $tab->title }}
+                        </a>
+                    @endforeach
                 </div>
 
-                <form method="POST" action="{{ route('pages.pernikahan.update') }}" class="mb-8">
+                <form method="POST" action="{{ route('pages.update', ['key' => $page->key]) }}" class="mb-8">
                     @csrf
                     @method('PUT')
 
@@ -38,6 +43,15 @@
                         </div>
 
                         <div>
+                            <x-input-label for="embed_url" :value="__('URL Embed (opsional)')" />
+                            <x-text-input id="embed_url" name="embed_url" type="url" class="mt-1 block w-full" maxlength="255"
+                                          value="{{ old('embed_url', $page->embed_url) }}"
+                                          placeholder="https://datastudio.google.com/embed/reporting/..." />
+                            <p class="text-xs text-gray-500 mt-1">Tempel URL <code>src</code> dari bagikan Google Looker Studio (laporan/data studio) yang akan ditampilkan di halaman ini.</p>
+                            <x-input-error :messages="$errors->get('embed_url')" class="mt-2" />
+                        </div>
+
+                        <div>
                             <button type="submit"
                                     class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
                                 Simpan
@@ -46,10 +60,12 @@
                     </div>
                 </form>
 
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Topik Layanan Pernikahan</h3>
-                    @include('admin.marriage-services._table', ['marriageServices' => $marriageServices])
-                </div>
+                @if ($page->key === 'pernikahan')
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Topik Layanan Pernikahan</h3>
+                        @include('admin.marriage-services._table', ['marriageServices' => $marriageServices])
+                    </div>
+                @endif
             </div>
         </div>
     </div>

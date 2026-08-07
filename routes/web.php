@@ -95,7 +95,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
     Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
-    Route::put('/pages/pernikahan', [PageController::class, 'updatePernikahan'])->name('pages.pernikahan.update');
+    Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
