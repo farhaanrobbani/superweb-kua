@@ -19,7 +19,7 @@ class ServicesAnnouncementsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
+        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
     }
 
     private function layanan(): NavbarItem

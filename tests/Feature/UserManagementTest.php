@@ -59,6 +59,29 @@ class UserManagementTest extends TestCase
         $this->assertNotNull($created->email_verified_at);
     }
 
+    public function test_kepala_can_create_operator_user(): void
+    {
+        $kepala = User::factory()->role(User::ROLE_KEPALA)->create();
+
+        $this->actingAs($kepala)
+            ->post(route('users.store'), [
+                'name' => 'Operator Baru',
+                'email' => 'operatorbaru@kua.local',
+                'role' => User::ROLE_OPERATOR,
+                'password' => 'rahasia123',
+                'password_confirmation' => 'rahasia123',
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('users.index'));
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'operatorbaru@kua.local',
+            'name' => 'Operator Baru',
+            'role' => User::ROLE_OPERATOR,
+            'is_active' => 1,
+        ]);
+    }
+
     public function test_create_user_requires_valid_role_and_unique_email(): void
     {
         $kepala = User::factory()->role(User::ROLE_KEPALA)->create();

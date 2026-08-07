@@ -21,7 +21,7 @@ class NavbarTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
+        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
     }
 
     public function test_seeder_creates_default_navbar_items(): void

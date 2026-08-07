@@ -19,7 +19,7 @@ class AdminMasterDataTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
+        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
     }
 
     public function test_staff_can_view_letter_types_list(): void

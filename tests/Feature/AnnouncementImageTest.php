@@ -18,7 +18,7 @@ class AnnouncementImageTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
+        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
     }
 
     public function test_staff_can_create_announcement_with_cover_image(): void

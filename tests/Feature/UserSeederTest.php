@@ -16,6 +16,7 @@ class UserSeederTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $this->assertDatabaseHas('users', ['email' => 'staf@kua.local', 'role' => User::ROLE_STAFF]);
+        $this->assertDatabaseHas('users', ['email' => 'operator@kua.local', 'role' => User::ROLE_OPERATOR]);
         $this->assertDatabaseHas('users', ['email' => 'kepala@kua.local', 'role' => User::ROLE_KEPALA]);
     }
 
@@ -24,6 +25,7 @@ class UserSeederTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $this->assertTrue(auth()->validate(['email' => 'staf@kua.local', 'password' => 'password']));
+        $this->assertTrue(auth()->validate(['email' => 'operator@kua.local', 'password' => 'password']));
         $this->assertTrue(auth()->validate(['email' => 'kepala@kua.local', 'password' => 'password']));
     }
 }
