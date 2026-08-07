@@ -32,10 +32,10 @@ if (! function_exists('kua_navbar')) {
     function kua_navbar(): Collection
     {
         $defaults = collect([
-            (object) ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/'],
-            (object) ['key' => 'layanan', 'label' => 'Layanan', 'url' => null],
-            (object) ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman'],
-            (object) ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null],
+            (object) ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'has_submenu' => false],
+            (object) ['key' => 'layanan', 'label' => 'Layanan', 'url' => null, 'has_submenu' => true],
+            (object) ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'has_submenu' => false],
+            (object) ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'has_submenu' => true],
         ]);
 
         try {
