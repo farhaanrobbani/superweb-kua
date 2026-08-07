@@ -3,13 +3,18 @@
 @section('title', 'Kritik & Saran — '.kua_setting('instansi', 'KUA'))
 
 @section('content')
+    @php
+        $page = kua_page('kritik-saran');
+    @endphp
     <section class="mx-auto max-w-3xl px-6 py-14">
         <div class="mb-6">
             <p class="text-sm font-medium uppercase tracking-widest text-teal-700">Suara Anda</p>
-            <h1 class="mt-2 text-3xl font-bold sm:text-4xl">Kritik & Saran</h1>
-            <p class="mt-2 text-sm text-[#1b1b1870]">
-                Sampaikan kritik, saran, atau masukan Anda untuk meningkatkan pelayanan Kantor Urusan Agama.
-            </p>
+            <h1 class="mt-2 text-3xl font-bold sm:text-4xl">{{ $page?->title ?: 'Kritik & Saran' }}</h1>
+            @if ($page?->description || ! $page)
+                <p class="mt-2 text-sm text-[#1b1b1870]">
+                    {{ $page?->description ?: 'Sampaikan kritik, saran, atau masukan Anda untuk meningkatkan pelayanan Kantor Urusan Agama.' }}
+                </p>
+            @endif
         </div>
 
         @if (session('success'))
@@ -71,5 +76,11 @@
                 </div>
             </form>
         </div>
+
+        @if ($page && $page->active && trim((string) $page->content) !== '')
+            <div class="mt-8 prose-sm text-sm text-[#1b1b18]">
+                {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
+            </div>
+        @endif
     </section>
 @endsection

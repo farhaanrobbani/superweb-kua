@@ -14,10 +14,13 @@
     @include('partials.public-header')
 
     <main class="flex-1 py-10">
+        @php
+            $page = kua_page('permohonan');
+        @endphp
         <div class="max-w-5xl mx-auto px-4">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Form Permohonan Surat</h2>
-                <p class="text-sm text-gray-500 mt-1">{{ $service->description ?? 'Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.' }}</p>
+                <h2 class="text-2xl font-bold text-gray-800">{{ $page?->title ?: 'Form Permohonan Surat' }}</h2>
+                <p class="text-sm text-gray-500 mt-1">{{ $page?->description ?: ($service->description ?? 'Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.') }}</p>
             </div>
 
             @if ($errors->any())
@@ -116,6 +119,12 @@
                         {!! nl2br(e($selectedType->permohonan_informasi)) !!}
                     </div>
                 @endif
+            @endif
+
+            @if ($page && $page->active && trim((string) $page->content) !== '')
+                <div class="mt-8 rounded-lg bg-white p-6 shadow-sm border border-gray-200 prose-sm text-sm text-[#1b1b18]">
+                    {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
+                </div>
             @endif
         </div>
     </main>

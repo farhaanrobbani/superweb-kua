@@ -3,9 +3,16 @@
 @section('title', kua_setting('instansi', 'Surat Digital KUA').' — Download Center')
 
 @section('content')
+    @php
+        $page = kua_page('unduhan');
+    @endphp
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <h1 class="text-center text-2xl font-bold">Download Center</h1>
-        <p class="mt-2 text-center text-sm text-[#1b1b1870]">{{ $total }} berkas tersedia untuk diunduh.</p>
+        <h1 class="text-center text-2xl font-bold">{{ $page?->title ?: 'Download Center' }}</h1>
+        @if ($page?->description || ! $page)
+            <p class="mt-2 text-center text-sm text-[#1b1b1870]">
+                {{ $page?->description ?: $total.' berkas tersedia untuk diunduh.' }}
+            </p>
+        @endif
 
         @forelse ($categories as $category => $items)
             <div class="mt-8">
@@ -55,5 +62,11 @@
                 Belum ada berkas yang tersedia.
             </div>
         @endforelse
+
+        @if ($page && $page->active && trim((string) $page->content) !== '')
+            <div class="mt-10 prose-sm text-sm text-[#1b1b18]">
+                {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
+            </div>
+        @endif
     </section>
 @endsection
