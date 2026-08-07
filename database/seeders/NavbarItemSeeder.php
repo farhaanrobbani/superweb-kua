@@ -24,7 +24,11 @@ class NavbarItemSeeder extends Seeder
         $tentang = NavbarItem::where('key', 'tentang')->first();
 
         $subItems = [
-            ['key' => 'layanan-permohonan', 'label' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'parent_id' => $layanan?->id, 'sort_order' => 1],
+            ['key' => 'pernikahan', 'label' => 'Pernikahan', 'url' => '/pernikahan', 'parent_id' => $layanan?->id, 'sort_order' => 1],
+            ['key' => 'wakaf', 'label' => 'Wakaf', 'url' => '/wakaf', 'parent_id' => $layanan?->id, 'sort_order' => 2],
+            ['key' => 'keagamaan', 'label' => 'Keagamaan', 'url' => '/keagamaan', 'parent_id' => $layanan?->id, 'sort_order' => 3],
+            ['key' => 'layanan-permohonan', 'label' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'parent_id' => $layanan?->id, 'sort_order' => 4],
+            ['key' => 'cari-akta', 'label' => 'Pencarian Akta', 'url' => '/cari-akta', 'parent_id' => $layanan?->id, 'sort_order' => 5],
             ['key' => 'pegawai', 'label' => 'Daftar Pegawai', 'url' => '/daftar-pegawai', 'parent_id' => $tentang?->id, 'sort_order' => 1],
             ['key' => 'unduhan', 'label' => 'Download Center', 'url' => '/unduhan', 'parent_id' => $tentang?->id, 'sort_order' => 2],
             ['key' => 'kritik-saran', 'label' => 'Kritik & Saran', 'url' => '/kritik-saran', 'parent_id' => $tentang?->id, 'sort_order' => 3],

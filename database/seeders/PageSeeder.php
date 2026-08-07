@@ -28,5 +28,25 @@ class PageSeeder extends Seeder
                 'active' => true,
             ]
         );
+
+        Page::updateOrCreate(
+            ['key' => 'wakaf'],
+            [
+                'title' => 'Wakaf',
+                'description' => null,
+                'embed_url' => null,
+                'active' => true,
+            ]
+        );
+
+        Page::updateOrCreate(
+            ['key' => 'keagamaan'],
+            [
+                'title' => 'Keagamaan',
+                'description' => null,
+                'embed_url' => null,
+                'active' => true,
+            ]
+        );
     }
 }
