@@ -62,7 +62,8 @@
                                 <td class="px-6 py-4 text-sm space-x-2">
                                     <a href="{{ route('staff.edit', $staffMember) }}" class="text-blue-600 hover:underline">Edit</a>
                                     <form action="{{ route('staff.destroy', $staffMember) }}" method="POST" class="inline"
-                                          onsubmit="return confirm('Hapus pegawai {{ $staffMember->nama }}?')">
+                                          data-confirm-name="{{ $staffMember->nama }}"
+                                          onsubmit="return confirm('Hapus pegawai ' + this.dataset.confirmName + '?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="text-red-600 hover:underline">Hapus</button>

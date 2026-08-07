@@ -34,7 +34,8 @@
                                 <td class="px-6 py-4 text-sm space-x-2">
                                     <a href="{{ route('kritik-saran.show', $feedback) }}" class="text-blue-600 hover:underline">Detail</a>
                                     <form action="{{ route('kritik-saran.destroy', $feedback) }}" method="POST" class="inline"
-                                          onsubmit="return confirm('Hapus kritik/saran dari {{ $feedback->nama }}?')">
+                                          data-confirm-name="{{ $feedback->nama }}"
+                                          onsubmit="return confirm('Hapus kritik/saran dari ' + this.dataset.confirmName + '?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="text-red-600 hover:underline">Hapus</button>

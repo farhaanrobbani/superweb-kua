@@ -72,7 +72,8 @@
                                     @if ($user->id !== auth()->id())
                                         <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:underline">Edit</a>
                                         <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('Hapus akun {{ $user->name }}?')">
+                                              data-confirm-name="{{ $user->name }}"
+                                              onsubmit="return confirm('Hapus akun ' + this.dataset.confirmName + '?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="text-red-600 hover:underline">Hapus</button>
