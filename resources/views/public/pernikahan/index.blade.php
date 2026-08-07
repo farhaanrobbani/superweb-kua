@@ -46,7 +46,7 @@
 
                         @if ($persyaratan)
                             <div class="mb-5">
-                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">Persyaratan</h3>
+                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->persyaratan_label ?: 'Persyaratan' }}</h3>
                                 <ul class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
                                     @foreach ($persyaratan as $syarat)
                                         <li class="flex gap-2">
@@ -60,7 +60,7 @@
 
                         @if ($alur)
                             <div class="mb-5">
-                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">Alur</h3>
+                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->alur_label ?: 'Alur' }}</h3>
                                 <ol class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
                                     @foreach ($alur as $i => $langkah)
                                         <li class="flex gap-3">
@@ -74,7 +74,7 @@
 
                         @if ($sop)
                             <div class="mb-5">
-                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">SOP</h3>
+                                <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->sop_label ?: 'SOP' }}</h3>
                                 <ul class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
                                     @foreach ($sop as $prosedur)
                                         <li class="flex gap-2">
@@ -86,18 +86,14 @@
                             </div>
                         @endif
 
-                        <div class="mt-4">
-                            @if ($service->targetUrl())
+                        @if ($service->targetUrl())
+                            <div class="mt-4">
                                 <a href="{{ $service->targetUrl() }}"
-                                   class="inline-flex items-center rounded-md bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-800">
+                                   class="inline-flex items-center rounded-md bg-teal-700 px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white hover:bg-teal-800">
                                     Ajukan Permohonan
                                 </a>
-                            @else
-                                <p class="text-sm text-[#1b1b1870]">
-                                    Layanan ini dapat diurus langsung di kantor KUA.
-                                </p>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @empty

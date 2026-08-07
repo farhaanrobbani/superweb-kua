@@ -126,7 +126,7 @@ class MarriageServiceTest extends TestCase
             ->assertSee('permohonan?jenis=SPD', false);
     }
 
-    public function test_public_index_shows_note_when_no_target_url(): void
+    public function test_public_index_shows_no_button_when_no_target_url(): void
     {
         MarriageService::factory()->create([
             'name' => 'Legalisir',
@@ -140,8 +140,52 @@ class MarriageServiceTest extends TestCase
         $this->get(route('pernikahan.index'))
             ->assertOk()
             ->assertSee('Legalisir')
-            ->assertSee('diurus langsung di kantor KUA')
-            ->assertDontSee('Ajukan Permohonan');
+            ->assertDontSee('Ajukan Permohonan')
+            ->assertDontSee('diurus langsung di kantor KUA');
+    }
+
+    public function test_public_index_uses_custom_section_labels_with_default_fallback(): void
+    {
+        MarriageService::factory()->create([
+            'name' => 'Duplikat Akta Nikah',
+            'persyaratan' => "KTP\nKK",
+            'alur' => "Ajukan online\nDatang ke KUA",
+            'sop' => "Periksa berkas\nTerbitkan duplikat",
+            'persyaratan_label' => 'Berkas yang Dibawa',
+            'alur_label' => 'Tahapan',
+            'sop_label' => null,
+            'active' => true,
+        ]);
+
+        $this->get(route('pernikahan.index'))
+            ->assertOk()
+            ->assertSee('Berkas yang Dibawa')
+            ->assertSee('Tahapan')
+            ->assertSee('SOP')
+            ->assertDontSee('Persyaratan');
+    }
+
+    public function test_staff_can_set_custom_section_labels(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('marriage-services.store'), [
+                'name' => 'Topik Baru',
+                'persyaratan' => "Satu\nDua",
+                'alur' => "Langkah satu\nLangkah dua",
+                'sop' => "Prosedur satu",
+                'persyaratan_label' => 'Berkas',
+                'alur_label' => 'Langkah',
+                'sop_label' => 'Prosedur',
+                'active' => 1,
+            ])
+            ->assertRedirect(route('marriage-services.index'));
+
+        $this->assertDatabaseHas('marriage_services', [
+            'name' => 'Topik Baru',
+            'persyaratan_label' => 'Berkas',
+            'alur_label' => 'Langkah',
+            'sop_label' => 'Prosedur',
+        ]);
     }
 
     public function test_public_pernikahan_header_keeps_layanan_services(): void

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'slug', 'description', 'persyaratan', 'alur', 'sop', 'target_url', 'icon', 'sort_order', 'active'])]
+#[Fillable(['name', 'slug', 'description', 'persyaratan', 'alur', 'sop', 'persyaratan_label', 'alur_label', 'sop_label', 'target_url', 'icon', 'sort_order', 'active'])]
 class MarriageService extends Model
 {
     use HasFactory;

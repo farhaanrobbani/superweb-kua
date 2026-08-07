@@ -55,6 +55,31 @@
 
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="p-6 space-y-5">
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div>
+                                <x-input-label for="persyaratan_label" value="Judul Persyaratan" />
+                                <x-text-input id="persyaratan_label" name="persyaratan_label" maxlength="50"
+                                              value="{{ old('persyaratan_label', $marriageService->persyaratan_label) }}" class="mt-1 block w-full"
+                                              placeholder="Persyaratan" />
+                                <x-input-error :messages="$errors->get('persyaratan_label')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="alur_label" value="Judul Alur" />
+                                <x-text-input id="alur_label" name="alur_label" maxlength="50"
+                                              value="{{ old('alur_label', $marriageService->alur_label) }}" class="mt-1 block w-full"
+                                              placeholder="Alur" />
+                                <x-input-error :messages="$errors->get('alur_label')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="sop_label" value="Judul SOP" />
+                                <x-text-input id="sop_label" name="sop_label" maxlength="50"
+                                              value="{{ old('sop_label', $marriageService->sop_label) }}" class="mt-1 block w-full"
+                                              placeholder="SOP" />
+                                <x-input-error :messages="$errors->get('sop_label')" class="mt-2" />
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 -mt-3">Kosongkan untuk memakai judul bawaan.</p>
+
                         <div>
                             <x-input-label for="persyaratan" value="Persyaratan (satu per baris)" />
                             <textarea id="persyaratan" name="persyaratan" rows="7" maxlength="5000"
