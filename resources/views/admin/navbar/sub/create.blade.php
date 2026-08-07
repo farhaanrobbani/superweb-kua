@@ -39,15 +39,6 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-input-label for="embed_url" value="URL Embed (opsional)" />
-                        <x-text-input id="embed_url" name="embed_url" type="url" class="mt-1 block w-full" maxlength="255"
-                                      value="{{ old('embed_url') }}"
-                                      placeholder="https://datastudio.google.com/embed/reporting/..." />
-                        <p class="text-xs text-gray-500 mt-1">Tempel URL <code>src</code> dari bagikan Google Looker Studio (laporan/data studio).</p>
-                        <x-input-error :messages="$errors->get('embed_url')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
                         <x-input-label for="icon" value="Ikon" />
                         <select id="icon" name="icon"
                                 class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm">

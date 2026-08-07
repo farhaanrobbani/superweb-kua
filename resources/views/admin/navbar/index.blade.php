@@ -43,9 +43,6 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $item->url ?? '-' }}
-                                    @if ($item->embed_url)
-                                        <span class="ml-2 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-sans">embed</span>
-                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $item->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
@@ -102,9 +99,6 @@
                                             @endif
                                         </td>
                                         <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $child->url ?? '-' }}
-                                            @if ($child->embed_url)
-                                                <span class="ml-2 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-sans">embed</span>
-                                            @endif
                                         </td>
                                         <td class="px-6 py-4">
                                             <span class="px-2 py-1 text-xs rounded-full {{ $child->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
