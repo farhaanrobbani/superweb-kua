@@ -5,7 +5,7 @@
 @section('content')
     <div class="mx-auto max-w-6xl px-6 pb-16 pt-12">
         <h1 class="mt-4 text-2xl font-bold">{{ $page->title ?? 'Pencarian Akta' }}</h1>
-        @if ($page->description)
+        @if ($page?->description)
             <p class="mt-2 text-sm text-[#1b1b1870]">{{ $page->description }}</p>
         @endif
 
