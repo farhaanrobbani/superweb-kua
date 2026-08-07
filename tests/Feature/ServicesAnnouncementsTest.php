@@ -3,8 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Announcement;
-use App\Models\Service;
+use App\Models\NavbarItem;
 use App\Models\User;
+use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,6 +19,13 @@ class ServicesAnnouncementsTest extends TestCase
     {
         parent::setUp();
         $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
+    }
+
+    private function layanan(): NavbarItem
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        return NavbarItem::where('key', 'layanan')->firstOrFail();
     }
 
     public function test_public_announcement_search_filters_results(): void
@@ -66,7 +74,7 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_landing_shows_center_menu_without_login(): void
     {
-        Service::factory()->create(['name' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'active' => true]);
+        $this->seed(NavbarItemSeeder::class);
         Announcement::factory()->create(['title' => 'Layanan Hari Ini', 'active' => true]);
 
         $this->get('/')
@@ -82,7 +90,13 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_landing_hides_inactive_services_and_unpublished_announcements(): void
     {
-        Service::factory()->create(['name' => 'Layanan Rahasia', 'active' => false]);
+        $parent = $this->layanan();
+        NavbarItem::factory()->create([
+            'label' => 'Layanan Rahasia',
+            'url' => '/rahasia',
+            'parent_id' => $parent->id,
+            'active' => false,
+        ]);
         Announcement::factory()->create([
             'title' => 'Draft Pengumuman',
             'active' => true,
@@ -135,8 +149,8 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_submission_page_shows_service_description(): void
     {
-        Service::factory()->create([
-            'name' => 'Pengajuan Surat Online',
+        NavbarItem::factory()->create([
+            'label' => 'Pengajuan Surat Online',
             'url' => '/permohonan',
             'description' => 'Ajukan surat tanpa antre',
             'active' => true,
@@ -147,17 +161,20 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertSee('Ajukan surat tanpa antre');
     }
 
-    public function test_guest_cannot_access_admin_service_crud(): void
+    public function test_guest_cannot_access_admin_navbar_crud(): void
     {
-        $this->get(route('services.create'))->assertRedirect(route('login'));
+        $this->get(route('navbar.create'))->assertRedirect(route('login'));
         $this->get(route('navbar.index'))->assertRedirect(route('login'));
+        $this->get(route('navbar.sub.create', NavbarItem::factory()->create()))->assertRedirect(route('login'));
     }
 
-    public function test_staff_can_create_and_edit_service(): void
+    public function test_staff_can_create_and_edit_sub_menu(): void
     {
+        $parent = $this->layanan();
+
         $this->actingAs($this->user)
-            ->post(route('services.store'), [
-                'name' => 'Layanan Konsultasi',
+            ->post(route('navbar.sub.store', $parent), [
+                'label' => 'Layanan Konsultasi',
                 'description' => 'Konsultasi nikah',
                 'url' => '/permohonan',
                 'icon' => 'envelope',
@@ -166,13 +183,14 @@ class ServicesAnnouncementsTest extends TestCase
             ])
             ->assertRedirect(route('navbar.index'));
 
-        $service = Service::where('name', 'Layanan Konsultasi')->first();
-        $this->assertNotNull($service);
-        $this->assertTrue($service->active);
+        $sub = NavbarItem::where('label', 'Layanan Konsultasi')->first();
+        $this->assertNotNull($sub);
+        $this->assertTrue($sub->active);
+        $this->assertSame($parent->id, $sub->parent_id);
 
         $this->actingAs($this->user)
-            ->put(route('services.update', $service), [
-                'name' => 'Layanan Konsultasi Online',
+            ->put(route('navbar.sub.update', $sub), [
+                'label' => 'Layanan Konsultasi Online',
                 'description' => 'Konsultasi nikah online',
                 'url' => '/permohonan',
                 'icon' => 'envelope',
@@ -181,53 +199,57 @@ class ServicesAnnouncementsTest extends TestCase
             ])
             ->assertRedirect(route('navbar.index'));
 
-        $this->assertDatabaseHas('services', [
-            'id' => $service->id,
-            'name' => 'Layanan Konsultasi Online',
+        $this->assertDatabaseHas('navbar_items', [
+            'id' => $sub->id,
+            'label' => 'Layanan Konsultasi Online',
             'active' => 0,
         ]);
     }
 
-    public function test_service_icon_and_url_validated(): void
+    public function test_sub_menu_icon_and_url_validated(): void
     {
+        $parent = $this->layanan();
+
         $this->actingAs($this->user)
-            ->post(route('services.store'), [
-                'name' => 'Ikon Salah',
+            ->post(route('navbar.sub.store', $parent), [
+                'label' => 'Ikon Salah',
                 'icon' => 'not-exist',
                 'url' => '#',
             ])
             ->assertSessionHasErrors(['icon', 'url']);
 
-        $this->assertDatabaseMissing('services', ['name' => 'Ikon Salah']);
+        $this->assertDatabaseMissing('navbar_items', ['label' => 'Ikon Salah']);
     }
 
-    public function test_service_update_without_checkbox_turns_off_active(): void
+    public function test_sub_menu_update_without_checkbox_turns_off_active(): void
     {
-        $service = Service::factory()->create(['active' => true]);
+        $parent = $this->layanan();
+        $sub = NavbarItem::factory()->create(['parent_id' => $parent->id, 'active' => true]);
 
         $this->actingAs($this->user)
-            ->put(route('services.update', $service), [
-                'name' => 'Layanan Diubah',
+            ->put(route('navbar.sub.update', $sub), [
+                'label' => 'Layanan Diubah',
                 'description' => 'Tanpa centang aktif',
             ])
             ->assertRedirect(route('navbar.index'));
 
-        $this->assertDatabaseHas('services', [
-            'id' => $service->id,
-            'name' => 'Layanan Diubah',
+        $this->assertDatabaseHas('navbar_items', [
+            'id' => $sub->id,
+            'label' => 'Layanan Diubah',
             'active' => 0,
         ]);
     }
 
-    public function test_staff_can_delete_service(): void
+    public function test_staff_can_delete_sub_menu(): void
     {
-        $service = Service::factory()->create();
+        $parent = $this->layanan();
+        $sub = NavbarItem::factory()->create(['parent_id' => $parent->id]);
 
         $this->actingAs($this->user)
-            ->delete(route('services.destroy', $service))
+            ->delete(route('navbar.sub.destroy', $sub))
             ->assertRedirect(route('navbar.index'));
 
-        $this->assertDatabaseMissing('services', ['id' => $service->id]);
+        $this->assertDatabaseMissing('navbar_items', ['id' => $sub->id]);
     }
 
     public function test_staff_can_create_and_edit_announcement(): void
@@ -278,11 +300,13 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertSessionHasErrors(['title', 'content']);
     }
 
-    public function test_admin_can_set_service_embed_url(): void
+    public function test_admin_can_set_sub_menu_embed_url(): void
     {
+        $parent = $this->layanan();
+
         $this->actingAs($this->user)
-            ->post(route('services.store'), [
-                'name' => 'Pencarian Akta',
+            ->post(route('navbar.sub.store', $parent), [
+                'label' => 'Pencarian Akta',
                 'url' => '/cari-akta',
                 'embed_url' => 'https://datastudio.google.com/embed/reporting/abc123/page/x',
                 'icon' => 'document',
@@ -290,28 +314,30 @@ class ServicesAnnouncementsTest extends TestCase
             ])
             ->assertRedirect(route('navbar.index'));
 
-        $this->assertDatabaseHas('services', [
-            'name' => 'Pencarian Akta',
+        $this->assertDatabaseHas('navbar_items', [
+            'label' => 'Pencarian Akta',
             'embed_url' => 'https://datastudio.google.com/embed/reporting/abc123/page/x',
         ]);
     }
 
-    public function test_service_embed_url_validated_as_url(): void
+    public function test_sub_menu_embed_url_validated_as_url(): void
     {
+        $parent = $this->layanan();
+
         $this->actingAs($this->user)
-            ->post(route('services.store'), [
-                'name' => 'Embed Salah',
+            ->post(route('navbar.sub.store', $parent), [
+                'label' => 'Embed Salah',
                 'embed_url' => 'bukan-url',
             ])
             ->assertSessionHasErrors('embed_url');
 
-        $this->assertDatabaseMissing('services', ['name' => 'Embed Salah']);
+        $this->assertDatabaseMissing('navbar_items', ['label' => 'Embed Salah']);
     }
 
     public function test_cari_akta_page_renders_embed_iframe(): void
     {
-        Service::factory()->create([
-            'name' => 'Pencarian Akta',
+        NavbarItem::factory()->create([
+            'label' => 'Pencarian Akta',
             'url' => '/cari-akta',
             'embed_url' => 'https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF',
             'active' => true,
@@ -326,8 +352,8 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_cari_akta_page_without_embed_redirects_home(): void
     {
-        Service::factory()->create([
-            'name' => 'Pencarian Akta',
+        NavbarItem::factory()->create([
+            'label' => 'Pencarian Akta',
             'url' => '/cari-akta',
             'embed_url' => null,
             'active' => true,
@@ -338,9 +364,11 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_landing_links_cari_akta_service_to_its_url(): void
     {
-        Service::factory()->create([
-            'name' => 'Pencarian Akta',
+        $parent = $this->layanan();
+        NavbarItem::factory()->create([
+            'label' => 'Pencarian Akta',
             'url' => '/cari-akta',
+            'parent_id' => $parent->id,
             'active' => true,
         ]);
 

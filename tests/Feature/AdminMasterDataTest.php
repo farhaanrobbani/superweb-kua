@@ -4,8 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\LetterTemplate;
 use App\Models\LetterType;
-use App\Models\Service;
+use App\Models\NavbarItem;
 use App\Models\User;
+use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -431,7 +432,13 @@ class AdminMasterDataTest extends TestCase
 
     public function test_service_management_moved_to_navbar_menu(): void
     {
-        Service::factory()->create(['name' => 'Contoh Layanan']);
+        $this->seed(NavbarItemSeeder::class);
+        $layanan = NavbarItem::where('key', 'layanan')->firstOrFail();
+        NavbarItem::factory()->create([
+            'label' => 'Contoh Layanan',
+            'url' => '/contoh-layanan',
+            'parent_id' => $layanan->id,
+        ]);
 
         $settingsHtml = $this->actingAs($this->user)
             ->get(route('kua-settings.edit'))
@@ -444,8 +451,7 @@ class AdminMasterDataTest extends TestCase
             ->get(route('navbar.index'))
             ->assertOk()
             ->assertSee('Contoh Layanan')
-            ->assertSee('Tambah Layanan')
-            ->assertSee('Sub Menu Layanan');
+            ->assertSee('Tambah Sub Menu Layanan');
     }
 
     public function test_staff_can_update_kua_settings(): void

@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\MarriageService;
+use App\Models\NavbarItem;
 use App\Models\User;
 use Database\Seeders\MarriageServiceSeeder;
+use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -216,7 +218,9 @@ class MarriageServiceTest extends TestCase
 
     public function test_public_pernikahan_header_keeps_layanan_services(): void
     {
-        \App\Models\Service::factory()->create(['name' => 'Layanan Asli', 'url' => '/permohonan', 'active' => true]);
+        $this->seed(NavbarItemSeeder::class);
+        $layanan = NavbarItem::where('key', 'layanan')->firstOrFail();
+        NavbarItem::factory()->create(['label' => 'Layanan Asli', 'url' => '/permohonan', 'parent_id' => $layanan->id]);
         MarriageService::factory()->create(['name' => 'Topik Nikah', 'active' => true]);
 
         $this->get(route('pernikahan.index'))
