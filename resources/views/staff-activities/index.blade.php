@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Kegiatan Harian</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Kegiatan Harian</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if (session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm dark:bg-green-900/30 dark:border-green-800 dark:text-green-300">
                     {{ session('success') }}
                 </div>
             @endif
@@ -41,7 +41,7 @@
                 <x-primary-button>Tampilkan</x-primary-button>
             </form>
 
-            <div class="bg-white rounded-lg shadow-sm"
+            <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800"
                  x-data="{
                      tanggal: '{{ now()->format('Y-m-d') }}',
                      rows: [{ key: '', kegiatan: '', pekerjaan: '', jumlah: '', save_template: false }],
@@ -62,9 +62,9 @@
                          if (row.key && d && d[row.key] !== undefined) row.jumlah = d[row.key];
                      }
                  }">
-                <div class="border-b border-gray-100 px-6 py-4">
-                    <h3 class="text-sm font-semibold text-gray-700">Input Kegiatan</h3>
-                    <p class="text-xs text-gray-500 mt-0.5">
+                <div class="border-b border-gray-100 dark:border-gray-700 px-6 py-4">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Input Kegiatan</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                         Jumlah otomatis terisi dari Master Data Harian jika jenis kegiatan dipilih. Centang
                         <span class="font-medium">Template</span> untuk menyimpan kalimat sebagai template pribadi.
                     </p>
@@ -79,10 +79,10 @@
 
                     <div class="space-y-3">
                         <template x-for="(row, i) in rows" :key="i">
-                            <div class="border border-gray-200 rounded-lg p-4 space-y-3">
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
                                 <div class="grid grid-cols-1 gap-3 lg:grid-cols-12">
                                     <div class="lg:col-span-3">
-                                        <label class="block text-xs font-medium text-gray-600">Jenis Kegiatan</label>
+                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Jenis Kegiatan</label>
                                         <select x-model="row.key" @change="onKeyChange(row)"
                                                 :name="'items[' + i + '][activity_type_key]'"
                                                 class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
@@ -93,30 +93,30 @@
                                         </select>
                                     </div>
                                     <div class="lg:col-span-4">
-                                        <label class="block text-xs font-medium text-gray-600">Kegiatan</label>
+                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Kegiatan</label>
                                         <textarea x-model="row.kegiatan" :name="'items[' + i + '][kegiatan]'" rows="2" required
                                                   placeholder="Uraian kegiatan yang dilaksanakan"
                                                   class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
                                     </div>
                                     <div class="lg:col-span-3">
-                                        <label class="block text-xs font-medium text-gray-600">Pekerjaan</label>
+                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Pekerjaan</label>
                                         <textarea x-model="row.pekerjaan" :name="'items[' + i + '][pekerjaan]'" rows="2" required
                                                   placeholder="Hasil / pekerjaan yang diselesaikan"
                                                   class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
                                     </div>
                                     <div class="lg:col-span-1">
-                                        <label class="block text-xs font-medium text-gray-600">Jumlah</label>
+                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Jumlah</label>
                                         <input type="number" x-model="row.jumlah" :name="'items[' + i + '][total_jumlah]'" min="0"
                                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
                                     </div>
                                     <div class="lg:col-span-1 flex items-end justify-between gap-2">
-                                        <label class="flex items-center gap-1 text-xs text-gray-600">
+                                        <label class="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300">
                                             <input type="checkbox" x-model="row.save_template" :name="'items[' + i + '][save_template]'" value="1"
-                                                   class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                                                   class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
                                             Template
                                         </label>
                                         <button type="button" @click="removeRow(i)" x-show="rows.length > 1"
-                                                class="text-red-600 hover:underline text-sm">Hapus</button>
+                                                class="text-red-600 dark:text-red-400 hover:underline text-sm">Hapus</button>
                                     </div>
                                 </div>
                                 <input type="hidden" :name="'items[' + i + '][tanggal]'" :value="tanggal" />
@@ -126,54 +126,54 @@
 
                     <div class="flex items-center gap-3">
                         <x-primary-button>Simpan Kegiatan</x-primary-button>
-                        <button type="button" @click="addRow()" class="text-sm text-teal-700 font-medium hover:underline">+ Tambah baris</button>
+                        <button type="button" @click="addRow()" class="text-sm text-teal-700 dark:text-teal-400 font-medium hover:underline">+ Tambah baris</button>
                     </div>
                     @if ($errors->has('items'))
-                        <p class="text-xs text-red-600">{{ $errors->first('items') }}</p>
+                        <p class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('items') }}</p>
                     @endif
                 </form>
             </div>
 
             @php($grouped = $activities->groupBy(fn ($a) => $a->tanggal))
             @forelse ($grouped as $tanggal => $items)
-                <div class="bg-white rounded-lg shadow-sm">
-                    <div class="border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-                        <h3 class="text-sm font-semibold text-gray-700">{{ tanggal_indonesia($tanggal, 'l, d F Y') }}</h3>
-                        <span class="text-xs text-teal-700 font-medium">{{ $items->sum('total_jumlah') }} volume</span>
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
+                    <div class="border-b border-gray-100 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ tanggal_indonesia($tanggal, 'l, d F Y') }}</h3>
+                        <span class="text-xs text-teal-700 dark:text-teal-400 font-medium">{{ $items->sum('total_jumlah') }} volume</span>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700/40">
                                 <tr>
                                     @if ($users->isNotEmpty())
-                                        <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Pegawai</th>
+                                        <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Pegawai</th>
                                     @endif
-                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Jenis</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Kegiatan</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Pekerjaan</th>
-                                    <th class="px-4 py-2.5 text-right text-xs font-medium text-gray-500 uppercase">Jumlah</th>
-                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Jenis</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Kegiatan</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Pekerjaan</th>
+                                    <th class="px-4 py-2.5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Jumlah</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
                                 @foreach ($items as $activity)
                                     <tr>
                                         @if ($users->isNotEmpty())
-                                            <td class="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{{ $activity->user->name }}</td>
+                                            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ $activity->user->name }}</td>
                                         @endif
-                                        <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
+                                        <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                             {{ $activity->activityLabel() ?? 'Lainnya' }}
                                         </td>
-                                        <td class="px-4 py-3 text-sm text-gray-900 max-w-md">{{ $activity->kegiatan }}</td>
-                                        <td class="px-4 py-3 text-sm text-gray-700 max-w-md">{{ $activity->pekerjaan }}</td>
-                                        <td class="px-4 py-3 text-sm text-gray-900 text-right">{{ $activity->total_jumlah }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 max-w-md">{{ $activity->kegiatan }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 max-w-md">{{ $activity->pekerjaan }}</td>
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 text-right">{{ $activity->total_jumlah }}</td>
                                         <td class="px-4 py-3 text-sm space-x-2 whitespace-nowrap">
-                                            <a href="{{ route('kegiatan.edit', $activity) }}" class="text-blue-600 hover:underline">Edit</a>
+                                            <a href="{{ route('kegiatan.edit', $activity) }}" class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
                                             <form action="{{ route('kegiatan.destroy', $activity) }}" method="POST" class="inline"
                                                   onsubmit="return confirm('Hapus kegiatan ini?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="text-red-600 hover:underline">Hapus</button>
+                                                <button class="text-red-600 dark:text-red-400 hover:underline">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -183,7 +183,7 @@
                     </div>
                 </div>
             @empty
-                <div class="bg-white rounded-lg shadow-sm px-6 py-8 text-center text-sm text-gray-500">
+                <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800 px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                     Belum ada kegiatan pada {{ tanggal_indonesia(now()->month($month)->year($year), 'F Y') }}.
                 </div>
             @endforelse

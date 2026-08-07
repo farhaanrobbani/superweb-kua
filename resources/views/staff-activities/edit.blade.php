@@ -1,21 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Kegiatan</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Edit Kegiatan</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
-                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm dark:bg-red-900/30 dark:border-red-800 dark:text-red-300">
                     Periksa kembali isian yang disorot di bawah.
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('kegiatan.update', $activity) }}" class="bg-white rounded-lg shadow-sm">
+            <form method="POST" action="{{ route('kegiatan.update', $activity) }}" class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                 @csrf
                 @method('PUT')
-                <div class="border-b border-gray-100 px-6 py-4">
-                    <h3 class="text-sm font-semibold text-gray-700">Kegiatan Harian {{ tanggal_indonesia($activity->tanggal, 'd F Y') }}</h3>
+                <div class="border-b border-gray-100 dark:border-gray-700 px-6 py-4">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Kegiatan Harian {{ tanggal_indonesia($activity->tanggal, 'd F Y') }}</h3>
                 </div>
                 <div class="px-6 py-4 space-y-4">
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -58,15 +58,15 @@
                                value="{{ old('total_jumlah', $activity->total_jumlah) }}"
                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
                         @if ($daily && $activity->activity_type_key && array_key_exists($activity->activity_type_key, $columns))
-                            <p class="text-xs text-gray-500 mt-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 Jumlah otomatis mengikuti Master Data Harian ({{ $daily->{$activity->activity_type_key} }}).
                             </p>
                         @endif
                     </div>
 
-                    <div class="pt-2 border-t border-gray-100 flex items-center gap-3">
+                    <div class="pt-2 border-t border-gray-100 dark:border-gray-700 flex items-center gap-3">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('kegiatan.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('kegiatan.index') }}" class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</a>
                     </div>
                 </div>
             </form>

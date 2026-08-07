@@ -1,10 +1,10 @@
 <section x-data="{ preview: null }">
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Data Pegawai') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
             {{ __('Data kepegawaian yang digunakan untuk laporan kinerja.') }}
         </p>
     </header>
@@ -51,21 +51,21 @@
                 <img x-show="preview"
                      :src="preview"
                      alt="Pratinjau foto"
-                     class="h-20 w-20 rounded-full object-cover border border-gray-200" />
+                     class="h-20 w-20 rounded-full object-cover border border-gray-200 dark:border-gray-700" />
                 <img x-show="! preview && {{ $user->fotoUrl() ? 'true' : 'false' }}"
                      src="{{ $user->fotoUrl() }}"
                      alt="Foto profil"
-                     class="h-20 w-20 rounded-full object-cover border border-gray-200" />
+                     class="h-20 w-20 rounded-full object-cover border border-gray-200 dark:border-gray-700" />
                 <label class="cursor-pointer">
                     <input type="file" name="foto_profil" id="foto_profil" accept="image/jpeg,image/png,image/webp" class="sr-only"
                            @change="const f = $event.target.files[0]; if (f) { const r = new FileReader(); r.onload = e => preview = e.target.result; r.readAsDataURL(f); }" />
-                    <span class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:border-teal-500 hover:text-teal-700">
+                    <span class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-500 hover:border-teal-500 hover:text-teal-700 dark:text-teal-400">
                         {{ __('Pilih Foto') }}
                     </span>
                 </label>
                 @if ($user->fotoUrl())
-                    <label class="flex items-center gap-1 text-sm text-gray-600">
-                        <input type="checkbox" name="foto_hapus" value="1" class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
+                    <label class="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500">
+                        <input type="checkbox" name="foto_hapus" value="1" class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
                         {{ __('Hapus foto') }}
                     </label>
                 @endif
@@ -82,7 +82,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
+                    class="text-sm text-gray-600 dark:text-gray-300 dark:text-gray-500"
                 >{{ __('Tersimpan.') }}</p>
             @endif
         </div>

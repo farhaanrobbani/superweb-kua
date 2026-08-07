@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Master Data Harian KUA</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-gray-100">Master Data Harian KUA</h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if (session('success'))
-                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm">
+                <div class="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md text-sm dark:bg-green-900/30 dark:border-green-800 dark:text-green-300">
                     {{ session('success') }}
                 </div>
             @endif
@@ -36,41 +36,41 @@
                 </a>
             </div>
 
-            <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+            <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg dark:bg-gray-800">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700/40">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Tanggal</th>
                             @foreach ($columns as $label)
-                                <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap">{{ $label }}</th>
+                                <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase whitespace-nowrap dark:text-gray-400">{{ $label }}</th>
                             @endforeach
-                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Total</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         @forelse ($data as $item)
                             <tr>
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-gray-100">
                                     {{ tanggal_indonesia($item->tanggal, 'd F Y') }}
                                 </td>
                                 @foreach ($columns as $key => $label)
-                                    <td class="px-3 py-3 text-sm text-gray-700 text-right">{{ $item->{$key} }}</td>
+                                    <td class="px-3 py-3 text-sm text-gray-700 text-right dark:text-gray-300">{{ $item->{$key} }}</td>
                                 @endforeach
-                                <td class="px-3 py-3 text-sm font-semibold text-teal-700 text-right">{{ $item->totalVolume() }}</td>
+                                <td class="px-3 py-3 text-sm font-semibold text-teal-700 text-right dark:text-teal-400">{{ $item->totalVolume() }}</td>
                                 <td class="px-4 py-3 text-sm space-x-2 whitespace-nowrap">
-                                    <a href="{{ route('kua-daily.edit', $item) }}" class="text-blue-600 hover:underline">Edit</a>
+                                    <a href="{{ route('kua-daily.edit', $item) }}" class="text-blue-600 hover:underline dark:text-blue-400">Edit</a>
                                     <form action="{{ route('kua-daily.destroy', $item) }}" method="POST" class="inline"
                                           onsubmit="return confirm('Hapus data harian tanggal {{ tanggal_indonesia($item->tanggal, 'd F Y') }}?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="text-red-600 hover:underline">Hapus</button>
+                                        <button class="text-red-600 hover:underline dark:text-red-400">Hapus</button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ count($columns) + 3 }}" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <td colspan="{{ count($columns) + 3 }}" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                     Belum ada data harian pada {{ tanggal_indonesia(now()->month($month)->year($year), 'F Y') }}.
                                 </td>
                             </tr>
