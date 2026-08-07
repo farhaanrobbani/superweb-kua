@@ -77,6 +77,6 @@ class KritikSaranTest extends TestCase
             ->assertOk()
             ->assertSee('Tentang Kami')
             ->assertSee('Daftar Pegawai')
-            ->assertSee('Kritik & Saran', false);
+            ->assertSee('Kritik & Saran');
     }
 }
