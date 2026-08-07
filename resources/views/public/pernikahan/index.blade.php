@@ -1,13 +1,12 @@
 @extends('layouts.public')
 
-@section('title', kua_setting('instansi', 'Surat Digital KUA').' — Layanan Pernikahan')
+@section('title', kua_setting('instansi', 'Surat Digital KUA').' — '.($page->title ?? 'Layanan Pernikahan'))
 
 @section('content')
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <h1 class="text-center text-2xl font-bold">Layanan Pernikahan</h1>
+        <h1 class="text-center text-2xl font-bold">{{ $page->title ?? 'Layanan Pernikahan' }}</h1>
         <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">
-            Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan pernikahan di KUA.
-            Beberapa layanan dapat diajukan secara online melalui tombol ajukan.
+            {{ $page->description ?? 'Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan pernikahan di KUA. Beberapa layanan dapat diajukan secara online melalui tombol ajukan.' }}
         </p>
 
         <div class="mt-8 space-y-4">
