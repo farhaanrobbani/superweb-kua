@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Layanan</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Navbar — Tambah Layanan</h2>
     </x-slot>
 
     <div class="py-12">
@@ -70,7 +70,7 @@
 
                     <div class="mt-6 flex items-center gap-4">
                         <x-primary-button>Simpan</x-primary-button>
-                        <a href="{{ route('services.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                        <a href="{{ route('navbar.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
                     </div>
                 </form>
             </div>
