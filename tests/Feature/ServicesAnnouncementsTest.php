@@ -163,7 +163,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'sort_order' => 2,
                 'active' => 1,
             ])
-            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
+            ->assertRedirect(route('services.index'));
 
         $service = Service::where('name', 'Layanan Konsultasi')->first();
         $this->assertNotNull($service);
@@ -178,7 +178,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'sort_order' => 2,
                 'active' => 0,
             ])
-            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
+            ->assertRedirect(route('services.index'));
 
         $this->assertDatabaseHas('services', [
             'id' => $service->id,
@@ -209,7 +209,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'name' => 'Layanan Diubah',
                 'description' => 'Tanpa centang aktif',
             ])
-            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
+            ->assertRedirect(route('services.index'));
 
         $this->assertDatabaseHas('services', [
             'id' => $service->id,
@@ -224,7 +224,7 @@ class ServicesAnnouncementsTest extends TestCase
 
         $this->actingAs($this->user)
             ->delete(route('services.destroy', $service))
-            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
+            ->assertRedirect(route('services.index'));
 
         $this->assertDatabaseMissing('services', ['id' => $service->id]);
     }
@@ -287,7 +287,7 @@ class ServicesAnnouncementsTest extends TestCase
                 'icon' => 'document',
                 'active' => 1,
             ])
-            ->assertRedirect(route('kua-settings.edit', ['tab' => 'layanan']));
+            ->assertRedirect(route('services.index'));
 
         $this->assertDatabaseHas('services', [
             'name' => 'Pencarian Akta',
@@ -346,5 +346,122 @@ class ServicesAnnouncementsTest extends TestCase
         $this->get(route('welcome'))
             ->assertOk()
             ->assertSee(url('/cari-akta'));
+    }
+
+    public function test_service_store_generates_slug_from_name(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('services.store'), [
+                'name' => 'Layanan Konsultasi',
+                'url' => null,
+                'active' => 1,
+            ])
+            ->assertRedirect(route('services.index'));
+
+        $this->assertDatabaseHas('services', [
+            'name' => 'Layanan Konsultasi',
+            'slug' => 'layanan-konsultasi',
+        ]);
+    }
+
+    public function test_service_slug_is_unique_with_suffix(): void
+    {
+        Service::factory()->create(['name' => 'Layanan Konsultasi', 'slug' => 'layanan-konsultasi']);
+
+        $this->actingAs($this->user)
+            ->post(route('services.store'), [
+                'name' => 'Layanan Konsultasi',
+                'active' => 1,
+            ]);
+
+        $this->assertDatabaseHas('services', [
+            'name' => 'Layanan Konsultasi',
+            'slug' => 'layanan-konsultasi-2',
+        ]);
+    }
+
+    public function test_service_content_is_sanitized_on_store(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('services.store'), [
+                'name' => 'Layanan Berkonten',
+                'content' => '<p>Selamat datang.</p><script>alert("xss")</script>',
+                'active' => 1,
+            ])
+            ->assertRedirect(route('services.index'));
+
+        $service = Service::where('name', 'Layanan Berkonten')->firstOrFail();
+        $this->assertStringNotContainsString('<script', $service->content);
+        $this->assertStringContainsString('Selamat datang.', $service->content);
+    }
+
+    public function test_public_layanan_page_renders_content(): void
+    {
+        Service::factory()->create([
+            'name' => 'Konsultasi Keluarga',
+            'slug' => 'konsultasi-keluarga',
+            'content' => '<p>Konsultasi keluarga tersedia di kantor KUA.</p>',
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.show', 'konsultasi-keluarga'))
+            ->assertOk()
+            ->assertSee('Konsultasi Keluarga')
+            ->assertSee('Konsultasi keluarga tersedia di kantor KUA.');
+    }
+
+    public function test_public_layanan_page_returns_404_for_inactive_service(): void
+    {
+        Service::factory()->create([
+            'name' => 'Layanan Rahasia',
+            'slug' => 'layanan-rahasia',
+            'content' => '<p>Tidak boleh tampil.</p>',
+            'active' => false,
+        ]);
+
+        $this->get(route('layanan.show', 'layanan-rahasia'))->assertNotFound();
+    }
+
+    public function test_public_layanan_page_without_content_redirects_to_url(): void
+    {
+        Service::factory()->create([
+            'name' => 'Pengajuan Surat Online',
+            'slug' => 'pengajuan-surat-online',
+            'url' => '/permohonan',
+            'content' => null,
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.show', 'pengajuan-surat-online'))
+            ->assertRedirect(url('/permohonan'));
+    }
+
+    public function test_public_layanan_page_without_content_or_url_returns_404(): void
+    {
+        Service::factory()->create([
+            'name' => 'Layanan Tanpa Tautan',
+            'slug' => 'layanan-tanpa-tautan',
+            'url' => null,
+            'content' => null,
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.show', 'layanan-tanpa-tautan'))->assertNotFound();
+    }
+
+    public function test_landing_links_service_with_content_to_its_page(): void
+    {
+        Service::factory()->create([
+            'name' => 'Konsultasi Keluarga',
+            'slug' => 'konsultasi-keluarga',
+            'content' => '<p>Konten konsultasi.</p>',
+            'url' => '/permohonan',
+            'active' => true,
+        ]);
+
+        $this->get(route('welcome'))
+            ->assertOk()
+            ->assertSee(url('/layanan/konsultasi-keluarga'))
+            ->assertDontSee(url('/permohonan'));
     }
 }
