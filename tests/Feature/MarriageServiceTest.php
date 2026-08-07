@@ -35,7 +35,7 @@ class MarriageServiceTest extends TestCase
                 'sort_order' => 1,
                 'active' => 1,
             ])
-            ->assertRedirect(route('marriage-services.index'));
+            ->assertRedirect(route('pages.index'));
 
         $this->assertDatabaseHas('marriage_services', [
             'name' => 'Pendaftaran Nikah',
@@ -66,7 +66,7 @@ class MarriageServiceTest extends TestCase
                 'icon' => 'check',
                 'active' => 1,
             ])
-            ->assertRedirect(route('marriage-services.index'));
+            ->assertRedirect(route('pages.index'));
 
         $this->assertDatabaseHas('marriage_services', [
             'id' => $service->id,
@@ -81,7 +81,7 @@ class MarriageServiceTest extends TestCase
 
         $this->actingAs($this->user)
             ->delete(route('marriage-services.destroy', $service))
-            ->assertRedirect(route('marriage-services.index'));
+            ->assertRedirect(route('pages.index'));
 
         $this->assertDatabaseMissing('marriage_services', ['id' => $service->id]);
     }
@@ -146,7 +146,7 @@ class MarriageServiceTest extends TestCase
                 'persyaratan' => '<script>alert(1)</script><p>Berikut <a href="https://example.com/form">formulir</a></p>',
                 'active' => 1,
             ])
-            ->assertRedirect(route('marriage-services.index'));
+            ->assertRedirect(route('pages.index'));
 
         $item = MarriageService::where('name', 'Sanitasi')->first();
 
@@ -206,7 +206,7 @@ class MarriageServiceTest extends TestCase
                 'sop_label' => 'Prosedur',
                 'active' => 1,
             ])
-            ->assertRedirect(route('marriage-services.index'));
+            ->assertRedirect(route('pages.index'));
 
         $this->assertDatabaseHas('marriage_services', [
             'name' => 'Topik Baru',
