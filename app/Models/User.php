@@ -7,10 +7,17 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['name', 'email', 'email_verified_at', 'password', 'role', 'is_active'])]
+#[Fillable([
+    'name', 'email', 'email_verified_at', 'password', 'role', 'is_active',
+    'nip', 'jabatan', 'level_jabatan', 'pangkat', 'ruang_golongan', 'grade_tukin',
+    'jumlah_tukin_kotor', 'jumlah_tukin_bersih', 'gapok', 'jumlah_uang_makan_harian',
+    'foto_profil_url', 'instansi',
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -46,6 +53,25 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return (bool) $this->is_active;
+    }
+
+    public function staffActivities(): HasMany
+    {
+        return $this->hasMany(StaffActivity::class);
+    }
+
+    public function activityTemplates(): HasMany
+    {
+        return $this->hasMany(UserActivityTemplate::class);
+    }
+
+    public function fotoUrl(): ?string
+    {
+        if (blank($this->foto_profil_url)) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->foto_profil_url);
     }
 
     /**
