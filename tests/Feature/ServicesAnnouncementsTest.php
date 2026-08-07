@@ -150,9 +150,9 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_submission_page_shows_service_description(): void
     {
-        NavbarItem::factory()->create([
-            'label' => 'Pengajuan Surat Online',
-            'url' => '/permohonan',
+        Page::factory()->create([
+            'key' => 'layanan-permohonan',
+            'title' => 'Pengajuan Surat Online',
             'description' => 'Ajukan surat tanpa antre',
             'active' => true,
         ]);

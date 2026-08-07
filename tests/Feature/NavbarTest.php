@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\NavbarItem;
+use App\Models\Page;
 use App\Models\User;
 use Database\Seeders\NavbarItemSeeder;
 use DOMDocument;
@@ -27,9 +28,9 @@ class NavbarTest extends TestCase
     {
         $this->seed(NavbarItemSeeder::class);
 
-        $this->assertSame(8, NavbarItem::count());
+        $this->assertSame(12, NavbarItem::count());
         $this->assertSame(4, NavbarItem::root()->count());
-        $this->assertSame(4, NavbarItem::whereNotNull('parent_id')->count());
+        $this->assertSame(8, NavbarItem::whereNotNull('parent_id')->count());
 
         foreach (['beranda', 'layanan', 'pengumuman', 'tentang'] as $key) {
             $this->assertDatabaseHas('navbar_items', ['key' => $key]);
@@ -46,6 +47,10 @@ class NavbarTest extends TestCase
 
         $layanan = NavbarItem::where('key', 'layanan')->firstOrFail();
         $this->assertSame($layanan->id, NavbarItem::where('key', 'layanan-permohonan')->firstOrFail()->parent_id);
+        $this->assertSame($layanan->id, NavbarItem::where('key', 'pernikahan')->firstOrFail()->parent_id);
+        $this->assertSame($layanan->id, NavbarItem::where('key', 'wakaf')->firstOrFail()->parent_id);
+        $this->assertSame($layanan->id, NavbarItem::where('key', 'keagamaan')->firstOrFail()->parent_id);
+        $this->assertSame($layanan->id, NavbarItem::where('key', 'cari-akta')->firstOrFail()->parent_id);
     }
 
     public function test_guest_cannot_access_admin_navbar(): void
@@ -62,7 +67,6 @@ class NavbarTest extends TestCase
         $this->actingAs($this->user)
             ->put(route('navbar.update', $item), [
                 'label' => 'Home',
-                'description' => 'Halaman utama',
                 'url' => '/',
                 'icon' => 'home',
                 'sort_order' => 5,
@@ -74,7 +78,6 @@ class NavbarTest extends TestCase
         $this->assertDatabaseHas('navbar_items', [
             'id' => $item->id,
             'label' => 'Home',
-            'description' => 'Halaman utama',
             'url' => '/',
             'icon' => 'home',
             'sort_order' => 5,
@@ -101,6 +104,12 @@ class NavbarTest extends TestCase
             'url' => '/unduhan',
             'parent_id' => null,
         ]);
+
+        $this->assertDatabaseHas('pages', [
+            'key' => 'unduhan',
+            'title' => 'Unduhan',
+            'active' => true,
+        ]);
     }
 
     public function test_main_item_key_is_unique_slug(): void
@@ -124,6 +133,9 @@ class NavbarTest extends TestCase
         $tentang = NavbarItem::where('key', 'tentang')->firstOrFail();
         $childrenIds = $tentang->children()->pluck('id');
 
+        Page::factory()->create(['key' => 'tentang', 'title' => 'Tentang Kami', 'active' => true]);
+        Page::factory()->create(['key' => 'pegawai', 'title' => 'Daftar Pegawai', 'active' => true]);
+
         $this->actingAs($this->user)
             ->delete(route('navbar.destroy', $tentang))
             ->assertRedirect(route('navbar.index'));
@@ -132,6 +144,9 @@ class NavbarTest extends TestCase
         foreach ($childrenIds as $id) {
             $this->assertDatabaseMissing('navbar_items', ['id' => $id]);
         }
+
+        $this->assertDatabaseMissing('pages', ['key' => 'tentang']);
+        $this->assertDatabaseMissing('pages', ['key' => 'pegawai']);
     }
 
     public function test_staff_can_create_sub_menu(): void
@@ -153,6 +168,12 @@ class NavbarTest extends TestCase
             'url' => '/layanan-baru',
             'parent_id' => $layanan->id,
             'has_submenu' => 0,
+        ]);
+
+        $this->assertDatabaseHas('pages', [
+            'key' => 'layanan-baru',
+            'title' => 'Layanan Baru',
+            'active' => true,
         ]);
     }
 

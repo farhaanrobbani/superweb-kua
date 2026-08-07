@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\NavbarItem;
 use App\Models\Page;
 use App\Models\User;
+use Database\Seeders\NavbarItemSeeder;
 use Database\Seeders\PageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -78,15 +80,87 @@ class PageTest extends TestCase
             ->assertSessionHasErrors('embed_url');
     }
 
-    public function test_admin_pages_index_shows_all_page_tabs(): void
+    public function test_admin_pages_index_shows_tabs_matching_navbar_items(): void
     {
+        $this->seed(NavbarItemSeeder::class);
         $this->seed(PageSeeder::class);
 
         $this->actingAs($this->user)
             ->get(route('pages.index'))
             ->assertOk()
             ->assertSee('Pernikahan')
+            ->assertSee('Wakaf')
+            ->assertSee('Keagamaan')
             ->assertSee('Pencarian Akta');
+    }
+
+    public function test_admin_pages_index_auto_creates_page_for_navbar_item(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        $this->actingAs($this->user)->get(route('pages.index'))->assertOk();
+
+        $this->assertDatabaseHas('pages', [
+            'key' => 'wakaf',
+            'title' => 'Wakaf',
+            'active' => true,
+        ]);
+        $this->assertDatabaseHas('pages', [
+            'key' => 'keagamaan',
+            'title' => 'Keagamaan',
+            'active' => true,
+        ]);
+    }
+
+    public function test_admin_page_tabs_follow_navbar_item_removal(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+        $wakaf = NavbarItem::where('key', 'wakaf')->firstOrFail();
+
+        $this->actingAs($this->user)
+            ->delete(route('navbar.destroy', $wakaf))
+            ->assertRedirect(route('navbar.index'));
+
+        $this->assertDatabaseMissing('pages', ['key' => 'wakaf']);
+
+        $this->actingAs($this->user)
+            ->get(route('pages.index'))
+            ->assertOk()
+            ->assertDontSee('Wakaf');
+    }
+
+    public function test_public_wakaf_page_is_empty_when_no_content(): void
+    {
+        $this->seed(PageSeeder::class);
+
+        $this->get(route('layanan.wakaf'))
+            ->assertOk()
+            ->assertDontSee('<iframe');
+    }
+
+    public function test_public_keagamaan_page_is_empty_when_no_content(): void
+    {
+        $this->seed(PageSeeder::class);
+
+        $this->get(route('layanan.keagamaan'))
+            ->assertOk()
+            ->assertDontSee('<iframe');
+    }
+
+    public function test_public_wakaf_page_renders_content_when_filled(): void
+    {
+        Page::factory()->create([
+            'key' => 'wakaf',
+            'title' => 'Wakaf',
+            'description' => 'Info program wakaf KUA.',
+            'embed_url' => 'https://datastudio.google.com/embed/reporting/wakaf123/page/x',
+            'active' => true,
+        ]);
+
+        $this->get(route('layanan.wakaf'))
+            ->assertOk()
+            ->assertSee('Info program wakaf KUA.')
+            ->assertSee('https://datastudio.google.com/embed/reporting/wakaf123/page/x');
     }
 
     public function test_public_cari_akta_page_uses_custom_title_description_and_embed(): void
