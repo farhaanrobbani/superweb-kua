@@ -30,14 +30,6 @@
                      x-transition:leave-end="opacity-0"
                      x-cloak
                      class="absolute start-1/2 mt-2 w-72 -translate-x-1/2 rounded-lg border border-teal-100 bg-white p-2 shadow-lg">
-                    <a href="{{ route('pernikahan.index') }}"
-                       class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
-                        <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => 'heart', 'class' => 'h-5 w-5'])</span>
-                        <span>
-                            <span class="block text-sm font-semibold text-[#1b1b18]">Pernikahan</span>
-                        </span>
-                    </a>
-                    <div class="my-1 border-t border-teal-100"></div>
                     @forelse ($headerServices as $service)
                         <a href="{{ $service->url ? url($service->url) : '#' }}"
                            class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
@@ -102,14 +94,6 @@
                  x-transition:leave-end="opacity-0"
                  x-cloak
                  class="w-full border-t border-teal-100 pt-1">
-                <a href="{{ route('pernikahan.index') }}"
-                   class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
-                    <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => 'heart', 'class' => 'h-5 w-5'])</span>
-                    <span>
-                        <span class="block text-sm font-semibold text-[#1b1b18]">Pernikahan</span>
-                    </span>
-                </a>
-                <div class="my-1 border-t border-teal-100"></div>
                 @foreach ($headerServices as $service)
                     <a href="{{ $service->url ? url($service->url) : '#' }}"
                        class="flex items-start gap-3 rounded-md px-3 py-2.5 hover:bg-teal-50">
