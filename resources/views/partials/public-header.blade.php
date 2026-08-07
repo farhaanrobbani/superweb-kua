@@ -44,6 +44,7 @@
                 </div>
             </div>
             <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
+            <a href="{{ route('pernikahan.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pernikahan</a>
             <div class="relative" @mouseenter="tentang = true" @mouseleave="tentang = false">
                 <button type="button" @click="tentang = !tentang"
                         class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700"
@@ -78,6 +79,7 @@
             </svg>
         </button>
         <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
+        <a href="{{ route('pernikahan.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pernikahan</a>
         <button type="button" @click="tentang = !tentang" class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700" :aria-expanded="tentang">
             Tentang Kami
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

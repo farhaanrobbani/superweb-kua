@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
+use App\Http\Controllers\Admin\MarriageServiceController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\DownloadPublicController;
 use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
@@ -37,6 +39,8 @@ Route::get('/daftar-pegawai', [StaffPublicController::class, 'index'])->name('pe
 
 Route::get('/unduhan', [DownloadPublicController::class, 'index'])->name('unduhan.index');
 Route::get('/unduhan/{downloadItem}/unduh', [DownloadPublicController::class, 'download'])->name('unduhan.unduh')->middleware('throttle:10,1');
+
+Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->name('pernikahan.index');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -77,6 +81,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::resource('download-items', DownloadItemController::class)->except('show');
+    Route::resource('marriage-services', MarriageServiceController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');

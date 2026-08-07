@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(KuaSettingSeeder::class);
         $this->call(LetterTypeSeeder::class);
         $this->call(ServiceSeeder::class);
+        $this->call(MarriageServiceSeeder::class);
         $this->call(AnnouncementSeeder::class);
     }
 }
