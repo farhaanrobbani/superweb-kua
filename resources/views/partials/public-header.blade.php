@@ -35,7 +35,6 @@
                         <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => 'heart', 'class' => 'h-5 w-5'])</span>
                         <span>
                             <span class="block text-sm font-semibold text-[#1b1b18]">Pernikahan</span>
-                            <span class="block text-xs text-[#1b1b1870]">Persyaratan, alur & SOP</span>
                         </span>
                     </a>
                     <div class="my-1 border-t border-teal-100"></div>
@@ -108,7 +107,6 @@
                     <span class="mt-0.5 text-teal-700">@include('partials.service-icon', ['icon' => 'heart', 'class' => 'h-5 w-5'])</span>
                     <span>
                         <span class="block text-sm font-semibold text-[#1b1b18]">Pernikahan</span>
-                        <span class="block text-xs text-[#1b1b1870]">Persyaratan, alur & SOP</span>
                     </span>
                 </a>
                 <div class="my-1 border-t border-teal-100"></div>
