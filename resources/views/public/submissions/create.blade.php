@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Permohonan Surat - {{ $kua['instansi'] }}</title>
+    <title>{{ $service->title ?? 'Permohonan Surat' }} - {{ $kua['instansi'] }}</title>
     <link rel="icon" href="{{ \App\Models\KuaSetting::logoUrl() ?: asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <main class="flex-1 py-10">
         <div class="max-w-5xl mx-auto px-4">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Form Permohonan Surat</h2>
+                <h2 class="text-2xl font-bold text-gray-800">{{ $service->title ?? 'Form Permohonan Surat' }}</h2>
                 <p class="text-sm text-gray-500 mt-1">{{ $service->description ?? 'Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.' }}</p>
             </div>
 
