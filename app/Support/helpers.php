@@ -2,7 +2,6 @@
 
 use App\Models\KuaSetting;
 use App\Models\NavbarItem;
-use App\Models\Service;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -17,55 +16,40 @@ if (! function_exists('kua_setting')) {
     }
 }
 
-if (! function_exists('kua_services')) {
-    function kua_services(): Collection
-    {
-        try {
-            return Service::query()->active()->ordered()->get(['name', 'description', 'url', 'icon']);
-        } catch (\Throwable) {
-            return collect();
-        }
-    }
-}
-
 if (! function_exists('kua_navbar')) {
     function kua_navbar(): Collection
     {
         $defaults = collect([
-            (object) ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'has_submenu' => false],
-            (object) ['key' => 'layanan', 'label' => 'Layanan', 'url' => null, 'has_submenu' => true],
-            (object) ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'has_submenu' => false],
-            (object) ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'has_submenu' => true],
+            (object) ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'has_submenu' => false, 'children' => collect()],
+            (object) [
+                'key' => 'layanan',
+                'label' => 'Layanan',
+                'url' => null,
+                'has_submenu' => true,
+                'children' => collect([
+                    (object) ['label' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'icon' => null, 'active' => true],
+                ]),
+            ],
+            (object) ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'has_submenu' => false, 'children' => collect()],
+            (object) [
+                'key' => 'tentang',
+                'label' => 'Tentang Kami',
+                'url' => null,
+                'has_submenu' => true,
+                'children' => collect([
+                    (object) ['label' => 'Daftar Pegawai', 'url' => '/daftar-pegawai', 'icon' => null, 'active' => true],
+                    (object) ['label' => 'Download Center', 'url' => '/unduhan', 'icon' => null, 'active' => true],
+                    (object) ['label' => 'Kritik & Saran', 'url' => '/kritik-saran', 'icon' => null, 'active' => true],
+                ]),
+            ],
         ]);
 
         try {
             $items = NavbarItem::query()
-                ->where('group', NavbarItem::GROUP_MAIN)
+                ->root()
                 ->active()
                 ->ordered()
-                ->get();
-        } catch (\Throwable) {
-            return $defaults;
-        }
-
-        return $items->isEmpty() ? $defaults : $items;
-    }
-}
-
-if (! function_exists('kua_navbar_tentang')) {
-    function kua_navbar_tentang(): Collection
-    {
-        $defaults = collect([
-            (object) ['label' => 'Daftar Pegawai', 'url' => '/daftar-pegawai'],
-            (object) ['label' => 'Download Center', 'url' => '/unduhan'],
-            (object) ['label' => 'Kritik & Saran', 'url' => '/kritik-saran'],
-        ]);
-
-        try {
-            $items = NavbarItem::query()
-                ->where('group', NavbarItem::GROUP_TENTANG)
-                ->active()
-                ->ordered()
+                ->with('children')
                 ->get();
         } catch (\Throwable) {
             return $defaults;

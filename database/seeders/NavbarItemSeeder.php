@@ -9,17 +9,32 @@ class NavbarItemSeeder extends Seeder
 {
     public function run(): void
     {
-        $items = [
-            ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'group' => NavbarItem::GROUP_MAIN, 'sort_order' => 1, 'has_submenu' => false],
-            ['key' => 'layanan', 'label' => 'Layanan', 'url' => null, 'group' => NavbarItem::GROUP_MAIN, 'sort_order' => 2, 'has_submenu' => true],
-            ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'group' => NavbarItem::GROUP_MAIN, 'sort_order' => 3, 'has_submenu' => false],
-            ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'group' => NavbarItem::GROUP_MAIN, 'sort_order' => 4, 'has_submenu' => true],
-            ['key' => 'pegawai', 'label' => 'Daftar Pegawai', 'url' => '/daftar-pegawai', 'group' => NavbarItem::GROUP_TENTANG, 'sort_order' => 1, 'has_submenu' => false],
-            ['key' => 'unduhan', 'label' => 'Download Center', 'url' => '/unduhan', 'group' => NavbarItem::GROUP_TENTANG, 'sort_order' => 2, 'has_submenu' => false],
-            ['key' => 'kritik-saran', 'label' => 'Kritik & Saran', 'url' => '/kritik-saran', 'group' => NavbarItem::GROUP_TENTANG, 'sort_order' => 3, 'has_submenu' => false],
+        $mainItems = [
+            ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'sort_order' => 1, 'has_submenu' => false],
+            ['key' => 'layanan', 'label' => 'Layanan', 'url' => null, 'sort_order' => 2, 'has_submenu' => true],
+            ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'sort_order' => 3, 'has_submenu' => false],
+            ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'sort_order' => 4, 'has_submenu' => true],
         ];
 
-        foreach ($items as $item) {
+        foreach ($mainItems as $item) {
+            NavbarItem::firstOrCreate(['key' => $item['key']], $item);
+        }
+
+        $layanan = NavbarItem::where('key', 'layanan')->first();
+        $tentang = NavbarItem::where('key', 'tentang')->first();
+
+        $subItems = [
+            ['key' => 'layanan-permohonan', 'label' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'parent_id' => $layanan?->id, 'sort_order' => 1],
+            ['key' => 'pegawai', 'label' => 'Daftar Pegawai', 'url' => '/daftar-pegawai', 'parent_id' => $tentang?->id, 'sort_order' => 1],
+            ['key' => 'unduhan', 'label' => 'Download Center', 'url' => '/unduhan', 'parent_id' => $tentang?->id, 'sort_order' => 2],
+            ['key' => 'kritik-saran', 'label' => 'Kritik & Saran', 'url' => '/kritik-saran', 'parent_id' => $tentang?->id, 'sort_order' => 3],
+        ];
+
+        foreach ($subItems as $item) {
+            if ($item['parent_id'] === null) {
+                continue;
+            }
+
             NavbarItem::firstOrCreate(['key' => $item['key']], $item);
         }
     }

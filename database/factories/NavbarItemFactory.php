@@ -16,9 +16,10 @@ class NavbarItemFactory extends Factory
             'key' => fake()->unique()->slug(2),
             'label' => fake()->words(2, true),
             'url' => '/',
-            'group' => NavbarItem::GROUP_MAIN,
+            'parent_id' => null,
             'sort_order' => 0,
             'active' => true,
+            'has_submenu' => false,
         ];
     }
 }
