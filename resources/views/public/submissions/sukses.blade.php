@@ -27,12 +27,14 @@
                 konfirmasi dari petugas melalui kontak yang Anda berikan.
             </p>
             @if (session('permohonan_unduh'))
-                <a href="{{ route('permohonan.download', session('permohonan_unduh')) }}"
-                   class="inline-block mt-6 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700">
-                    Download Surat Permohonan (PDF)
-                </a>
+                <div class="mt-6">
+                    <a href="{{ route('permohonan.download', session('permohonan_unduh')) }}"
+                       class="inline-block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700">
+                        Download Surat Permohonan (PDF)
+                    </a>
+                </div>
             @endif
-            <a href="{{ route('permohonan.create') }}" class="inline-block mt-6 text-sm text-teal-700 hover:underline">
+            <a href="{{ route('permohonan.create') }}" class="mt-6 inline-block text-sm text-teal-700 hover:underline">
                 Ajukan permohonan lain
             </a>
         </div>
