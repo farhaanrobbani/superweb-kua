@@ -29,7 +29,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/cari-akta', [LayananController::class, 'cariAkta'])->name('layanan.cari-akta');
-Route::get('/layanan/{service:slug}', [LayananController::class, 'show'])->name('layanan.show');
 
 Route::get('/favicon.ico', FaviconController::class);
 
