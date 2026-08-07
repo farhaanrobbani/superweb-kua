@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LetterType;
+use App\Models\Submission;
 use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -51,6 +52,21 @@ class LetterTypeController extends Controller
 
     public function destroy(LetterType $letterType): RedirectResponse
     {
+        if ($letterType->letters()->exists()) {
+            return redirect()->route('letter-types.index')
+                ->with('error', 'Jenis surat tidak bisa dihapus karena masih memiliki surat terkait.');
+        }
+
+        if (Submission::where('letter_type_id', $letterType->id)->exists()) {
+            return redirect()->route('letter-types.index')
+                ->with('error', 'Jenis surat tidak bisa dihapus karena masih memiliki permohonan terkait.');
+        }
+
+        if ($letterType->templates()->exists()) {
+            return redirect()->route('letter-types.index')
+                ->with('error', 'Jenis surat tidak bisa dihapus karena masih memiliki template terkait.');
+        }
+
         $letterType->delete();
 
         return redirect()->route('letter-types.index')

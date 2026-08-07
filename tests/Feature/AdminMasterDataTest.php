@@ -432,4 +432,55 @@ class AdminMasterDataTest extends TestCase
     {
         $this->get(route('letter-types.index'))->assertRedirect(route('login'));
     }
+
+    public function test_letter_type_with_letters_cannot_be_deleted(): void
+    {
+        $type = LetterType::factory()->create(['code' => 'SKU', 'name' => 'Surat Keterangan']);
+        \App\Models\Letter::factory()->create(['letter_type_id' => $type->id]);
+
+        $this->actingAs($this->user)
+            ->delete(route('letter-types.destroy', $type))
+            ->assertRedirect(route('letter-types.index'))
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id]);
+    }
+
+    public function test_letter_type_with_submissions_cannot_be_deleted(): void
+    {
+        $type = LetterType::factory()->create(['code' => 'SKU', 'name' => 'Surat Keterangan']);
+        \App\Models\Submission::factory()->create(['letter_type_id' => $type->id]);
+
+        $this->actingAs($this->user)
+            ->delete(route('letter-types.destroy', $type))
+            ->assertRedirect(route('letter-types.index'))
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id]);
+    }
+
+    public function test_letter_type_with_templates_cannot_be_deleted(): void
+    {
+        $type = LetterType::factory()->create(['code' => 'SKU', 'name' => 'Surat Keterangan']);
+        LetterTemplate::factory()->create(['letter_type_id' => $type->id]);
+
+        $this->actingAs($this->user)
+            ->delete(route('letter-types.destroy', $type))
+            ->assertRedirect(route('letter-types.index'))
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id]);
+    }
+
+    public function test_empty_letter_type_can_be_deleted(): void
+    {
+        $type = LetterType::factory()->create(['code' => 'SKU', 'name' => 'Surat Keterangan']);
+
+        $this->actingAs($this->user)
+            ->delete(route('letter-types.destroy', $type))
+            ->assertRedirect(route('letter-types.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('letter_types', ['id' => $type->id]);
+    }
 }

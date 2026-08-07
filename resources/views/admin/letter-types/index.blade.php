@@ -11,6 +11,12 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="mb-4 flex justify-end">
                 <a href="{{ route('letter-types.create') }}"
                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
