@@ -45,8 +45,8 @@
                                 <x-input-label for="active" value="Status" />
                                 <select name="active" id="active"
                                         class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
-                                    <option value="1" @selected(old('active', true))>Aktif (ditampilkan)</option>
-                                    <option value="0" @selected(! old('active', true))>Nonaktif (draf)</option>
+                                    <option value="1" @selected(old('active', '1') === '1')>Aktif (ditampilkan)</option>
+                                    <option value="0" @selected(old('active', '1') === '0')>Nonaktif (draf)</option>
                                 </select>
                             </div>
 
