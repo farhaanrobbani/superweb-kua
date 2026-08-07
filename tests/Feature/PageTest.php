@@ -221,6 +221,66 @@ class PageTest extends TestCase
             ->assertSee('Layanan Pernikahan');
     }
 
+    public function test_public_announcements_page_uses_custom_title_and_description(): void
+    {
+        Page::factory()->create([
+            'key' => 'pengumuman',
+            'title' => 'Info & Layanan',
+            'description' => 'Pengumuman resmi KUA.',
+            'active' => true,
+        ]);
+
+        $this->get(route('pengumuman.index'))
+            ->assertOk()
+            ->assertSee('Info & Layanan')
+            ->assertSee('Pengumuman resmi KUA.');
+    }
+
+    public function test_public_staff_page_uses_custom_title_and_description(): void
+    {
+        Page::factory()->create([
+            'key' => 'pegawai',
+            'title' => 'Profil Pegawai',
+            'description' => 'Daftar pegawai KUA.',
+            'active' => true,
+        ]);
+
+        $this->get(route('pegawai.index'))
+            ->assertOk()
+            ->assertSee('Profil Pegawai')
+            ->assertSee('Daftar pegawai KUA.');
+    }
+
+    public function test_public_unduhan_page_uses_custom_title_and_description(): void
+    {
+        Page::factory()->create([
+            'key' => 'unduhan',
+            'title' => 'Berkas & Formulir',
+            'description' => 'Unduh berkas resmi di sini.',
+            'active' => true,
+        ]);
+
+        $this->get(route('unduhan.index'))
+            ->assertOk()
+            ->assertSee('Berkas & Formulir')
+            ->assertSee('Unduh berkas resmi di sini.');
+    }
+
+    public function test_public_pages_fall_back_to_default_titles_when_empty(): void
+    {
+        $this->get(route('pengumuman.index'))
+            ->assertOk()
+            ->assertSee('Pengumuman');
+
+        $this->get(route('pegawai.index'))
+            ->assertOk()
+            ->assertSee('Struktur Organisasi');
+
+        $this->get(route('unduhan.index'))
+            ->assertOk()
+            ->assertSee('Download Center');
+    }
+
     public function test_inactive_page_is_not_used_in_public(): void
     {
         $this->seed(PageSeeder::class);
