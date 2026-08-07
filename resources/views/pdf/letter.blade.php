@@ -46,7 +46,7 @@
             <tr>
                 @if ($hasLogo)
                     <td class="logo">
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->path($selectedLogo) }}">
+                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->path($selectedLogo) }}" alt="Logo {{ $settings['instansi'] ?? 'KUA' }}">
                     </td>
                 @endif
                 <td class="teks">
