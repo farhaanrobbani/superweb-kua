@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\DownloadItemController;
+use App\Http\Controllers\Admin\KuaDailyController;
 use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffPublicController;
+use App\Http\Controllers\StaffActivityController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +80,12 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/kelola-kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran.index');
     Route::get('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'show'])->name('kritik-saran.show');
     Route::delete('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'destroy'])->name('kritik-saran.destroy');
+
+    Route::get('/lapkin/kegiatan', [StaffActivityController::class, 'index'])->name('kegiatan.index');
+    Route::post('/lapkin/kegiatan', [StaffActivityController::class, 'store'])->name('kegiatan.store');
+    Route::get('/lapkin/kegiatan/{kegiatan}/edit', [StaffActivityController::class, 'edit'])->name('kegiatan.edit');
+    Route::put('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'update'])->name('kegiatan.update');
+    Route::delete('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'destroy'])->name('kegiatan.destroy');
 });
 
 Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
@@ -103,6 +111,13 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
+
+    Route::get('/lapkin/master', [KuaDailyController::class, 'index'])->name('kua-daily.index');
+    Route::get('/lapkin/master/create', [KuaDailyController::class, 'create'])->name('kua-daily.create');
+    Route::post('/lapkin/master', [KuaDailyController::class, 'store'])->name('kua-daily.store');
+    Route::get('/lapkin/master/{kuaDaily}/edit', [KuaDailyController::class, 'edit'])->name('kua-daily.edit');
+    Route::put('/lapkin/master/{kuaDaily}', [KuaDailyController::class, 'update'])->name('kua-daily.update');
+    Route::delete('/lapkin/master/{kuaDaily}', [KuaDailyController::class, 'destroy'])->name('kua-daily.destroy');
 });
 
 Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function () {
