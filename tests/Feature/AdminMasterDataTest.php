@@ -425,26 +425,27 @@ class AdminMasterDataTest extends TestCase
             ->assertSee('Pengaturan Web')
             ->assertSee('Instansi')
             ->assertSee('Surat')
-            ->assertDontSee('Tambah Layanan')
+            ->assertSee('Layanan')
             ->assertSee('Media Sosial');
     }
 
-    public function test_service_management_moved_out_of_kua_settings(): void
+    public function test_layanan_delete_form_is_not_nested_inside_settings_form(): void
     {
         Service::factory()->create(['name' => 'Contoh Layanan']);
 
-        $settingsHtml = $this->actingAs($this->user)
+        $html = $this->actingAs($this->user)
             ->get(route('kua-settings.edit'))
             ->assertOk()
             ->getContent();
 
-        $this->assertStringNotContainsString('_method" value="DELETE"', $settingsHtml, 'Form hapus layanan masih ada di halaman pengaturan.');
+        $formStart = strpos($html, route('kua-settings.update'));
+        $formClose = strpos($html, '</form>', $formStart);
+        $deleteInput = strpos($html, '_method" value="DELETE"', $formStart);
 
-        $this->actingAs($this->user)
-            ->get(route('services.index'))
-            ->assertOk()
-            ->assertSee('Contoh Layanan')
-            ->assertSee('Tambah Layanan');
+        $this->assertNotFalse($formStart, 'Form pengaturan tidak ditemukan.');
+        $this->assertNotFalse($formClose, 'Penutup form pengaturan tidak ditemukan.');
+        $this->assertNotFalse($deleteInput, 'Form hapus layanan tidak ditemukan.');
+        $this->assertLessThan($deleteInput, $formClose, 'Form hapus layanan masih bersarang di dalam form pengaturan.');
     }
 
     public function test_staff_can_update_kua_settings(): void
