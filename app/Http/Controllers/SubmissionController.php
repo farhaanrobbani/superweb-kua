@@ -85,7 +85,9 @@ class SubmissionController extends Controller
             'token' => Str::random(40),
         ]);
 
-        return redirect()->route('permohonan.sukses')->with('unduh', $submission->token);
+        session(['permohonan_unduh' => $submission->token]);
+
+        return redirect()->route('permohonan.sukses');
     }
 
     public function download(string $token)

@@ -26,8 +26,8 @@
                 Silakan datang ke kantor KUA dengan membawa dokumen persyaratan atau menunggu
                 konfirmasi dari petugas melalui kontak yang Anda berikan.
             </p>
-            @if (session('unduh'))
-                <a href="{{ route('permohonan.download', session('unduh')) }}"
+            @if (session('permohonan_unduh'))
+                <a href="{{ route('permohonan.download', session('permohonan_unduh')) }}"
                    class="inline-block mt-6 rounded-md bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700">
                     Download Surat Permohonan (PDF)
                 </a>
