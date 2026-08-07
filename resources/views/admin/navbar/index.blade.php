@@ -28,8 +28,18 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $item->sort_order }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">
                                     <span class="font-medium">{{ $item->label }}</span>
+                                    @if ($item->has_submenu)
+                                        <span class="ml-2 rounded-full bg-teal-100 text-teal-700 px-2 py-0.5 text-xs">sub menu</span>
+                                    @endif
+                                    @if ($item->description)
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->description }}</p>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $item->url ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $item->url ?? '-' }}
+                                    @if ($item->embed_url)
+                                        <span class="ml-2 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-sans">embed</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $item->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                         {{ $item->active ? 'Aktif' : 'Nonaktif' }}
@@ -66,8 +76,15 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $item->sort_order }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">
                                     <span class="font-medium">{{ $item->label }}</span>
+                                    @if ($item->description)
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->description }}</p>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $item->url ?? '-' }}</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $item->url ?? '-' }}
+                                    @if ($item->embed_url)
+                                        <span class="ml-2 rounded-full bg-purple-100 text-purple-700 px-2 py-0.5 text-xs font-sans">embed</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2 py-1 text-xs rounded-full {{ $item->active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' }}">
                                         {{ $item->active ? 'Aktif' : 'Nonaktif' }}
