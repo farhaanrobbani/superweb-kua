@@ -11,14 +11,32 @@ class KuaSetting extends Model
 {
     public static function get(string $key, ?string $default = null): ?string
     {
-        $setting = static::where('key', $key)->first();
+        $settings = static::cachedAll();
 
-        return $setting?->value ?? $default;
+        return $settings[$key] ?? $default;
     }
 
     public static function set(string $key, ?string $value): void
     {
         static::updateOrCreate(['key' => $key], ['value' => $value]);
+
+        if (app()->bound('kua_settings.cache')) {
+            $cache = app('kua_settings.cache');
+            $cache[$key] = $value;
+            app()->instance('kua_settings.cache', $cache);
+        }
+    }
+
+    private static function cachedAll(): array
+    {
+        if (app()->bound('kua_settings.cache')) {
+            return app('kua_settings.cache');
+        }
+
+        $settings = static::pluck('value', 'key')->all();
+        app()->instance('kua_settings.cache', $settings);
+
+        return $settings;
     }
 
     public static function logoUrl(): ?string
