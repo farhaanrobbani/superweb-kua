@@ -10,7 +10,7 @@ class MarriageServicePublicController extends Controller
     public function index(): View
     {
         return view('public.pernikahan.index', [
-            'services' => MarriageService::active()->ordered()->get(),
+            'marriageServices' => MarriageService::active()->ordered()->get(),
         ]);
     }
 }

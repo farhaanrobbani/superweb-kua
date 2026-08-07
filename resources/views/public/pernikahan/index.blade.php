@@ -11,7 +11,7 @@
         </p>
 
         <div class="mt-8 space-y-4">
-            @forelse ($services as $service)
+            @forelse ($marriageServices as $service)
                 <div class="overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm" x-data="{ open: false }">
                     <button type="button" @click="open = !open"
                             class="flex w-full items-center gap-4 px-5 py-4 text-start transition hover:bg-teal-50/50">

@@ -144,6 +144,17 @@ class MarriageServiceTest extends TestCase
             ->assertDontSee('Ajukan Permohonan');
     }
 
+    public function test_public_pernikahan_header_keeps_layanan_services(): void
+    {
+        \App\Models\Service::factory()->create(['name' => 'Layanan Asli', 'url' => '/permohonan', 'active' => true]);
+        MarriageService::factory()->create(['name' => 'Topik Nikah', 'active' => true]);
+
+        $this->get(route('pernikahan.index'))
+            ->assertOk()
+            ->assertSee('Layanan Asli')
+            ->assertSee('Topik Nikah');
+    }
+
     public function test_seeder_creates_ten_topics_idempotently(): void
     {
         $this->seed(MarriageServiceSeeder::class);
