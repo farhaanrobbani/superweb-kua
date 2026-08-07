@@ -76,8 +76,6 @@
                 <div class="text-sm text-gray-800 bg-gray-50 rounded-md p-3">{!! $letter->renderHeader() !!}</div>
             </div>
 
-            </div>
-
             <div class="flex flex-wrap items-center gap-3">
                 @if ($letter->status === \App\Models\Letter::STATUS_DRAFT)
                     <form method="POST" action="{{ route('letters.ajukan', $letter) }}">
