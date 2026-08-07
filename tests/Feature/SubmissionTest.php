@@ -79,9 +79,13 @@ class SubmissionTest extends TestCase
         $this->get(route('permohonan.sukses'))
             ->assertOk()
             ->assertSee('Download Surat Permohonan (PDF)');
+
+        $this->get(route('permohonan.sukses'))
+            ->assertOk()
+            ->assertSee('Download Surat Permohonan (PDF)');
     }
 
-    public function test_sukses_page_hides_download_button_without_flash(): void
+    public function test_sukses_page_hides_download_button_without_session(): void
     {
         $this->get(route('permohonan.sukses'))
             ->assertOk()
