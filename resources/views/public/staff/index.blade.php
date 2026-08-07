@@ -3,16 +3,10 @@
 @section('title', 'Daftar Pegawai — '.kua_setting('instansi', 'KUA'))
 
 @section('content')
-    @php
-        $page = kua_page('daftar-pegawai');
-    @endphp
     <section class="mx-auto max-w-5xl px-6 pb-16 pt-14">
         <div class="text-center">
             <p class="text-sm font-medium uppercase tracking-widest text-teal-700">Kantor Urusan Agama {{ kua_setting('kecamatan') }}</p>
-            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">{{ $page?->title ?: 'Struktur Organisasi' }}</h1>
-            @if ($page?->description)
-                <p class="mx-auto mt-2 max-w-2xl text-sm text-[#1b1b1870]">{{ $page->description }}</p>
-            @endif
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Struktur Organisasi</h1>
         </div>
 
         @forelse ($groups as $bagian => $members)
@@ -80,12 +74,6 @@
                     </tbody>
                 </table>
             </div>
-        </section>
-    @endif
-
-    @if ($page && $page->active && trim((string) $page->content) !== '')
-        <section class="mx-auto max-w-5xl px-6 pb-16 prose-sm text-sm text-[#1b1b18]">
-            {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
         </section>
     @endif
 @endsection

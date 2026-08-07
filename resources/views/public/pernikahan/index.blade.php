@@ -3,16 +3,12 @@
 @section('title', kua_setting('instansi', 'Surat Digital KUA').' — Layanan Pernikahan')
 
 @section('content')
-    @php
-        $page = kua_page('pernikahan');
-    @endphp
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <h1 class="text-center text-2xl font-bold">{{ $page?->title ?: 'Layanan Pernikahan' }}</h1>
-        @if ($page?->description || ! $page)
-            <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">
-                {{ $page?->description ?: 'Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan pernikahan di KUA. Beberapa layanan dapat diajukan secara online melalui tombol ajukan.' }}
-            </p>
-        @endif
+        <h1 class="text-center text-2xl font-bold">Layanan Pernikahan</h1>
+        <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">
+            Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan pernikahan di KUA.
+            Beberapa layanan dapat diajukan secara online melalui tombol ajukan.
+        </p>
 
         <div class="mt-8 space-y-4">
             @forelse ($marriageServices as $service)
@@ -76,11 +72,5 @@
                 </div>
             @endforelse
         </div>
-
-        @if ($page && $page->active && trim((string) $page->content) !== '')
-            <div class="mt-10 prose-sm text-sm text-[#1b1b18]">
-                {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
-            </div>
-        @endif
     </section>
 @endsection

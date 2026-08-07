@@ -15,9 +15,7 @@
         @include('partials.public-header')
 
         <main>
-            @php
-                $hasBg = ! empty($kua['bg_url']);
-            @endphp
+            @php($hasBg = ! empty($kua['bg_url']))
             <section @if ($hasBg) style="background-image: url('{{ $kua['bg_url'] }}')" @endif
                      class="relative @if ($hasBg) bg-cover bg-center @else bg-gradient-to-br from-teal-50 via-emerald-50 to-white @endif">
                 @if ($hasBg)
@@ -82,17 +80,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 </section>
             @endif
         </main>
-
-        @php
-            $page = kua_page('beranda');
-        @endphp
-        @if ($page && $page->active && trim((string) $page->content) !== '')
-            <section class="mx-auto max-w-5xl px-6 pb-16">
-                <div class="prose-sm text-sm text-[#1b1b18]">
-                    {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
-                </div>
-            </section>
-        @endif
 
         @include('partials.public-footer')
     </body>

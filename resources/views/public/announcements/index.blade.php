@@ -3,14 +3,8 @@
 @section('title', kua_setting('instansi', 'Surat Digital KUA').' — Pengumuman')
 
 @section('content')
-    @php
-        $page = kua_page('pengumuman');
-    @endphp
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <h1 class="text-center text-2xl font-bold">{{ $page?->title ?: 'Pengumuman' }}</h1>
-        @if ($page?->description)
-            <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">{{ $page->description }}</p>
-        @endif
+        <h1 class="text-center text-2xl font-bold">Pengumuman</h1>
 
         <form method="GET" action="{{ route('pengumuman.index') }}" class="mx-auto mt-6 flex max-w-md gap-2">
             <input type="text" name="q" value="{{ $q }}"
@@ -57,11 +51,5 @@
         </div>
 
         <div class="mt-6">{{ $announcements->links() }}</div>
-
-        @if ($page && $page->active && trim((string) $page->content) !== '')
-            <div class="mt-10 prose-sm text-sm text-[#1b1b18]">
-                {!! \App\Support\HtmlSanitizer::normalize($page->content) !!}
-            </div>
-        @endif
     </section>
 @endsection
