@@ -1,10 +1,13 @@
 @extends('layouts.public')
 
-@section('title', kua_setting('instansi', 'Surat Digital KUA').' — Download Center')
+@section('title', ($page->title ?? 'Download Center').' — '.kua_setting('instansi', 'Surat Digital KUA'))
 
 @section('content')
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <h1 class="text-center text-2xl font-bold">Download Center</h1>
+        <h1 class="text-center text-2xl font-bold">{{ $page->title ?? 'Download Center' }}</h1>
+        @if ($page?->description)
+            <p class="mt-2 text-center text-sm text-[#1b1b1870]">{{ $page->description }}</p>
+        @endif
         <p class="mt-2 text-center text-sm text-[#1b1b1870]">{{ $total }} berkas tersedia untuk diunduh.</p>
 
         @forelse ($categories as $category => $items)

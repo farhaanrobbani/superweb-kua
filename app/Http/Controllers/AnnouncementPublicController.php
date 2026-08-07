@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -25,6 +26,7 @@ class AnnouncementPublicController extends Controller
         return view('public.announcements.index', [
             'announcements' => $announcements,
             'q' => $query,
+            'page' => $this->page('pengumuman'),
         ]);
     }
 
@@ -36,5 +38,14 @@ class AnnouncementPublicController extends Controller
         );
 
         return view('public.announcements.show', compact('announcement'));
+    }
+
+    private function page(string $key): ?Page
+    {
+        try {
+            return Page::query()->where('key', $key)->active()->first();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 }

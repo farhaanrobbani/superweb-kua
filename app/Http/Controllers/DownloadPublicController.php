@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DownloadItem;
+use App\Models\Page;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -16,9 +17,16 @@ class DownloadPublicController extends Controller
 
         $categories = $items->groupBy(fn (DownloadItem $item) => trim((string) $item->category) !== '' ? $item->category : 'Lainnya');
 
+        try {
+            $page = Page::query()->where('key', 'unduhan')->active()->first();
+        } catch (\Throwable) {
+            $page = null;
+        }
+
         return view('public.unduhan.index', [
             'categories' => $categories,
             'total' => $items->count(),
+            'page' => $page,
         ]);
     }
 

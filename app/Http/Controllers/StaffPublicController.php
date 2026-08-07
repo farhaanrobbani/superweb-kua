@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use App\Models\Staff;
 use Illuminate\View\View;
 
@@ -13,9 +14,16 @@ class StaffPublicController extends Controller
             return $staff->bagian ?: 'Pegawai';
         });
 
+        try {
+            $page = Page::query()->where('key', 'pegawai')->active()->first();
+        } catch (\Throwable) {
+            $page = null;
+        }
+
         return view('public.staff.index', [
             'groups' => $grouped,
             'all' => Staff::active()->ordered()->get(),
+            'page' => $page,
         ]);
     }
 }
