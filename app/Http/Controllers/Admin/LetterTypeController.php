@@ -80,6 +80,7 @@ class LetterTypeController extends Controller
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:1000'],
             'permohonan_body' => ['nullable', 'string'],
+            'permohonan_informasi' => ['nullable', 'string', 'max:2000'],
             'permohonan_fields' => ['nullable', 'array'],
             'permohonan_fields.*' => ['string', 'max:50'],
             'fields' => ['nullable', 'array'],
