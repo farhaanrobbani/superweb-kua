@@ -3,6 +3,10 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Edit Topik Pernikahan</h2>
     </x-slot>
 
+    @push('editor')
+        @vite(['resources/js/editor.js'])
+    @endpush
+
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             @if ($errors->any())
@@ -31,24 +35,15 @@
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
-                        <div class="grid gap-5 sm:grid-cols-2">
-                            <div>
-                                <x-input-label for="target_url" value="URL Tombol Ajukan" />
-                                <x-text-input id="target_url" name="target_url" maxlength="255"
-                                              value="{{ old('target_url', $marriageService->target_url) }}" class="mt-1 block w-full" />
-                                <p class="text-xs text-gray-500 mt-1">Kosongkan jika topik belum punya alur permohonan online.</p>
-                                <x-input-error :messages="$errors->get('target_url')" class="mt-2" />
-                            </div>
-                            <div>
-                                <x-input-label for="icon" value="Ikon" />
-                                <select name="icon" id="icon"
-                                        class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
-                                    @foreach (\App\Http\Controllers\Admin\MarriageServiceController::ICONS as $key => $label)
-                                        <option value="{{ $key }}" @selected(old('icon', $marriageService->icon ?: 'heart') === $key)>{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error :messages="$errors->get('icon')" class="mt-2" />
-                            </div>
+                        <div>
+                            <x-input-label for="icon" value="Ikon" />
+                            <select name="icon" id="icon"
+                                    class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
+                                @foreach (\App\Http\Controllers\Admin\MarriageServiceController::ICONS as $key => $label)
+                                    <option value="{{ $key }}" @selected(old('icon', $marriageService->icon ?: 'heart') === $key)>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('icon')" class="mt-2" />
                         </div>
                     </div>
                 </div>
@@ -81,23 +76,26 @@
                         <p class="text-xs text-gray-500 -mt-3">Kosongkan untuk memakai judul bawaan.</p>
 
                         <div>
-                            <x-input-label for="persyaratan" value="Persyaratan (satu per baris)" />
-                            <textarea id="persyaratan" name="persyaratan" rows="7" maxlength="5000"
-                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm font-mono">{{ old('persyaratan', $marriageService->persyaratan) }}</textarea>
+                            <x-input-label for="persyaratan" value="Persyaratan" />
+                            <textarea id="persyaratan" name="persyaratan" data-editor rows="8"
+                                      data-upload-url="{{ route('announcements.gambar') }}"
+                                      class="block w-full">{{ old('persyaratan', $marriageService->persyaratan) }}</textarea>
                             <x-input-error :messages="$errors->get('persyaratan')" class="mt-2" />
                         </div>
 
                         <div>
-                            <x-input-label for="alur" value="Alur / Langkah (satu per baris)" />
-                            <textarea id="alur" name="alur" rows="7" maxlength="5000"
-                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm font-mono">{{ old('alur', $marriageService->alur) }}</textarea>
+                            <x-input-label for="alur" value="Alur / Langkah" />
+                            <textarea id="alur" name="alur" data-editor rows="8"
+                                      data-upload-url="{{ route('announcements.gambar') }}"
+                                      class="block w-full">{{ old('alur', $marriageService->alur) }}</textarea>
                             <x-input-error :messages="$errors->get('alur')" class="mt-2" />
                         </div>
 
                         <div>
-                            <x-input-label for="sop" value="SOP / Prosedur Petugas (satu per baris)" />
-                            <textarea id="sop" name="sop" rows="6" maxlength="5000"
-                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm font-mono">{{ old('sop', $marriageService->sop) }}</textarea>
+                            <x-input-label for="sop" value="SOP / Prosedur Petugas" />
+                            <textarea id="sop" name="sop" data-editor rows="8"
+                                      data-upload-url="{{ route('announcements.gambar') }}"
+                                      class="block w-full">{{ old('sop', $marriageService->sop) }}</textarea>
                             <x-input-error :messages="$errors->get('sop')" class="mt-2" />
                         </div>
                     </div>

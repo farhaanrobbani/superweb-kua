@@ -38,60 +38,30 @@
                          x-transition:leave-start="opacity-100"
                          x-transition:leave-end="opacity-0"
                          class="border-t border-teal-100 px-5 pt-5 pb-7 sm:px-6">
-                        @php
-                            $persyaratan = preg_split('/\r\n|\r|\n/', (string) $service->persyaratan, -1, PREG_SPLIT_NO_EMPTY);
-                            $alur = preg_split('/\r\n|\r|\n/', (string) $service->alur, -1, PREG_SPLIT_NO_EMPTY);
-                            $sop = preg_split('/\r\n|\r|\n/', (string) $service->sop, -1, PREG_SPLIT_NO_EMPTY);
-                        @endphp
-
-                        @if ($persyaratan)
+                        @if (trim((string) $service->persyaratan) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->persyaratan_label ?: 'Persyaratan' }}</h3>
-                                <ul class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
-                                    @foreach ($persyaratan as $syarat)
-                                        <li class="flex gap-2">
-                                            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-600"></span>
-                                            <span>{{ $syarat }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                    {!! \App\Support\HtmlSanitizer::normalize($service->persyaratan) !!}
+                                </div>
                             </div>
                         @endif
 
-                        @if ($alur)
+                        @if (trim((string) $service->alur) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->alur_label ?: 'Alur' }}</h3>
-                                <ol class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
-                                    @foreach ($alur as $i => $langkah)
-                                        <li class="flex gap-3">
-                                            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-teal-100 text-xs font-semibold text-teal-700">{{ $i + 1 }}</span>
-                                            <span>{{ $langkah }}</span>
-                                        </li>
-                                    @endforeach
-                                </ol>
+                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                    {!! \App\Support\HtmlSanitizer::normalize($service->alur) !!}
+                                </div>
                             </div>
                         @endif
 
-                        @if ($sop)
+                        @if (trim((string) $service->sop) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->sop_label ?: 'SOP' }}</h3>
-                                <ul class="mt-2 space-y-1.5 text-sm text-[#1b1b18]">
-                                    @foreach ($sop as $prosedur)
-                                        <li class="flex gap-2">
-                                            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-400"></span>
-                                            <span>{{ $prosedur }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
-                        @if ($service->targetUrl())
-                            <div class="mt-4">
-                                <a href="{{ $service->targetUrl() }}"
-                                   class="inline-flex items-center rounded-md bg-teal-700 px-6 py-2.5 text-sm font-semibold uppercase tracking-wide text-white hover:bg-teal-800">
-                                    Ajukan Permohonan
-                                </a>
+                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                    {!! \App\Support\HtmlSanitizer::normalize($service->sop) !!}
+                                </div>
                             </div>
                         @endif
                     </div>

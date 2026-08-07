@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'slug', 'description', 'persyaratan', 'alur', 'sop', 'persyaratan_label', 'alur_label', 'sop_label', 'target_url', 'icon', 'sort_order', 'active'])]
+#[Fillable(['name', 'slug', 'description', 'persyaratan', 'alur', 'sop', 'persyaratan_label', 'alur_label', 'sop_label', 'icon', 'sort_order', 'active'])]
 class MarriageService extends Model
 {
     use HasFactory;
@@ -20,11 +20,6 @@ class MarriageService extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderBy('id');
-    }
-
-    public function targetUrl(): ?string
-    {
-        return $this->target_url ? url($this->target_url) : null;
     }
 
     protected function casts(): array

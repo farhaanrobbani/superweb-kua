@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarriageService;
+use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -63,17 +64,20 @@ class MarriageServiceController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'persyaratan' => ['nullable', 'string', 'max:5000'],
-            'alur' => ['nullable', 'string', 'max:5000'],
-            'sop' => ['nullable', 'string', 'max:5000'],
+            'persyaratan' => ['nullable', 'string', 'max:50000'],
+            'alur' => ['nullable', 'string', 'max:50000'],
+            'sop' => ['nullable', 'string', 'max:50000'],
             'persyaratan_label' => ['nullable', 'string', 'max:50'],
             'alur_label' => ['nullable', 'string', 'max:50'],
             'sop_label' => ['nullable', 'string', 'max:50'],
-            'target_url' => ['nullable', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:50', \Illuminate\Validation\Rule::in(array_keys(self::ICONS))],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'active' => ['sometimes', 'boolean'],
         ]);
+
+        foreach (['persyaratan', 'alur', 'sop'] as $field) {
+            $data[$field] = HtmlSanitizer::normalize($data[$field] ?? null);
+        }
 
         $data['active'] = $request->boolean('active');
         $data['sort_order'] = $request->integer('sort_order');

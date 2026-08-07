@@ -29,7 +29,6 @@ class MarriageServiceTest extends TestCase
                 'persyaratan' => "Syarat satu\nSyarat dua",
                 'alur' => "Langkah satu\nLangkah dua",
                 'sop' => "Prosedur satu",
-                'target_url' => '/permohonan?jenis=SPD',
                 'icon' => 'heart',
                 'sort_order' => 1,
                 'active' => 1,
@@ -39,7 +38,6 @@ class MarriageServiceTest extends TestCase
         $this->assertDatabaseHas('marriage_services', [
             'name' => 'Pendaftaran Nikah',
             'slug' => 'pendaftaran-nikah',
-            'target_url' => '/permohonan?jenis=SPD',
         ]);
     }
 
@@ -63,7 +61,6 @@ class MarriageServiceTest extends TestCase
                 'persyaratan' => 'Syarat baru',
                 'alur' => "Alur satu\nAlur dua",
                 'sop' => 'SOP baru',
-                'target_url' => '/cari-akta',
                 'icon' => 'check',
                 'active' => 1,
             ])
@@ -73,7 +70,6 @@ class MarriageServiceTest extends TestCase
             'id' => $service->id,
             'name' => 'Baru',
             'slug' => 'baru',
-            'target_url' => '/cari-akta',
         ]);
     }
 
@@ -103,14 +99,13 @@ class MarriageServiceTest extends TestCase
         $this->assertStringBefore($response->getContent(), 'Aktif 2', 'Aktif 1');
     }
 
-    public function test_public_index_renders_sections_and_button(): void
+    public function test_public_index_renders_sections_as_html(): void
     {
-        $service = MarriageService::factory()->create([
+        MarriageService::factory()->create([
             'name' => 'Duplikat Akta Nikah',
-            'persyaratan' => "KTP\nKK",
-            'alur' => "Ajukan online\nDatang ke KUA",
-            'sop' => "Periksa berkas\nTerbitkan duplikat",
-            'target_url' => '/permohonan?jenis=SPD',
+            'persyaratan' => "<p>KTP</p><p>KK</p>",
+            'alur' => "<p>Ajukan online</p><p>Datang ke KUA</p>",
+            'sop' => "<p>Periksa berkas</p><p>Terbitkan duplikat</p>",
             'active' => true,
         ]);
 
@@ -122,8 +117,40 @@ class MarriageServiceTest extends TestCase
             ->assertSee('Ajukan online')
             ->assertSee('SOP')
             ->assertSee('Periksa berkas')
-            ->assertSee('Ajukan Permohonan')
-            ->assertSee('permohonan?jenis=SPD', false);
+            ->assertDontSee('Ajukan Permohonan');
+    }
+
+    public function test_public_index_renders_links_inside_content(): void
+    {
+        MarriageService::factory()->create([
+            'name' => 'Cari Akta',
+            'persyaratan' => '<p>Silakan <a href="https://example.com/form">klik di sini</a> untuk mengisi formulir.</p>',
+            'alur' => null,
+            'sop' => null,
+            'active' => true,
+        ]);
+
+        $this->get(route('pernikahan.index'))
+            ->assertOk()
+            ->assertSee('klik di sini')
+            ->assertSee('href="https://example.com/form"', false);
+    }
+
+    public function test_content_is_sanitized_on_store(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('marriage-services.store'), [
+                'name' => 'Sanitasi',
+                'persyaratan' => '<script>alert(1)</script><p>Berikut <a href="https://example.com/form">formulir</a></p>',
+                'active' => 1,
+            ])
+            ->assertRedirect(route('marriage-services.index'));
+
+        $item = MarriageService::where('name', 'Sanitasi')->first();
+
+        $this->assertStringNotContainsString('<script', $item->persyaratan);
+        $this->assertStringContainsString('href="https://example.com/form"', $item->persyaratan);
+        $this->assertStringContainsString('formulir', $item->persyaratan);
     }
 
     public function test_public_index_shows_no_button_when_no_target_url(): void
@@ -133,7 +160,6 @@ class MarriageServiceTest extends TestCase
             'persyaratan' => 'Buku nikah',
             'alur' => 'Datang ke KUA',
             'sop' => null,
-            'target_url' => null,
             'active' => true,
         ]);
 
@@ -206,9 +232,9 @@ class MarriageServiceTest extends TestCase
 
         $this->assertSame(10, MarriageService::count());
         $this->assertDatabaseHas('marriage_services', ['slug' => 'pendaftaran-nikah']);
-        $this->assertDatabaseHas('marriage_services', ['slug' => 'cari-akta', 'target_url' => '/cari-akta']);
-        $this->assertDatabaseHas('marriage_services', ['slug' => 'duplikat-akta-nikah', 'target_url' => '/permohonan?jenis=SPD']);
-        $this->assertDatabaseHas('marriage_services', ['slug' => 'legalisir', 'target_url' => null]);
+        $this->assertDatabaseHas('marriage_services', ['slug' => 'cari-akta']);
+        $this->assertDatabaseHas('marriage_services', ['slug' => 'duplikat-akta-nikah']);
+        $this->assertDatabaseHas('marriage_services', ['slug' => 'legalisir']);
     }
 
     private function assertStringBefore(string $haystack, string $needle, string $otherNeedle): void

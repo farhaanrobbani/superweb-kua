@@ -18,7 +18,6 @@ class MarriageServiceFactory extends Factory
             'persyaratan' => "Syarat satu\nSyarat dua\nSyarat tiga",
             'alur' => "Langkah satu\nLangkah dua\nLangkah tiga",
             'sop' => "Prosedur satu\nProsedur dua",
-            'target_url' => null,
             'icon' => 'heart',
             'sort_order' => 0,
             'active' => true,
