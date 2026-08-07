@@ -110,6 +110,12 @@
                         </div>
                     </form>
                 </div>
+
+                @if ($selectedType->permohonan_informasi)
+                    <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-sm leading-relaxed text-gray-600">
+                        {!! nl2br(e($selectedType->permohonan_informasi)) !!}
+                    </div>
+                @endif
             @endif
         </div>
     </main>
