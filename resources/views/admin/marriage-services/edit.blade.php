@@ -122,7 +122,7 @@
 
                         <div class="pt-2 border-t border-gray-100 flex items-center gap-3">
                             <x-primary-button>Simpan</x-primary-button>
-                            <a href="{{ route('marriage-services.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                            <a href="{{ route('pages.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
                         </div>
                     </div>
                 </div>

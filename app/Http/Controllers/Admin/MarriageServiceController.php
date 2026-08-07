@@ -7,18 +7,10 @@ use App\Models\MarriageService;
 use App\Support\HtmlSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
 
 class MarriageServiceController extends Controller
 {
-    public function index(): View
-    {
-        return view('admin.marriage-services.index', [
-            'marriageServices' => MarriageService::ordered()->paginate(15),
-        ]);
-    }
-
     public function create(): View
     {
         return view('admin.marriage-services.create');
@@ -31,7 +23,7 @@ class MarriageServiceController extends Controller
 
         MarriageService::create($data);
 
-        return redirect()->route('marriage-services.index')
+        return redirect()->route('pages.index')
             ->with('success', 'Topik berhasil ditambahkan.');
     }
 
@@ -47,7 +39,7 @@ class MarriageServiceController extends Controller
 
         $marriageService->update($data);
 
-        return redirect()->route('marriage-services.index')
+        return redirect()->route('pages.index')
             ->with('success', 'Topik berhasil diperbarui.');
     }
 
@@ -55,7 +47,7 @@ class MarriageServiceController extends Controller
     {
         $marriageService->delete();
 
-        return redirect()->route('marriage-services.index')
+        return redirect()->route('pages.index')
             ->with('success', 'Topik berhasil dihapus.');
     }
 
