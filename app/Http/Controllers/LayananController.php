@@ -45,6 +45,9 @@ class LayananController extends Controller
             $page = (object) ['title' => $defaultTitle, 'description' => null, 'embed_url' => null];
         }
 
-        return view('public.layanan.placeholder', compact('page'));
+        return view('public.layanan.placeholder', [
+            'page' => $page,
+            'defaultTitle' => $defaultTitle,
+        ]);
     }
 }
