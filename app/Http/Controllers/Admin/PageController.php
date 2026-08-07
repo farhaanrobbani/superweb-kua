@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarriageService;
+use App\Models\NavbarItem;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,20 @@ class PageController extends Controller
 {
     public function index(): View
     {
-        $pages = Page::active()->orderBy('id')->get();
+        $pages = collect();
+
+        foreach (NavbarItem::query()->active()->ordered()->get() as $item) {
+            $page = Page::firstOrCreate(
+                ['key' => $item->key],
+                [
+                    'title' => $item->label,
+                    'active' => true,
+                ]
+            );
+            $page->navbar_order = $item->sort_order;
+
+            $pages->push($page);
+        }
 
         $activeKey = $pages->contains(fn (Page $page) => $page->key === request('tab'))
             ? request('tab')
