@@ -41,7 +41,7 @@ class LetterController extends Controller
             'letters' => $query->paginate(15)->withQueryString(),
             'letterTypes' => LetterType::orderBy('name')->get(),
             'statuses' => Letter::statuses(),
-            'years' => Letter::query()->orderBy('created_at')->get()->map(fn ($l) => $l->created_at->year)->unique()->values()->reverse()->values(),
+            'years' => Letter::query()->select('created_at')->pluck('created_at')->map(fn ($d) => substr((string) $d, 0, 4))->unique()->sortDesc()->values(),
         ]);
     }
 
