@@ -44,7 +44,6 @@
                 </div>
             </div>
             <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
-            <a href="{{ route('unduhan.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Download Center</a>
             <div class="relative" @mouseenter="tentang = true" @mouseleave="tentang = false">
                 <button type="button" @click="tentang = !tentang"
                         class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700"
@@ -64,6 +63,7 @@
                      x-cloak
                      class="absolute start-1/2 mt-2 w-56 -translate-x-1/2 rounded-lg border border-teal-100 bg-white p-2 shadow-lg">
                     <a href="{{ route('pegawai.index') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Daftar Pegawai</a>
+                    <a href="{{ route('unduhan.index') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Download Center</a>
                     <a href="{{ route('kritik-saran.create') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Kritik & Saran</a>
                 </div>
             </div>
@@ -78,7 +78,6 @@
             </svg>
         </button>
         <a href="{{ route('pengumuman.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Pengumuman</a>
-        <a href="{{ route('unduhan.index') }}" class="rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700">Download Center</a>
         <button type="button" @click="tentang = !tentang" class="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-teal-800 transition-colors duration-150 hover:bg-teal-50 hover:text-teal-700" :aria-expanded="tentang">
             Tentang Kami
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -116,6 +115,7 @@
              x-cloak
              class="w-full border-t border-teal-100 pt-1">
             <a href="{{ route('pegawai.index') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Daftar Pegawai</a>
+            <a href="{{ route('unduhan.index') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Download Center</a>
             <a href="{{ route('kritik-saran.create') }}" class="block rounded-md px-3 py-2 text-sm font-medium text-[#1b1b18] hover:bg-teal-50">Kritik & Saran</a>
         </div>
     </nav>

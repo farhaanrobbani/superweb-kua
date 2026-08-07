@@ -29,7 +29,7 @@
                                 @endif
                                 <p class="mt-1 text-xs text-[#1b1b1870]">
                                     @if ($item->file)
-                                        {{ $item->fileName() }} · {{ $item->fileSize() ?? '—' }}
+                                        {{ $item->fileSize() ?? '—' }}
                                     @else
                                         Link eksternal
                                     @endif
