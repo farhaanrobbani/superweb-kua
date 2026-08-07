@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(NavbarItemSeeder::class);
         $this->call(LetterTypeSeeder::class);
         $this->call(MarriageServiceSeeder::class);
+        $this->call(PageSeeder::class);
         $this->call(AnnouncementSeeder::class);
     }
 }
