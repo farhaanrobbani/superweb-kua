@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['key', 'title', 'description', 'active'])]
+#[Fillable(['key', 'title', 'description', 'embed_url', 'active'])]
 class Page extends Model
 {
     use HasFactory;
