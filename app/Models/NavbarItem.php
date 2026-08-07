@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['key', 'label', 'description', 'url', 'icon', 'parent_id', 'sort_order', 'active', 'has_submenu'])]
+#[Fillable(['key', 'label', 'url', 'icon', 'parent_id', 'sort_order', 'active', 'has_submenu'])]
 class NavbarItem extends Model
 {
     use HasFactory;

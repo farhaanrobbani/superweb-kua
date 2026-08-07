@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\NavbarItem;
+use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -29,7 +30,8 @@ class NavbarController extends Controller
         $data = $this->validateData($request);
         $data['key'] = $this->uniqueKey($request->input('label'));
 
-        NavbarItem::create($data);
+        $item = NavbarItem::create($data);
+        $this->syncPage($item);
 
         return redirect()->route('navbar.index')
             ->with('success', 'Item navbar berhasil ditambahkan.');
@@ -43,6 +45,7 @@ class NavbarController extends Controller
     public function update(Request $request, NavbarItem $navbarItem): RedirectResponse
     {
         $navbarItem->update($this->validateData($request));
+        $this->syncPage($navbarItem);
 
         $message = $navbarItem->isSubMenu()
             ? 'Sub menu berhasil diperbarui.'
@@ -54,7 +57,11 @@ class NavbarController extends Controller
 
     public function destroy(NavbarItem $navbarItem): RedirectResponse
     {
+        $keys = collect([$navbarItem->key])
+            ->merge($navbarItem->children()->pluck('key'));
+
         $navbarItem->delete();
+        Page::whereIn('key', $keys)->delete();
 
         return redirect()->route('navbar.index')
             ->with('success', 'Item navbar berhasil dihapus.');
@@ -72,7 +79,8 @@ class NavbarController extends Controller
         $data['parent_id'] = $navbarItem->id;
         $data['has_submenu'] = false;
 
-        NavbarItem::create($data);
+        $item = NavbarItem::create($data);
+        $this->syncPage($item);
 
         return redirect()->route('navbar.index')
             ->with('success', 'Sub menu berhasil ditambahkan.');
@@ -89,6 +97,7 @@ class NavbarController extends Controller
     public function updateSub(Request $request, NavbarItem $subItem): RedirectResponse
     {
         $subItem->update($this->validateSubData($request));
+        $this->syncPage($subItem);
 
         return redirect()->route('navbar.index')
             ->with('success', 'Sub menu berhasil diperbarui.');
@@ -96,10 +105,23 @@ class NavbarController extends Controller
 
     public function destroySub(NavbarItem $subItem): RedirectResponse
     {
+        $key = $subItem->key;
         $subItem->delete();
+        Page::where('key', $key)->delete();
 
         return redirect()->route('navbar.index')
             ->with('success', 'Sub menu berhasil dihapus.');
+    }
+
+    private function syncPage(NavbarItem $item): void
+    {
+        Page::firstOrCreate(
+            ['key' => $item->key],
+            [
+                'title' => $item->label,
+                'active' => true,
+            ]
+        );
     }
 
     public static function icons(): array
@@ -122,7 +144,6 @@ class NavbarController extends Controller
     {
         $data = $request->validate([
             'label' => ['required', 'string', 'max:100'],
-            'description' => ['nullable', 'string', 'max:1000'],
             'url' => ['nullable', 'string', 'max:255', Rule::notIn(['#'])],
             'icon' => ['nullable', 'string', 'max:50', Rule::in(array_keys(self::icons()))],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
@@ -140,7 +161,6 @@ class NavbarController extends Controller
     {
         $data = $request->validate([
             'label' => ['required', 'string', 'max:100'],
-            'description' => ['nullable', 'string', 'max:1000'],
             'url' => ['nullable', 'string', 'max:255', Rule::notIn(['#'])],
             'icon' => ['nullable', 'string', 'max:50', Rule::in(array_keys(self::icons()))],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],

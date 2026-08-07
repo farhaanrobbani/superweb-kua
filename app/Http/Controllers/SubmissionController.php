@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KuaSetting;
 use App\Models\LetterType;
-use App\Models\NavbarItem;
+use App\Models\Page;
 use App\Models\Submission;
 use App\Support\SubmissionPdf;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +28,7 @@ class SubmissionController extends Controller
             'letterTypes' => LetterType::where('active', true)->publik()->orderBy('name')->get(),
             'selectedType' => $selectedType,
             'data' => $data,
-            'service' => NavbarItem::query()->where('url', '/permohonan')->active()->first(),
+            'service' => Page::query()->where('key', 'layanan-permohonan')->active()->first(),
             'kua' => [
                 'instansi' => KuaSetting::get('instansi'),
                 'alamat' => KuaSetting::get('alamat'),

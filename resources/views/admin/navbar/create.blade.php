@@ -23,14 +23,6 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-input-label for="description" value="Deskripsi (opsional)" />
-                        <textarea id="description" name="description" rows="3"
-                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
-                                  maxlength="1000">{{ old('description') }}</textarea>
-                        <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                    </div>
-
-                    <div class="mt-4">
                         <x-input-label for="url" value="URL (opsional)" />
                         <x-text-input id="url" name="url" class="mt-1 block w-full" maxlength="255"
                                       value="{{ old('url') }}" placeholder="/halaman" />
