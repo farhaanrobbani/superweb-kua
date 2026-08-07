@@ -149,7 +149,8 @@ class ServicesAnnouncementsTest extends TestCase
 
     public function test_guest_cannot_access_admin_service_crud(): void
     {
-        $this->get(route('services.index'))->assertRedirect(route('login'));
+        $this->get(route('services.create'))->assertRedirect(route('login'));
+        $this->get(route('navbar.index'))->assertRedirect(route('login'));
     }
 
     public function test_staff_can_create_and_edit_service(): void
