@@ -17,6 +17,12 @@ class UserSeeder extends Seeder
                 'role' => User::ROLE_STAFF,
             ],
             [
+                'name' => 'Operator KUA',
+                'email' => env('OPERATOR_EMAIL') ?: 'operator@kua.local',
+                'password' => env('OPERATOR_PASSWORD') ?: 'password',
+                'role' => User::ROLE_OPERATOR,
+            ],
+            [
                 'name' => 'Kepala KUA',
                 'email' => env('KEPALA_EMAIL') ?: 'kepala@kua.local',
                 'password' => env('KEPALA_PASSWORD') ?: 'password',

@@ -19,6 +19,8 @@ class User extends Authenticatable
 
     public const ROLE_STAFF = 'staff';
 
+    public const ROLE_OPERATOR = 'operator';
+
     public const ROLE_KEPALA = 'kepala';
 
     public function isKepala(): bool
@@ -26,9 +28,19 @@ class User extends Authenticatable
         return $this->role === self::ROLE_KEPALA;
     }
 
+    public function isOperator(): bool
+    {
+        return $this->role === self::ROLE_OPERATOR;
+    }
+
     public function isStaff(): bool
     {
         return $this->role === self::ROLE_STAFF;
+    }
+
+    public function canManageContent(): bool
+    {
+        return $this->isOperator() || $this->isKepala();
     }
 
     public function isActive(): bool
