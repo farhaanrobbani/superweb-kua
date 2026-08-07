@@ -194,6 +194,47 @@ class AdminMasterDataTest extends TestCase
         $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_body' => '<p>Narasi diperbarui.</p>']);
     }
 
+    public function test_staff_can_save_permohonan_informasi_on_letter_type(): void
+    {
+        $this->actingAs($this->user)
+            ->post(route('letter-types.store'), [
+                'code' => 'SKI',
+                'name' => 'Surat Keterangan I',
+                'permohonan_informasi' => "Berkas yang dibawa:\n- KTP\n- KK",
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $type = LetterType::where('code', 'SKI')->firstOrFail();
+        $this->assertSame("Berkas yang dibawa:\n- KTP\n- KK", $type->permohonan_informasi);
+
+        $this->actingAs($this->user)
+            ->put(route('letter-types.update', $type), [
+                'code' => 'SKI',
+                'name' => 'Surat Keterangan I',
+                'permohonan_informasi' => 'Hanya KTP',
+                'fields' => [
+                    ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => 1],
+                ],
+            ])
+            ->assertRedirect(route('letter-types.index'));
+
+        $this->assertDatabaseHas('letter_types', ['id' => $type->id, 'permohonan_informasi' => 'Hanya KTP']);
+    }
+
+    public function test_letter_type_form_shows_permohonan_informasi_textarea(): void
+    {
+        $type = LetterType::factory()->create(['permohonan_informasi' => 'Bawa KTP asli.']);
+
+        $this->actingAs($this->user)
+            ->get(route('letter-types.edit', $type))
+            ->assertOk()
+            ->assertSee('Informasi di Bawah Form Permohonan (Berkas yang Dibawa)')
+            ->assertSee('Bawa KTP asli.');
+    }
+
     public function test_staff_can_save_permohonan_fields_on_letter_type(): void
     {
         $this->actingAs($this->user)

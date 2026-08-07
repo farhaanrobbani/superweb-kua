@@ -147,6 +147,56 @@ class SubmissionTest extends TestCase
             ->assertDontSee('Catatan Petugas');
     }
 
+    public function test_permohonan_form_shows_informasi_below_form(): void
+    {
+        $this->type->update(['permohonan_informasi' => "Berkas yang dibawa:\n- KTP\n- KK"]);
+
+        $this->get(route('permohonan.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertSee('Berkas yang dibawa:')
+            ->assertSee('KTP')
+            ->assertSee('KK');
+    }
+
+    public function test_permohonan_form_hides_informasi_when_empty(): void
+    {
+        $this->get(route('permohonan.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertDontSee('Berkas yang dibawa');
+    }
+
+    public function test_permohonan_informasi_is_different_per_type(): void
+    {
+        $other = LetterType::factory()->create([
+            'code' => 'SPB',
+            'name' => 'Surat Permohonan B',
+            'publik' => true,
+            'permohonan_informasi' => 'Bawa Akta asli.',
+        ]);
+        $this->type->update(['permohonan_informasi' => 'Bawa KTP asli.']);
+
+        $this->get(route('permohonan.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertSee('Bawa KTP asli.')
+            ->assertDontSee('Bawa Akta asli.');
+
+        $this->get(route('permohonan.create', ['jenis' => $other->code]))
+            ->assertOk()
+            ->assertSee('Bawa Akta asli.')
+            ->assertDontSee('Bawa KTP asli.');
+    }
+
+    public function test_permohonan_informasi_is_escaped(): void
+    {
+        $this->type->update(['permohonan_informasi' => '<script>alert(1)</script>Bawa KTP']);
+
+        $this->get(route('permohonan.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertSee('Bawa KTP')
+            ->assertSee('&lt;script&gt;', false)
+            ->assertDontSee('<script>alert(1)</script>', false);
+    }
+
     public function test_public_submission_ignores_internal_fields(): void
     {
         $this->type->update(['fields' => [
