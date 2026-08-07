@@ -65,13 +65,13 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'show'])->name('kritik-saran.show');
     Route::delete('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'destroy'])->name('kritik-saran.destroy');
 
-    Route::resource('letter-types', LetterTypeController::class);
-    Route::resource('letter-templates', LetterTemplateController::class);
-    Route::resource('services', ServiceController::class);
-    Route::resource('staff', StaffController::class);
-    Route::resource('announcements', AnnouncementController::class);
+    Route::resource('letter-types', LetterTypeController::class)->except('show');
+    Route::resource('letter-templates', LetterTemplateController::class)->except('show');
+    Route::resource('services', ServiceController::class)->except('show');
+    Route::resource('staff', StaffController::class)->except('show');
+    Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
-    Route::resource('users', UserController::class)->middleware('role:kepala');
+    Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
 });
