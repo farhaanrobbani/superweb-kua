@@ -33,6 +33,10 @@ class NavbarTest extends TestCase
         foreach (['beranda', 'layanan', 'pengumuman', 'tentang'] as $key) {
             $this->assertDatabaseHas('navbar_items', ['key' => $key]);
         }
+
+        $this->assertDatabaseHas('navbar_items', ['key' => 'layanan', 'has_submenu' => 1]);
+        $this->assertDatabaseHas('navbar_items', ['key' => 'tentang', 'has_submenu' => 1]);
+        $this->assertDatabaseHas('navbar_items', ['key' => 'beranda', 'has_submenu' => 0]);
     }
 
     public function test_guest_cannot_access_admin_navbar(): void
@@ -48,17 +52,60 @@ class NavbarTest extends TestCase
         $this->actingAs($this->user)
             ->put(route('navbar.update', $item), [
                 'label' => 'Home',
+                'description' => 'Halaman utama',
+                'embed_url' => 'https://datastudio.google.com/embed/reporting/x',
+                'icon' => 'home',
                 'sort_order' => 5,
                 'active' => 0,
+                'has_submenu' => 1,
             ])
             ->assertRedirect(route('navbar.index'));
 
         $this->assertDatabaseHas('navbar_items', [
             'id' => $item->id,
             'label' => 'Home',
+            'description' => 'Halaman utama',
+            'embed_url' => 'https://datastudio.google.com/embed/reporting/x',
+            'icon' => 'home',
             'sort_order' => 5,
             'active' => 0,
+            'has_submenu' => 1,
         ]);
+    }
+
+    public function test_navbar_item_rejects_invalid_icon(): void
+    {
+        $item = NavbarItem::factory()->create();
+
+        $this->actingAs($this->user)
+            ->put(route('navbar.update', $item), ['label' => 'Ok', 'icon' => 'bukan-ikon'])
+            ->assertSessionHasErrors('icon');
+    }
+
+    public function test_edit_page_title_matches_item_type(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        $this->actingAs($this->user)
+            ->get(route('navbar.edit', NavbarItem::where('key', 'beranda')->firstOrFail()))
+            ->assertOk()
+            ->assertSee('Edit Item Navbar');
+
+        $this->actingAs($this->user)
+            ->get(route('navbar.edit', NavbarItem::where('key', 'unduhan')->firstOrFail()))
+            ->assertOk()
+            ->assertSee('Edit Sub Menu Tentang')
+            ->assertDontSee('Edit Item Navbar');
+    }
+
+    public function test_edit_service_page_title_is_sub_menu_layanan(): void
+    {
+        $service = Service::factory()->create();
+
+        $this->actingAs($this->user)
+            ->get(route('services.edit', $service))
+            ->assertOk()
+            ->assertSee('Edit Sub Menu Layanan');
     }
 
     public function test_navbar_item_requires_label(): void
@@ -109,6 +156,33 @@ class NavbarTest extends TestCase
         $this->get(route('welcome'))
             ->assertOk()
             ->assertDontSee(':aria-expanded="layanan"');
+    }
+
+    public function test_layanan_without_submenu_becomes_direct_link(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+        Service::factory()->create(['name' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'active' => true]);
+
+        $layanan = NavbarItem::where('key', 'layanan')->firstOrFail();
+        $layanan->update(['has_submenu' => false]);
+
+        $this->get(route('welcome'))
+            ->assertOk()
+            ->assertDontSee(':aria-expanded="layanan"')
+            ->assertSee('>Layanan</a>', false);
+    }
+
+    public function test_tentang_without_submenu_becomes_direct_link(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        $tentang = NavbarItem::where('key', 'tentang')->firstOrFail();
+        $tentang->update(['has_submenu' => false]);
+
+        $this->get(route('welcome'))
+            ->assertOk()
+            ->assertDontSee(':aria-expanded="tentang"')
+            ->assertSee('>Tentang Kami</a>', false);
     }
 
     public function test_main_item_order_respected_in_public_header(): void
