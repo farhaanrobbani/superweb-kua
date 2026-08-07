@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Support\HtmlSanitizer;
 
-#[Fillable(['letter_type_id', 'nama_pemohon', 'kontak', 'data', 'status', 'catatan'])]
+#[Fillable(['letter_type_id', 'nama_pemohon', 'kontak', 'data', 'status', 'catatan', 'token'])]
 class Submission extends Model
 {
     use HasFactory;
