@@ -190,7 +190,24 @@ class HtmlSanitizer
 
     private static function isUnsafeStyleValue(string $value): bool
     {
-        return preg_match('/(url\s*\(|expression|javascript:|vbscript:|@import|behavior\s*:|-moz-binding)/i', $value) === 1;
+        $decoded = preg_replace_callback(
+            '/\\\\([0-9a-fA-F]{1,6}\s?|.)/',
+            fn (array $m): string => self::decodeCssEscape($m[1]),
+            $value
+        );
+
+        return preg_match('/(url\s*\(|expression|javascript:|vbscript:|@import|behavior\s*:|-moz-binding)/i', $decoded) === 1;
+    }
+
+    private static function decodeCssEscape(string $escape): string
+    {
+        if (preg_match('/^[0-9a-fA-F]{1,6}\s?$/', $escape) === 1) {
+            $codePoint = hexdec($escape);
+
+            return $codePoint > 0 && $codePoint <= 0x10FFFF ? mb_chr($codePoint, 'UTF-8') : '';
+        }
+
+        return $escape === '' ? '' : $escape[0];
     }
 
     private static function cleanUrl(DOMElement $node, string $attr): void
@@ -200,7 +217,9 @@ class HtmlSanitizer
             return;
         }
 
-        $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+        $stripped = preg_replace('/[\x00-\x20\x7F]/', '', $url);
+
+        $scheme = strtolower((string) parse_url($stripped, PHP_URL_SCHEME));
         if ($scheme !== '' && ! in_array($scheme, ['http', 'https', 'mailto'], true)) {
             $node->removeAttribute($attr);
 
