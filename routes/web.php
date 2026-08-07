@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\MarriageServiceController;
 use App\Http\Controllers\Admin\NavbarController;
-use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
@@ -94,7 +93,6 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::resource('marriage-services', MarriageServiceController::class)->except('show');
-    Route::resource('pages', PageController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
