@@ -18,4 +18,17 @@ class LayananController extends Controller
 
         return view('public.layanan.show', compact('service'));
     }
+
+    public function show(Service $service): View|RedirectResponse
+    {
+        if (! $service->active) {
+            abort(404);
+        }
+
+        if (empty($service->content)) {
+            return $service->url ? redirect($service->url) : abort(404);
+        }
+
+        return view('public.layanan.content', compact('service'));
+    }
 }
