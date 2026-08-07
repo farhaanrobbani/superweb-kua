@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\User;
 use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class NavbarTest extends TestCase
@@ -162,5 +163,28 @@ class NavbarTest extends TestCase
             ->assertSee('Pengumuman')
             ->assertSee('Tentang Kami')
             ->assertSee('Download Center');
+    }
+
+    public function test_public_header_falls_back_to_defaults_when_table_missing(): void
+    {
+        Schema::dropIfExists('navbar_items');
+
+        $this->get(route('welcome'))
+            ->assertOk()
+            ->assertSee('Beranda')
+            ->assertSee('Layanan')
+            ->assertSee('Pengumuman')
+            ->assertSee('Tentang Kami')
+            ->assertSee('Download Center');
+    }
+
+    public function test_services_dropdown_shows_on_non_welcome_page(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+        Service::factory()->create(['name' => 'Pengajuan Surat Online', 'url' => '/permohonan', 'active' => true]);
+
+        $this->get(route('pengumuman.index'))
+            ->assertOk()
+            ->assertSee('Pengajuan Surat Online');
     }
 }
