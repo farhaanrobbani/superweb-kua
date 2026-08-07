@@ -78,7 +78,9 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/kelola-kritik-saran', [KritikSaranController::class, 'index'])->name('kritik-saran.index');
     Route::get('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'show'])->name('kritik-saran.show');
     Route::delete('/kelola-kritik-saran/{kritikSaran}', [KritikSaranController::class, 'destroy'])->name('kritik-saran.destroy');
+});
 
+Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
     Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
@@ -94,14 +96,17 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::delete('/navbar/sub/{subItem}', [NavbarController::class, 'destroySub'])->name('navbar.sub.destroy');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
+    Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
     Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
     Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
-    Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
-    Route::resource('users', UserController::class)->except('show')->middleware('role:kepala');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
+});
+
+Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function () {
+    Route::resource('users', UserController::class)->except('show');
 });
 
 Route::middleware('auth')->group(function () {
