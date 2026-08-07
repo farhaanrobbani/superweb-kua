@@ -37,7 +37,7 @@
                          x-transition:leave="transition ease-in duration-75"
                          x-transition:leave-start="opacity-100"
                          x-transition:leave-end="opacity-0"
-                         class="border-t border-teal-100 px-5 py-5 sm:px-6">
+                         class="border-t border-teal-100 px-5 pt-5 pb-7 sm:px-6">
                         @php
                             $persyaratan = preg_split('/\r\n|\r|\n/', (string) $service->persyaratan, -1, PREG_SPLIT_NO_EMPTY);
                             $alur = preg_split('/\r\n|\r|\n/', (string) $service->alur, -1, PREG_SPLIT_NO_EMPTY);
