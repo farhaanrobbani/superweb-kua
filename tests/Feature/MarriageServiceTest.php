@@ -22,6 +22,20 @@ class MarriageServiceTest extends TestCase
         $this->user = User::factory()->create(['role' => User::ROLE_STAFF]);
     }
 
+    public function test_staff_can_access_create_and_edit_forms(): void
+    {
+        $topic = MarriageService::factory()->create();
+
+        $this->actingAs($this->user)
+            ->get(route('marriage-services.create'))
+            ->assertOk();
+
+        $this->actingAs($this->user)
+            ->get(route('marriage-services.edit', $topic))
+            ->assertOk()
+            ->assertSee($topic->name);
+    }
+
     public function test_staff_can_create_marriage_topic(): void
     {
         $this->actingAs($this->user)
