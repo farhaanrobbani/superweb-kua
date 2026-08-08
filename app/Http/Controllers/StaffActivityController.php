@@ -68,7 +68,7 @@ class StaffActivityController extends Controller
             'items.*.tanggal' => ['required', 'date'],
             'items.*.kegiatan' => ['required', 'string', 'max:1000'],
             'items.*.pekerjaan' => ['required', 'string', 'max:1000'],
-            'items.*.activity_type_key' => ['nullable', 'string', 'max:100', Rule::in(array_keys(KuaActivityTheme::activeList()))],
+            'items.*.activity_type_key' => ['nullable', 'string', 'max:100', Rule::in($this->allowedActivityKeys())],
             'items.*.total_jumlah' => ['nullable', 'integer', 'min:0', 'max:1000000'],
             'items.*.save_template' => ['nullable', 'boolean'],
         ]);
@@ -118,7 +118,7 @@ class StaffActivityController extends Controller
             'tanggal' => ['required', 'date'],
             'kegiatan' => ['required', 'string', 'max:1000'],
             'pekerjaan' => ['required', 'string', 'max:1000'],
-            'activity_type_key' => ['nullable', 'string', 'max:100'],
+            'activity_type_key' => ['nullable', 'string', 'max:100', Rule::in($this->allowedActivityKeys())],
             'total_jumlah' => ['nullable', 'integer', 'min:0', 'max:1000000'],
         ]);
 
@@ -143,6 +143,10 @@ class StaffActivityController extends Controller
     {
         $key = $item['activity_type_key'] ?? null;
 
+        if ($key === 'libur') {
+            return 0;
+        }
+
         if ($key) {
             $daily = KuaDailyData::where('tanggal', $item['tanggal'])->first();
 
@@ -152,6 +156,15 @@ class StaffActivityController extends Controller
         }
 
         return (int) ($item['total_jumlah'] ?? 1);
+    }
+
+    private function allowedActivityKeys(): array
+    {
+        return [
+            'libur',
+            'lainnya',
+            ...array_keys(KuaActivityTheme::activeList()),
+        ];
     }
 
     private function authorizeActivity(Request $request, StaffActivity $activity): void

@@ -292,12 +292,48 @@ class LapkinTest extends TestCase
         ]);
     }
 
+    public function test_staff_can_log_holiday_activity_with_zero_volume(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), [
+                'items' => [
+                    ['tanggal' => '2026-08-17', 'kegiatan' => 'Hari Libur / Libur Nasional', 'pekerjaan' => '-', 'activity_type_key' => 'libur', 'total_jumlah' => 0],
+                ],
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('staff_activities', [
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'libur',
+            'total_jumlah' => 0,
+        ]);
+    }
+
+    public function test_staff_can_log_manual_activity_with_lainnya_key(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), [
+                'items' => [
+                    ['tanggal' => '2026-08-04', 'kegiatan' => 'Rapat Koordinasi KUA', 'pekerjaan' => 'Menyusun notulen rapat', 'activity_type_key' => 'lainnya', 'total_jumlah' => 1],
+                ],
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('staff_activities', [
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'lainnya',
+            'total_jumlah' => 1,
+        ]);
+    }
+
     public function test_staff_sees_pull_master_data_button(): void
     {
         $this->actingAs($this->staff)
             ->get(route('kegiatan.index'))
             ->assertOk()
-            ->assertSee('Ambil Data dari Operator');
+            ->assertSee('Ambil Data dari Operator')
+            ->assertSee('Buat Pekerjaan Baru')
+            ->assertSee('Volume Berkas');
     }
 
     public function test_sidebar_shows_lapkin_menu_for_staff(): void
