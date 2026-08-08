@@ -187,7 +187,7 @@ class UserManagementTest extends TestCase
             'password' => 'password',
         ]);
 
-        $this->post('/login', [
+        $this->post('/yukmasuk', [
             'email' => 'nonaktif@kua.local',
             'password' => 'password',
         ])->assertSessionHasErrors('email');
