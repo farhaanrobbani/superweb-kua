@@ -27,7 +27,7 @@
         ol { margin: 0; padding-left: 18px; }
         .ttd { width: 100%; margin-top: 46px; border-collapse: collapse; }
         .ttd td { width: 50%; text-align: left; vertical-align: top; }
-        .ttd .nama { font-weight: bold; text-decoration: underline; }
+        .ttd .nama { font-weight: bold; }
         .ttd .nip { font-size: 10px; font-weight: normal; text-decoration: none; }
     </style>
 </head>
@@ -113,12 +113,12 @@
             <td>
                 <div>Pejabat Penilai,</div>
                 <div style="height: 90px;"></div>
-                <div class="nama">{{ $kepala['nama'] }}<br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
+                <div class="nama"><u>{{ $kepala['nama'] }}</u><br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
             </td>
             <td>
                 <div>Pegawai yang Dinilai,</div>
                 <div style="height: 90px;"></div>
-                <div class="nama">{{ $user->name }}<br><span class="nip">NIP. {{ $user->nip }}</span></div>
+                <div class="nama"><u>{{ $user->name }}</u><br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>
         </tr>
     </table>
