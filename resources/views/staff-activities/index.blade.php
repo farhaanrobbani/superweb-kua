@@ -413,7 +413,7 @@
                                 <x-input-label value="2. Tema Pekerjaan (Dari Master Data)" />
                                 <select x-model="item.key" @change="onKeyChange()"
                                         class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
-                                    <option value="libur">Hari Libur (Volume Berkas Kosong / 0)</option>
+                                    <option value="libur">Hari Libur</option>
                                     @foreach ($columns as $key => $label)
                                         <option value="{{ $key }}">{{ $label }}</option>
                                     @endforeach
