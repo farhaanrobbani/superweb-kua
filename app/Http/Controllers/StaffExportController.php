@@ -10,9 +10,24 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
 
 class StaffExportController extends Controller
 {
+    public function index(Request $request): View
+    {
+        $user = $request->user();
+        $month = $this->month($request);
+        $year = $this->year($request);
+
+        return view('staff-activities.export', [
+            'users' => $user->canManageContent() ? User::orderBy('name')->get() : collect(),
+            'selectedUserId' => $user->canManageContent() ? $request->integer('user_id') : null,
+            'month' => $month,
+            'year' => $year,
+        ]);
+    }
+
     public function laporanKinerja(Request $request)
     {
         $user = $this->resolveExportUser($request);

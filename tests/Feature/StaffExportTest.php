@@ -151,6 +151,23 @@ class StaffExportTest extends TestCase
         $this->assertStringContainsString('%PDF', $content);
     }
 
+    public function test_staff_can_view_export_page(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.index', ['bulan' => 8, 'tahun' => 2026]))
+            ->assertOk()
+            ->assertSee('Export Laporan Kinerja')
+            ->assertSee('Export Rekap');
+    }
+
+    public function test_operator_export_page_requires_staff_selection(): void
+    {
+        $this->actingAs($this->operator)
+            ->get(route('kegiatan.export.index', ['bulan' => 8, 'tahun' => 2026]))
+            ->assertOk()
+            ->assertSee('Pilih pegawai (wajib)');
+    }
+
     public function test_operator_can_export_rekap_for_staff(): void
     {
         $this->actingAs($this->operator)

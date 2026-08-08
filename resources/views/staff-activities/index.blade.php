@@ -220,14 +220,6 @@
                                     class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
                                 + Buat Pekerjaan Baru
                             </button>
-                            <a href="{{ route('kegiatan.export.laporan', ['bulan' => $month, 'tahun' => $year, 'user_id' => $selectedUserId ?? 0]) }}"
-                               class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
-                                Export Laporan Kinerja
-                            </a>
-                            <button type="button" @click="$dispatch('open-modal', 'export-rekap')"
-                                    class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
-                                Export Rekap
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -473,52 +465,6 @@
                     </div>
                 </x-modal>
 
-                <x-modal name="export-rekap" maxWidth="md">
-                    <form method="GET" action="{{ route('kegiatan.export.rekap') }}">
-                        <input type="hidden" name="bulan" value="{{ $month }}" />
-                        <input type="hidden" name="tahun" value="{{ $year }}" />
-                        @if ($users->isNotEmpty())
-                            <input type="hidden" name="user_id" value="{{ $selectedUserId ?? 0 }}" />
-                        @endif
-                        <div class="px-6 py-4">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-100">Export Rekap Laporan Kinerja</h3>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                        Isi jumlah kehadiran pegawai pada bulan {{ tanggal_indonesia(now()->month($month), 'F') }} {{ $year }}.
-                                    </p>
-                                </div>
-                                <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
-                                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">&times;</button>
-                            </div>
-
-                            <div class="mt-4">
-                                <x-input-label value="Jumlah Kehadiran (Hari)" />
-                                <input type="number" name="total_hari_kerja" value="22" min="0" max="31" required
-                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
-                            </div>
-
-                            <div class="mt-4">
-                                <x-input-label value="Tanggal Tanda Tangan (opsional)" />
-                                <input type="text" name="tanggal_ttd" placeholder="31 Agustus 2026"
-                                       maxlength="100"
-                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    Kosongkan untuk memakai tanggal terakhir bulan. Kota tetap otomatis dari pengaturan.
-                                </p>
-                            </div>
-
-                            <div class="mt-4 flex items-center justify-end gap-3">
-                                <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
-                                        class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
-                                <button type="submit"
-                                        class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
-                                    Export PDF
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </x-modal>
             </div>
         </div>
     </div>

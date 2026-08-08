@@ -90,6 +90,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::delete('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'destroy'])->name('kegiatan.destroy');
     Route::get('/lapkin/kegiatan/export/laporan-kinerja', [StaffExportController::class, 'laporanKinerja'])->name('kegiatan.export.laporan');
     Route::get('/lapkin/kegiatan/export/rekap', [StaffExportController::class, 'rekap'])->name('kegiatan.export.rekap');
+    Route::get('/lapkin/export', [StaffExportController::class, 'index'])->name('kegiatan.export.index');
     Route::get('/lapkin/template-kalimat', [StaffTemplateController::class, 'index'])->name('kegiatan.templates.index');
     Route::post('/lapkin/template-kalimat', [StaffTemplateController::class, 'store'])->name('kegiatan.templates.store');
 });

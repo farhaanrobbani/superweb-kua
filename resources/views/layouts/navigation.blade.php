@@ -82,14 +82,17 @@
             </button>
             <div x-show="open" x-cloak class="mt-1 space-y-1">
                 <div class="ms-4">
-                    <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.*')">
-                        {{ __('Kegiatan Harian') }}
-                    </x-nav-link>
                     @if (Auth::user()->canManageContent())
                         <x-nav-link :href="route('kua-daily.index')" :active="request()->routeIs('kua-daily.*')">
                             {{ __('Master Data Harian') }}
                         </x-nav-link>
                     @endif
+                    <x-nav-link :href="route('kegiatan.index')" :active="request()->routeIs('kegiatan.index', 'kegiatan.edit')">
+                        {{ __('Kegiatan Harian') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('kegiatan.export.index')" :active="request()->routeIs('kegiatan.export.*')">
+                        {{ __('Export') }}
+                    </x-nav-link>
                 </div>
             </div>
         </div>
