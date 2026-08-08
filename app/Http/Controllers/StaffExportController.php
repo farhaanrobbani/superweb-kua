@@ -62,7 +62,7 @@ class StaffExportController extends Controller
 
         PdfSupport::registerArialFonts();
 
-        return Pdf::loadView('pdf.laporan-kinerja', $data)->download($data['fileName'] . '.pdf');
+        return Pdf::loadView('pdf.laporan-kinerja', $data)->download($data['fileName'].'.pdf');
     }
 
     public function rekap(Request $request)
@@ -84,7 +84,7 @@ class StaffExportController extends Controller
             'totalHariKerja' => $totalHariKerja,
             'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
             'kepala' => $this->kepala(),
-            'kepalaJabatan' => trim('Kepala KUA ' . KuaSetting::get('kecamatan', '')),
+            'kepalaJabatan' => trim('Kepala KUA '.KuaSetting::get('kecamatan', '')),
             'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Rekap_Laporan_Kinerja_%s_%s_%s',
@@ -100,7 +100,7 @@ class StaffExportController extends Controller
 
         PdfSupport::registerArialFonts();
 
-        return Pdf::loadView('pdf.rekap-laporan-kinerja', $data)->download($data['fileName'] . '.pdf');
+        return Pdf::loadView('pdf.rekap-laporan-kinerja', $data)->download($data['fileName'].'.pdf');
     }
 
     private function isWord(Request $request): bool
@@ -154,7 +154,7 @@ class StaffExportController extends Controller
         $kota = KuaSetting::get('kabupaten', '') ?: '';
         $tanggal = $custom !== '' ? $custom : $this->printDate($month, $year);
 
-        return trim(($kota !== '' ? $kota . ', ' : '') . $tanggal);
+        return trim(($kota !== '' ? $kota.', ' : '').$tanggal);
     }
 
     private function kepala(): array
