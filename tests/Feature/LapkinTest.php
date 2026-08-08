@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\KuaDailyData;
 use App\Models\StaffActivity;
 use App\Models\User;
+use App\Models\UserActivityTemplate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -231,6 +232,63 @@ class LapkinTest extends TestCase
             'nip' => '198001012000031001',
             'jabatan' => 'Penghulu',
             'pangkat' => 'Penata Muda',
+        ]);
+    }
+
+    public function test_staff_can_manage_personal_template_sentences(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.templates.index'))
+            ->assertOk()
+            ->assertSee('Atur Template Kalimat');
+
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.templates.store'), [
+                'templates' => [
+                    'pendaftaran_nikah_kantor' => ['kegiatan' => 'Melayani pendaftaran nikah', 'pekerjaan' => 'Input berkas pemohon'],
+                    'pelaksanaan_bimwin' => ['kegiatan' => '', 'pekerjaan' => ''],
+                ],
+            ])
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('user_activity_templates', [
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'pendaftaran_nikah_kantor',
+            'kegiatan' => 'Melayani pendaftaran nikah',
+        ]);
+        $this->assertDatabaseMissing('user_activity_templates', [
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'pelaksanaan_bimwin',
+        ]);
+    }
+
+    public function test_staff_templates_do_not_leak_between_users(): void
+    {
+        UserActivityTemplate::create([
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'pelaksanaan_wakaf',
+            'kegiatan' => 'Milik staf',
+            'pekerjaan' => '',
+        ]);
+
+        $this->actingAs($this->operator)
+            ->post(route('kegiatan.templates.store'), [
+                'templates' => [
+                    'pendaftaran_nikah_kantor' => ['kegiatan' => 'Milik operator', 'pekerjaan' => ''],
+                ],
+            ])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('user_activity_templates', [
+            'user_id' => $this->operator->id,
+            'activity_type_key' => 'pendaftaran_nikah_kantor',
+            'kegiatan' => 'Milik operator',
+        ]);
+        $this->assertDatabaseHas('user_activity_templates', [
+            'user_id' => $this->staff->id,
+            'activity_type_key' => 'pelaksanaan_wakaf',
+            'kegiatan' => 'Milik staf',
         ]);
     }
 

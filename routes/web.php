@@ -26,6 +26,7 @@ use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffActivityController;
 use App\Http\Controllers\StaffPublicController;
+use App\Http\Controllers\StaffTemplateController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -86,6 +87,8 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/lapkin/kegiatan/{kegiatan}/edit', [StaffActivityController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'update'])->name('kegiatan.update');
     Route::delete('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'destroy'])->name('kegiatan.destroy');
+    Route::get('/lapkin/template-kalimat', [StaffTemplateController::class, 'index'])->name('kegiatan.templates.index');
+    Route::post('/lapkin/template-kalimat', [StaffTemplateController::class, 'store'])->name('kegiatan.templates.store');
 });
 
 Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
