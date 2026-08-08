@@ -114,7 +114,7 @@ class LapkinWordExport
             ['alignment' => Jc::CENTER, 'spaceAfter' => 240]
         );
 
-        $identitas = $section->addTable(self::tableStyle());
+        $identitas = $section->addTable(self::identitasStyle());
         $fotoCell = null;
         foreach (self::identitasRowsRekap($data) as $index => [$label, $value]) {
             $identitas->addRow();
@@ -134,6 +134,8 @@ class LapkinWordExport
         if ($fotoCell !== null && $fotoPath && file_exists($fotoPath)) {
             $fotoCell->addImage($fotoPath, ['width' => 90]);
         }
+
+        $section->addText('', [], ['spaceAfter' => 240]);
 
         $rek = $section->addTable(self::tableStyle());
         $rek->addRow();
@@ -156,6 +158,8 @@ class LapkinWordExport
             $rek->addCell(3277, ['valign' => 'center'])->addText($keterangan);
             $no++;
         }
+
+        $section->addText('', [], ['spaceAfter' => 240]);
 
         $ttd = $section->addTable(['width' => 9638, 'unit' => 'dxa']);
         $ttd->addRow();
@@ -208,6 +212,15 @@ class LapkinWordExport
         return [
             'borderSize' => 6,
             'borderColor' => '000000',
+            'cellMargin' => 60,
+            'width' => 9638,
+            'unit' => 'dxa',
+        ];
+    }
+
+    private static function identitasStyle(): array
+    {
+        return [
             'cellMargin' => 60,
             'width' => 9638,
             'unit' => 'dxa',
