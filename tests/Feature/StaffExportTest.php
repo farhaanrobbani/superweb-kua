@@ -168,6 +168,47 @@ class StaffExportTest extends TestCase
             ->assertSee('Pilih pegawai (wajib)');
     }
 
+    public function test_staff_can_download_laporan_kinerja_word(): void
+    {
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.laporan', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'format' => 'word',
+            ]));
+
+        $response->assertOk()
+            ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            ->assertHeader('content-disposition', 'attachment; filename=Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertStringStartsWith('PK', $content);
+    }
+
+    public function test_staff_can_download_rekap_word(): void
+    {
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.rekap', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'total_hari_kerja' => 22,
+                'format' => 'word',
+            ]));
+
+        $response->assertOk()
+            ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            ->assertHeader('content-disposition', 'attachment; filename=Rekap_Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertStringStartsWith('PK', $content);
+    }
+
     public function test_operator_can_export_rekap_for_staff(): void
     {
         $this->actingAs($this->operator)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KuaSetting;
 use App\Models\StaffActivity;
 use App\Models\User;
+use App\Support\LapkinWordExport;
 use App\Support\PdfSupport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -34,32 +35,33 @@ class StaffExportController extends Controller
         $month = $this->month($request);
         $year = $this->year($request);
 
-        $activities = StaffActivity::query()
-            ->where('user_id', $user->id)
-            ->whereYear('tanggal', $year)
-            ->whereMonth('tanggal', $month)
-            ->orderBy('tanggal')
-            ->orderBy('id')
-            ->get();
-
-        PdfSupport::registerArialFonts();
-
-        $pdf = Pdf::loadView('pdf.laporan-kinerja', [
+        $data = [
             'user' => $user,
-            'activities' => $activities,
+            'activities' => StaffActivity::query()
+                ->where('user_id', $user->id)
+                ->whereYear('tanggal', $year)
+                ->whereMonth('tanggal', $month)
+                ->orderBy('tanggal')
+                ->orderBy('id')
+                ->get(),
             'monthName' => $this->monthName($month),
             'printDate' => $this->printDate($month, $year),
             'kepala' => $this->kepala(),
-        ]);
+            'fileName' => sprintf(
+                'Laporan_Kinerja_%s_%s_%s',
+                str_replace(' ', '_', $user->name),
+                $this->monthName($month),
+                $year
+            ),
+        ];
 
-        $fileName = sprintf(
-            'Laporan_Kinerja_%s_%s_%s.pdf',
-            str_replace(' ', '_', $user->name),
-            $this->monthName($month),
-            $year
-        );
+        if ($this->isWord($request)) {
+            return LapkinWordExport::download('laporan', $data);
+        }
 
-        return $pdf->download($fileName);
+        PdfSupport::registerArialFonts();
+
+        return Pdf::loadView('pdf.laporan-kinerja', $data)->download($data['fileName'] . '.pdf');
     }
 
     public function rekap(Request $request)
@@ -69,11 +71,9 @@ class StaffExportController extends Controller
         $year = $this->year($request);
         $totalHariKerja = min(max($request->integer('total_hari_kerja', 22), 0), 31);
 
-        PdfSupport::registerArialFonts();
-
         $customTanggal = trim((string) $request->string('tanggal_ttd', '')->limit(100));
 
-        $pdf = Pdf::loadView('pdf.rekap-laporan-kinerja', [
+        $data = [
             'user' => $user,
             'month' => $month,
             'year' => $year,
@@ -84,16 +84,26 @@ class StaffExportController extends Controller
             'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
             'kepala' => $this->kepala(),
             'kepalaJabatan' => trim('Kepala KUA ' . KuaSetting::get('kecamatan', '')),
-        ]);
+            'fileName' => sprintf(
+                'Rekap_Laporan_Kinerja_%s_%s_%s',
+                str_replace(' ', '_', $user->name),
+                $this->monthName($month),
+                $year
+            ),
+        ];
 
-        $fileName = sprintf(
-            'Rekap_Laporan_Kinerja_%s_%s_%s.pdf',
-            str_replace(' ', '_', $user->name),
-            $this->monthName($month),
-            $year
-        );
+        if ($this->isWord($request)) {
+            return LapkinWordExport::download('rekap', $data);
+        }
 
-        return $pdf->download($fileName);
+        PdfSupport::registerArialFonts();
+
+        return Pdf::loadView('pdf.rekap-laporan-kinerja', $data)->download($data['fileName'] . '.pdf');
+    }
+
+    private function isWord(Request $request): bool
+    {
+        return $request->string('format')->toString() === 'word';
     }
 
     private function resolveExportUser(Request $request): User

@@ -71,6 +71,10 @@
                                 class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
                             Export Laporan Kinerja
                         </button>
+                        <button type="submit" name="format" value="word"
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 transition ease-in-out duration-150">
+                            Export Word
+                        </button>
                         <button type="button" @click="syncRekap()"
                                 class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
                             Export Rekap
@@ -117,6 +121,10 @@
                         <div class="mt-4 flex items-center justify-end gap-3">
                             <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
                                     class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
+                            <button type="submit" name="format" value="word"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 transition ease-in-out duration-150">
+                                Export Word
+                            </button>
                             <button type="submit"
                                     class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
                                 Export PDF
