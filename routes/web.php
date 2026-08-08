@@ -2,16 +2,16 @@
 
 use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\DownloadItemController;
+use App\Http\Controllers\Admin\KritikSaranController;
+use App\Http\Controllers\Admin\KuaActivityThemeController;
 use App\Http\Controllers\Admin\KuaDailyController;
 use App\Http\Controllers\Admin\KuaSettingController;
-use App\Http\Controllers\Admin\KritikSaranController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\MarriageServiceController;
 use App\Http\Controllers\Admin\NavbarController;
 use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\Admin\UserController;
@@ -24,8 +24,8 @@ use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\StaffActivityController;
+use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +118,13 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::get('/lapkin/master/{kuaDaily}/edit', [KuaDailyController::class, 'edit'])->name('kua-daily.edit');
     Route::put('/lapkin/master/{kuaDaily}', [KuaDailyController::class, 'update'])->name('kua-daily.update');
     Route::delete('/lapkin/master/{kuaDaily}', [KuaDailyController::class, 'destroy'])->name('kua-daily.destroy');
+    Route::get('/lapkin/tema-pekerjaan', [KuaActivityThemeController::class, 'index'])->name('kua-themes.index');
+    Route::get('/lapkin/tema-pekerjaan/create', [KuaActivityThemeController::class, 'create'])->name('kua-themes.create');
+    Route::post('/lapkin/tema-pekerjaan', [KuaActivityThemeController::class, 'store'])->name('kua-themes.store');
+    Route::get('/lapkin/tema-pekerjaan/{kuaActivityTheme}/edit', [KuaActivityThemeController::class, 'edit'])->name('kua-themes.edit');
+    Route::put('/lapkin/tema-pekerjaan/{kuaActivityTheme}', [KuaActivityThemeController::class, 'update'])->name('kua-themes.update');
+    Route::delete('/lapkin/tema-pekerjaan/{kuaActivityTheme}', [KuaActivityThemeController::class, 'destroy'])->name('kua-themes.destroy');
+    Route::post('/lapkin/tema-pekerjaan/{kuaActivityTheme}/move', [KuaActivityThemeController::class, 'move'])->name('kua-themes.move');
 });
 
 Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function () {

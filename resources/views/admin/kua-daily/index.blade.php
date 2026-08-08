@@ -30,10 +30,17 @@
                     <x-primary-button>Tampilkan</x-primary-button>
                 </form>
 
-                <a href="{{ route('kua-daily.create') }}"
-                   class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
-                    + Input Data Harian
-                </a>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('kua-themes.index') }}"
+                       class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500">
+                        Tema Pekerjaan
+                    </a>
+
+                    <a href="{{ route('kua-daily.create') }}"
+                       class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
+                        + Input Data Harian
+                    </a>
+                </div>
             </div>
 
             <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg dark:bg-gray-800">
@@ -55,7 +62,7 @@
                                     {{ tanggal_indonesia($item->tanggal, 'd F Y') }}
                                 </td>
                                 @foreach ($columns as $key => $label)
-                                    <td class="px-3 py-3 text-sm text-gray-700 text-right dark:text-gray-300">{{ $item->{$key} }}</td>
+                                    <td class="px-3 py-3 text-sm text-gray-700 text-right dark:text-gray-300">{{ $item->value($key) ?? 0 }}</td>
                                 @endforeach
                                 <td class="px-3 py-3 text-sm font-semibold text-teal-700 text-right dark:text-teal-400">{{ $item->totalVolume() }}</td>
                                 <td class="px-4 py-3 text-sm space-x-2 whitespace-nowrap">

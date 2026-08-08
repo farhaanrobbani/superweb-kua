@@ -57,10 +57,10 @@
                         <input type="number" name="total_jumlah" id="total_jumlah" min="0"
                                value="{{ old('total_jumlah', $activity->total_jumlah) }}"
                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
-                        @if ($daily && $activity->activity_type_key && array_key_exists($activity->activity_type_key, $columns))
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Jumlah otomatis mengikuti Master Data Harian ({{ $daily->{$activity->activity_type_key} }}).
-                            </p>
+@if ($daily && $activity->activity_type_key && array_key_exists($activity->activity_type_key, $columns))
+                        <p class="text-xs text-teal-600 mt-1 dark:text-teal-400">
+                            Jumlah otomatis mengikuti Master Data Harian ({{ $daily->value($activity->activity_type_key) ?? 0 }}).
+                        </p>
                         @endif
                     </div>
 

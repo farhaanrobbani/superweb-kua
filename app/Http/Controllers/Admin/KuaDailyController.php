@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\KuaActivityTheme;
 use App\Models\KuaDailyData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class KuaDailyController extends Controller
 
         return view('admin.kua-daily.index', [
             'data' => $data,
-            'columns' => KuaDailyData::ACTIVITY_COLUMNS,
+            'columns' => KuaActivityTheme::activeList(),
             'month' => $month,
             'year' => $year,
         ]);
@@ -32,7 +33,7 @@ class KuaDailyController extends Controller
         $tanggal = $request->query('tanggal');
 
         return view('admin.kua-daily.create', [
-            'columns' => KuaDailyData::ACTIVITY_COLUMNS,
+            'columns' => KuaActivityTheme::activeList(),
             'tanggal' => $tanggal,
         ]);
     }
@@ -43,7 +44,7 @@ class KuaDailyController extends Controller
 
         KuaDailyData::updateOrCreate(
             ['tanggal' => $data['tanggal']],
-            [...$data, 'created_by' => $request->user()->id]
+            ['data' => $data['data'], 'created_by' => $request->user()->id]
         );
 
         return $this->redirectToPeriod($data['tanggal'])
@@ -53,7 +54,7 @@ class KuaDailyController extends Controller
     public function edit(KuaDailyData $kuaDaily): View
     {
         return view('admin.kua-daily.edit', [
-            'columns' => KuaDailyData::ACTIVITY_COLUMNS,
+            'columns' => KuaActivityTheme::activeList(),
             'data' => $kuaDaily,
         ]);
     }
@@ -62,7 +63,7 @@ class KuaDailyController extends Controller
     {
         $data = $this->validateData($request);
 
-        $kuaDaily->update($data);
+        $kuaDaily->update(['data' => $data['data']]);
 
         return $this->redirectToPeriod($data['tanggal'])
             ->with('success', 'Data harian berhasil diperbarui.');
@@ -77,15 +78,26 @@ class KuaDailyController extends Controller
 
     private function validateData(Request $request): array
     {
-        $rules = [
-            'tanggal' => ['required', 'date'],
-        ];
+        $keyRules = [];
 
-        foreach (array_keys(KuaDailyData::ACTIVITY_COLUMNS) as $column) {
-            $rules[$column] = ['nullable', 'integer', 'min:0', 'max:1000000'];
+        foreach (array_keys(KuaActivityTheme::activeList()) as $key) {
+            $keyRules[$key] = ['nullable', 'integer', 'min:0', 'max:1000000'];
         }
 
-        return $request->validate($rules);
+        $validated = $request->validate([
+            'tanggal' => ['required', 'date'],
+            ...$keyRules,
+        ]);
+
+        $data = [];
+
+        foreach (array_keys(KuaActivityTheme::activeList()) as $key) {
+            if (array_key_exists($key, $validated)) {
+                $data[$key] = $validated[$key];
+            }
+        }
+
+        return ['tanggal' => $validated['tanggal'], 'data' => $data];
     }
 
     private function redirectToPeriod(string $tanggal): RedirectResponse

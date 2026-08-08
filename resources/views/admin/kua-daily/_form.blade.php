@@ -17,7 +17,7 @@
             @foreach ($columns as $key => $label)
                 <div>
                     <x-input-label for="{{ $key }}" value="{{ $label }}" />
-                    <input type="number" name="{{ $key }}" id="{{ $key }}" min="0" value="{{ old($key, isset($data) ? $data->{$key} : 0) }}"
+                    <input type="number" name="{{ $key }}" id="{{ $key }}" min="0" value="{{ old($key, isset($data) ? $data->value($key) ?? 0 : 0) }}"
                            class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
                     <x-input-error :messages="$errors->get($key)" class="mt-2" />
                 </div>

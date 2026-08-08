@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KuaActivityTheme;
 use App\Models\KuaDailyData;
 use App\Models\StaffActivity;
 use App\Models\User;
 use App\Models\UserActivityTemplate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class StaffActivityController extends Controller
@@ -49,9 +51,9 @@ class StaffActivityController extends Controller
         return view('staff-activities.index', [
             'activities' => $activities,
             'dailyData' => $dailyData,
-            'dailyMap' => $dailyData->map(fn ($item) => $item->only(array_keys(KuaDailyData::ACTIVITY_COLUMNS)))->toArray(),
+            'dailyMap' => $dailyData->map(fn ($item) => $item->data ?? [])->toArray(),
             'templates' => $templates,
-            'columns' => KuaDailyData::ACTIVITY_COLUMNS,
+            'columns' => KuaActivityTheme::activeList(),
             'users' => $user->canManageContent() ? User::orderBy('name')->get() : collect(),
             'selectedUserId' => $user->canManageContent() ? $request->integer('user_id') : null,
             'month' => $month,
@@ -66,7 +68,7 @@ class StaffActivityController extends Controller
             'items.*.tanggal' => ['required', 'date'],
             'items.*.kegiatan' => ['required', 'string', 'max:1000'],
             'items.*.pekerjaan' => ['required', 'string', 'max:1000'],
-            'items.*.activity_type_key' => ['nullable', 'string', 'max:100'],
+            'items.*.activity_type_key' => ['nullable', 'string', 'max:100', Rule::in(array_keys(KuaActivityTheme::activeList()))],
             'items.*.total_jumlah' => ['nullable', 'integer', 'min:0', 'max:1000000'],
             'items.*.save_template' => ['nullable', 'boolean'],
         ]);
@@ -103,7 +105,7 @@ class StaffActivityController extends Controller
 
         return view('staff-activities.edit', [
             'activity' => $kegiatan,
-            'columns' => KuaDailyData::ACTIVITY_COLUMNS,
+            'columns' => KuaActivityTheme::activeList(),
             'daily' => KuaDailyData::where('tanggal', $kegiatan->tanggal)->first(),
         ]);
     }
@@ -141,11 +143,11 @@ class StaffActivityController extends Controller
     {
         $key = $item['activity_type_key'] ?? null;
 
-        if ($key && array_key_exists($key, KuaDailyData::ACTIVITY_COLUMNS)) {
+        if ($key) {
             $daily = KuaDailyData::where('tanggal', $item['tanggal'])->first();
 
-            if ($daily && is_numeric($daily->{$key})) {
-                return (int) $daily->{$key};
+            if ($daily && $daily->value($key) !== null) {
+                return $daily->value($key);
             }
         }
 
