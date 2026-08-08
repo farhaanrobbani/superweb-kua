@@ -20,6 +20,6 @@ class StaffActivity extends Model
 
     public function activityLabel(): ?string
     {
-        return KuaDailyData::ACTIVITY_COLUMNS[$this->activity_type_key] ?? null;
+        return KuaActivityTheme::labelOf($this->activity_type_key);
     }
 }
