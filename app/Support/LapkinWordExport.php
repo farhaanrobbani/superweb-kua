@@ -87,16 +87,14 @@ class LapkinWordExport
         $ttd = $section->addTable(['width' => 9638, 'unit' => 'dxa']);
         $ttd->addRow();
         $kiri = $ttd->addCell(4819, ['valign' => 'top']);
-        $kiri->addText('Pejabat Penilai,', [], ['alignment' => Jc::CENTER]);
+        $kiri->addText('Pejabat Penilai,', [], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kiri);
-        $kiri->addText($data['kepala']['nama'], ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kiri->addText('NIP. '.$data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
+        self::addNameAndNip($kiri, $data['kepala']['nama'], $data['kepala']['nip']);
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
-        $kanan->addText('Pegawai yang Dinilai,', [], ['alignment' => Jc::CENTER]);
+        $kanan->addText('Pegawai yang Dinilai,', [], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kanan);
-        $kanan->addText($user->name, ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kanan->addText('NIP. '.$user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
+        self::addNameAndNip($kanan, $user->name, $user->nip);
 
         return self::save($phpWord);
     }
@@ -137,7 +135,7 @@ class LapkinWordExport
 
         $section->addText('', [], ['spaceAfter' => 240]);
 
-        $rek = $section->addTable(self::tableStyle());
+        $rek = $section->addTable(self::rekapStyle());
         $rek->addRow();
         foreach ([771, 3662, 1928, 3277] as $index => $width) {
             $rek->addCell($width, ['valign' => 'center'])->addText(['NO', 'URAIAN', 'ADA / TIDAK ADA', 'KETERANGAN'][$index], ['bold' => true], ['alignment' => Jc::CENTER]);
@@ -164,18 +162,16 @@ class LapkinWordExport
         $ttd = $section->addTable(['width' => 9638, 'unit' => 'dxa']);
         $ttd->addRow();
         $kiri = $ttd->addCell(4819, ['valign' => 'top']);
-        $kiri->addText('Mengetahui,', [], ['alignment' => Jc::CENTER]);
-        $kiri->addText($data['kepalaJabatan'], ['bold' => true], ['alignment' => Jc::CENTER]);
+        $kiri->addText('Mengetahui,', [], ['alignment' => Jc::LEFT]);
+        $kiri->addText($data['kepalaJabatan'], ['bold' => true], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kiri);
-        $kiri->addText($data['kepala']['nama'], ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kiri->addText('NIP. '.$data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
+        self::addNameAndNip($kiri, $data['kepala']['nama'], $data['kepala']['nip']);
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
-        $kanan->addText($data['signatureDate'], [], ['alignment' => Jc::CENTER]);
-        $kanan->addText('Pegawai,', ['bold' => true], ['alignment' => Jc::CENTER]);
+        $kanan->addText($data['signatureDate'], [], ['alignment' => Jc::LEFT]);
+        $kanan->addText('Pegawai,', ['bold' => true], ['alignment' => Jc::LEFT]);
         self::addSignatureSpace($kanan);
-        $kanan->addText($user->name, ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kanan->addText('NIP. '.$user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
+        self::addNameAndNip($kanan, $user->name, $user->nip);
 
         $section->addText('Catatan:', ['bold' => true], ['spaceBefore' => 300]);
         $section->addText('Keterangan diisi dengan:');
@@ -221,7 +217,24 @@ class LapkinWordExport
     private static function identitasStyle(): array
     {
         return [
-            'cellMargin' => 60,
+            'cellMarginLeft' => 60,
+            'cellMarginRight' => 60,
+            'cellMarginTop' => 20,
+            'cellMarginBottom' => 20,
+            'width' => 9638,
+            'unit' => 'dxa',
+        ];
+    }
+
+    private static function rekapStyle(): array
+    {
+        return [
+            'borderSize' => 6,
+            'borderColor' => '000000',
+            'cellMarginLeft' => 60,
+            'cellMarginRight' => 60,
+            'cellMarginTop' => 20,
+            'cellMarginBottom' => 20,
             'width' => 9638,
             'unit' => 'dxa',
         ];
@@ -266,6 +279,14 @@ class LapkinWordExport
     private static function addSignatureSpace(Cell $cell): void
     {
         $cell->addTextRun()->addTextBreak(4);
+    }
+
+    private static function addNameAndNip(Cell $cell, string $nama, ?string $nip): void
+    {
+        $run = $cell->addTextRun(['alignment' => Jc::LEFT]);
+        $run->addText($nama, ['bold' => true, 'underline' => 'single']);
+        $run->addTextBreak();
+        $run->addText('NIP. '.($nip ?? ''), ['size' => 10]);
     }
 
     private static function rupiah(int $amount): string
