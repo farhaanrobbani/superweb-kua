@@ -37,10 +37,6 @@ class LapkinWordExport
             [
                 'alignment' => Jc::CENTER,
                 'spaceAfter' => 240,
-                'paddingBottom' => 80,
-                'borderBottom' => 'single',
-                'borderBottomSize' => 6,
-                'borderBottomColor' => '000000',
             ]
         );
 
@@ -83,6 +79,8 @@ class LapkinWordExport
             $isi->addCell(1735, ['valign' => 'center'])->addText(tanggal_indonesia($tanggal, 'j F Y'), [], ['alignment' => Jc::CENTER]);
             $no++;
         }
+
+        $section->addText('', [], ['spaceAfter' => 240]);
 
         $ttd = $section->addTable(['width' => 9638, 'unit' => 'dxa']);
         $ttd->addRow();

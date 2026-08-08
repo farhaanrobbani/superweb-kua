@@ -31,7 +31,7 @@
         .ttd td.kiri { text-align: left; }
         .ttd td.kanan { text-align: left; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
-        .ttd .nip { font-size: 10px; }
+        .ttd .nip { font-size: 10px; font-weight: normal; text-decoration: none; }
         .catatan { margin-top: 24px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; }
         .catatan ol { margin: 4px 0 0 0; padding-left: 16px; }
     </style>

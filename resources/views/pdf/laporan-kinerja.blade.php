@@ -26,9 +26,9 @@
         .tanggal-cetak strong { margin-right: 4px; }
         ol { margin: 0; padding-left: 18px; }
         .ttd { width: 100%; margin-top: 46px; border-collapse: collapse; }
-        .ttd td { width: 50%; text-align: center; vertical-align: top; }
+        .ttd td { width: 50%; text-align: left; vertical-align: top; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
-        .ttd .nip { font-size: 10px; }
+        .ttd .nip { font-size: 10px; font-weight: normal; text-decoration: none; }
     </style>
 </head>
 <body>
