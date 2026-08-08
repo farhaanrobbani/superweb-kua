@@ -32,6 +32,7 @@
         .ttd td.kanan { text-align: left; }
         .ttd .nama { font-weight: bold; }
         .ttd .nip { font-size: 10px; font-weight: normal; text-decoration: none; }
+        .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
         .catatan { margin-top: 24px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; }
         .catatan ol { margin: 4px 0 0 0; padding-left: 16px; }
     </style>
@@ -120,7 +121,13 @@
             <td class="kiri">
                 <div>Mengetahui,</div>
                 <div style="font-weight: bold;">{{ $kepalaJabatan }}</div>
-                <div style="height: 78px;"></div>
+                @if (($kop_anchor ?? '1') !== '0')
+                    <div style="height: 30px;"></div>
+                    <div class="anchor">^</div>
+                    <div style="height: 30px;"></div>
+                @else
+                    <div style="height: 78px;"></div>
+                @endif
                 <div class="nama"><u>{{ $kepala['nama'] }}</u><br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
             </td>
             <td class="kanan">

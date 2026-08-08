@@ -47,6 +47,7 @@ class StaffExportController extends Controller
             'monthName' => $this->monthName($month),
             'printDate' => $this->printDate($month, $year),
             'kepala' => $this->kepala(),
+            'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Laporan_Kinerja_%s_%s_%s',
                 str_replace(' ', '_', $user->name),
@@ -84,6 +85,7 @@ class StaffExportController extends Controller
             'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
             'kepala' => $this->kepala(),
             'kepalaJabatan' => trim('Kepala KUA ' . KuaSetting::get('kecamatan', '')),
+            'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
                 'Rekap_Laporan_Kinerja_%s_%s_%s',
                 str_replace(' ', '_', $user->name),

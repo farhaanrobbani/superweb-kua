@@ -29,6 +29,7 @@
         .ttd td { width: 50%; text-align: left; vertical-align: top; }
         .ttd .nama { font-weight: bold; }
         .ttd .nip { font-size: 10px; font-weight: normal; text-decoration: none; }
+        .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
     </style>
 </head>
 <body>
@@ -112,7 +113,13 @@
         <tr>
             <td>
                 <div>Pejabat Penilai,</div>
-                <div style="height: 90px;"></div>
+                @if (($kop_anchor ?? '1') !== '0')
+                    <div style="height: 30px;"></div>
+                    <div class="anchor">^</div>
+                    <div style="height: 30px;"></div>
+                @else
+                    <div style="height: 90px;"></div>
+                @endif
                 <div class="nama"><u>{{ $kepala['nama'] }}</u><br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
             </td>
             <td>
