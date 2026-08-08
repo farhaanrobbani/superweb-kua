@@ -410,14 +410,7 @@
                             </div>
 
                             <div>
-                                <x-input-label value="2. Tuliskan Kalimat Rincian Uraian Pekerjaan Anda" />
-                                <textarea rows="3" x-model="item.pekerjaan" required
-                                          placeholder="Misal: Memeriksa dan merekap berkas permohonan penerbitan duplikat buku nikah..."
-                                          class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
-                            </div>
-
-                            <div>
-                                <x-input-label value="3. Pilih Tema Pekerjaan (Dari Master Data)" />
+                                <x-input-label value="2. Tema Pekerjaan (Dari Master Data)" />
                                 <select x-model="item.key" @change="onKeyChange()"
                                         class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
                                     <option value="libur">Hari Libur (Volume Berkas Kosong / 0)</option>
@@ -429,14 +422,21 @@
                             </div>
 
                             <div>
-                                <x-input-label value="Judul Tema Kegiatan Laporan" />
+                                <x-input-label value="3. Judul Tema Kegiatan Laporan" />
                                 <input type="text" x-model="item.kegiatan" required
                                        class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
                             </div>
 
                             <div>
+                                <x-input-label value="4. Tuliskan Kalimat Rincian Uraian Pekerjaan Anda" />
+                                <textarea rows="3" x-model="item.pekerjaan" required
+                                          placeholder="Misal: Memeriksa dan merekap berkas permohonan penerbitan duplikat buku nikah..."
+                                          class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
+                            </div>
+
+                            <div>
                                 <div class="flex items-center justify-between">
-                                    <x-input-label value="4. Volume Berkas Pekerjaan" />
+                                    <x-input-label value="5. Volume Berkas Pekerjaan" />
                                     <span class="text-[11px] text-teal-600 dark:text-teal-400 font-medium"
                                           x-text="item.key === 'libur' ? 'Hari Libur / Tanpa Berkas' : 'Otomatis diambil dari data operator'"></span>
                                 </div>
