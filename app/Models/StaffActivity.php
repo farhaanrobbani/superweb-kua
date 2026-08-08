@@ -22,4 +22,9 @@ class StaffActivity extends Model
     {
         return KuaActivityTheme::labelOf($this->activity_type_key);
     }
+
+    public function isHoliday(): bool
+    {
+        return $this->activity_type_key === 'libur' || $this->pekerjaan === '-';
+    }
 }

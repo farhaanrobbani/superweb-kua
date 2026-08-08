@@ -25,6 +25,7 @@ use App\Http\Controllers\LayananController;
 use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffActivityController;
+use App\Http\Controllers\StaffExportController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\StaffTemplateController;
 use App\Http\Controllers\SubmissionController;
@@ -87,6 +88,8 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('/lapkin/kegiatan/{kegiatan}/edit', [StaffActivityController::class, 'edit'])->name('kegiatan.edit');
     Route::put('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'update'])->name('kegiatan.update');
     Route::delete('/lapkin/kegiatan/{kegiatan}', [StaffActivityController::class, 'destroy'])->name('kegiatan.destroy');
+    Route::get('/lapkin/kegiatan/export/laporan-kinerja', [StaffExportController::class, 'laporanKinerja'])->name('kegiatan.export.laporan');
+    Route::get('/lapkin/kegiatan/export/rekap', [StaffExportController::class, 'rekap'])->name('kegiatan.export.rekap');
     Route::get('/lapkin/template-kalimat', [StaffTemplateController::class, 'index'])->name('kegiatan.templates.index');
     Route::post('/lapkin/template-kalimat', [StaffTemplateController::class, 'store'])->name('kegiatan.templates.store');
 });
