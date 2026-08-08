@@ -361,6 +361,60 @@ class LapkinTest extends TestCase
             ->assertSee('Volume Berkas');
     }
 
+    public function test_staff_cannot_store_kegiatan_without_uraian_pekerjaan(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), [
+                'items' => [[
+                    'tanggal' => '2026-08-03',
+                    'kegiatan' => 'Pendaftaran Nikah di Kantor',
+                    'pekerjaan' => '',
+                    'activity_type_key' => 'pendaftaran_nikah_kantor',
+                    'total_jumlah' => 3,
+                ]],
+            ])
+            ->assertRedirect()
+            ->assertSessionHasErrors('items.0.pekerjaan');
+
+        $this->assertDatabaseMissing('staff_activities', ['kegiatan' => 'Pendaftaran Nikah di Kantor']);
+    }
+
+    public function test_staff_index_shows_validation_error_alert(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), [
+                'items' => [[
+                    'tanggal' => '2026-08-03',
+                    'kegiatan' => 'Pendaftaran Nikah di Kantor',
+                    'pekerjaan' => '',
+                    'activity_type_key' => 'pendaftaran_nikah_kantor',
+                    'total_jumlah' => 3,
+                ]],
+            ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.index'))
+            ->assertOk()
+            ->assertSee('Kegiatan gagal disimpan')
+            ->assertSee('pekerjaan');
+    }
+
+    public function test_staff_index_renders_operator_daily_data_for_pull_modal(): void
+    {
+        KuaDailyData::create([
+            'tanggal' => '2026-08-03',
+            'data' => ['pendaftaran_nikah_kantor' => 3, 'pelaksanaan_bimwin' => 2],
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.index', ['bulan' => 8, 'tahun' => 2026]))
+            ->assertOk()
+            ->assertSee('2026-08-03')
+            ->assertSee('pendaftaran_nikah_kantor')
+            ->assertSee('pelaksanaan_bimwin')
+            ->assertSee('belum diisi uraian pekerjaan');
+    }
+
     public function test_sidebar_shows_lapkin_menu_for_staff(): void
     {
         $this->actingAs($this->staff)

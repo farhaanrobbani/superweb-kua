@@ -17,6 +17,17 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm dark:bg-red-900/30 dark:border-red-800 dark:text-red-300">
+                    <p class="font-semibold mb-1">Kegiatan gagal disimpan:</p>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form method="GET" action="{{ route('kegiatan.index') }}" class="flex flex-wrap items-end gap-3">
                 <div>
                     <x-input-label for="bulan" value="Bulan" />
@@ -91,7 +102,7 @@
                              });
                          });
                          this.importItems = out;
-                         this.importItems.forEach(e => this.picked[e.uid] = true);
+                         this.importItems.forEach(e => this.picked[e.uid] = false);
                      },
                      visibleImport() {
                          const q = this.importSearch.trim().toLowerCase();
@@ -105,6 +116,9 @@
                      },
                      pickedCount() {
                          return this.importItems.filter(e => this.picked[e.uid]).length;
+                     },
+                     missingUraianCount() {
+                         return this.importItems.filter(e => this.picked[e.uid] && ! e.pekerjaan.trim()).length;
                      },
                      pickVisible(status) {
                          this.visibleImport().forEach(e => this.picked[e.uid] = status);
@@ -375,11 +389,20 @@
                             </template>
 
                             <div class="mt-4 flex items-center justify-between gap-3">
-                                <button type="button" @click="$dispatch('close-modal', 'pull-master-data')"
-                                        class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
-                                <x-primary-button>
-                                    Simpan Pekerjaan Terpilih (<span x-text="pickedCount()"></span>) ke Laporan Saya
-                                </x-primary-button>
+                                <div>
+                                    <p x-show="missingUraianCount() > 0" class="text-xs font-semibold text-red-600 dark:text-red-400"
+                                       x-text="missingUraianCount() + ' item terpilih belum diisi uraian pekerjaan. Lengkapi sebelum menyimpan.'"></p>
+                                    <p x-show="pickedCount() > 0 && missingUraianCount() === 0" class="text-xs text-teal-700 dark:text-teal-400 font-semibold">
+                                        Semua item terpilih sudah memiliki uraian. Siap disimpan.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-3 shrink-0">
+                                    <button type="button" @click="$dispatch('close-modal', 'pull-master-data')"
+                                            class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
+                                    <x-primary-button>
+                                        Simpan Pekerjaan Terpilih (<span x-text="pickedCount()"></span>) ke Laporan Saya
+                                    </x-primary-button>
+                                </div>
                             </div>
 
                             <template x-for="(e, i) in pickedEntries()" :key="e.uid">
