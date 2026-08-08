@@ -59,10 +59,6 @@ class StaffExportController extends Controller
             $year
         );
 
-        if ($request->boolean('preview')) {
-            return $pdf->stream($fileName, ['Attachment' => false]);
-        }
-
         return $pdf->download($fileName);
     }
 
@@ -96,10 +92,6 @@ class StaffExportController extends Controller
             $this->monthName($month),
             $year
         );
-
-        if ($request->boolean('preview')) {
-            return $pdf->stream($fileName, ['Attachment' => false]);
-        }
 
         return $pdf->download($fileName);
     }

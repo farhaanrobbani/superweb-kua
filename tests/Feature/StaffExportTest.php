@@ -168,43 +168,6 @@ class StaffExportTest extends TestCase
             ->assertSee('Pilih pegawai (wajib)');
     }
 
-    public function test_staff_can_view_laporan_preview_inline(): void
-    {
-        $response = $this->actingAs($this->staff)
-            ->get(route('kegiatan.export.laporan', [
-                'bulan' => 8,
-                'tahun' => 2026,
-                'preview' => 1,
-            ]));
-
-        $response->assertOk()
-            ->assertHeader('content-type', 'application/pdf')
-            ->assertHeader('content-disposition', 'inline; filename=Laporan_Kinerja_Budi_Santoso_Agustus_2026.pdf');
-    }
-
-    public function test_staff_can_view_rekap_preview_inline(): void
-    {
-        $response = $this->actingAs($this->staff)
-            ->get(route('kegiatan.export.rekap', [
-                'bulan' => 8,
-                'tahun' => 2026,
-                'total_hari_kerja' => 22,
-                'preview' => 1,
-            ]));
-
-        $response->assertOk()
-            ->assertHeader('content-type', 'application/pdf')
-            ->assertHeader('content-disposition', 'inline; filename=Rekap_Laporan_Kinerja_Budi_Santoso_Agustus_2026.pdf');
-    }
-
-    public function test_export_page_has_preview_panel(): void
-    {
-        $this->actingAs($this->staff)
-            ->get(route('kegiatan.export.index', ['bulan' => 8, 'tahun' => 2026]))
-            ->assertOk()
-            ->assertSee('Preview PDF');
-    }
-
     public function test_operator_can_export_rekap_for_staff(): void
     {
         $this->actingAs($this->operator)
