@@ -42,7 +42,6 @@ append_or_replace MAIL_HOST smtp.gmail.com
 append_or_replace MAIL_PORT 587
 append_or_replace MAIL_USERNAME "${GMAIL}"
 append_or_replace MAIL_PASSWORD "${APP_PASSWORD}"
-append_or_replace MAIL_ENCRYPTION tls
 append_or_replace MAIL_FROM_ADDRESS "${GMAIL}"
 append_or_replace MAIL_FROM_NAME "KUA Ampelgading"
 
