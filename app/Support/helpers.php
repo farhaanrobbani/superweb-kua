@@ -68,6 +68,9 @@ if (! function_exists('tanggal_indonesia')) {
 
         $isoFormat = strtr($format, [
             'd' => 'DD',
+            'j' => 'D',
+            'm' => 'MM',
+            'n' => 'M',
             'F' => 'MMMM',
             'Y' => 'YYYY',
             'l' => 'dddd',
