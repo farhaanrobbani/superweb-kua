@@ -30,6 +30,28 @@ php artisan storage:link           # symlink public/storage -> storage/app/publi
 npm install && npm run build
 ```
 
+### Email (SMTP Gmail)
+
+Aplikasi mengirim email untuk fitur lupa password. Default `.env.example` sudah diarahkan ke SMTP Gmail (`MAIL_MAILER=smtp`) — cukup isi di `.env`:
+
+| Variabel | Isi |
+|---|---|
+| `MAIL_USERNAME` | alamat Gmail pengirim (mis. `kuaampelgading83@gmail.com`) |
+| `MAIL_PASSWORD` | App Password Gmail 16 karakter |
+| `MAIL_FROM_ADDRESS` | alamat pengirim (sama dengan `MAIL_USERNAME`) |
+
+Cara membuat App Password:
+1. Aktifkan **2-Step Verification**: `https://myaccount.google.com/security`
+2. Buat App Password: Security → App passwords → pilih "Mail"
+
+Atau jalankan sekali (backup `.env`, set konfigurasi SMTP, kirim email test):
+
+```bash
+bash scripts/setup-mail.sh kuaampelgading83@gmail.com 'xxxx xxxx xxxx xxxx'
+```
+
+> `MAIL_SCHEME` opsional — kosongkan, otomatis mengikuti port (`587` → smtp, `465` → smtps).
+
 User awal (ubah via `.env` sebelum seed):
 
 | Role | Email default | Password default |
