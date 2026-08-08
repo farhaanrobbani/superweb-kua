@@ -6,7 +6,14 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-4">
+            <div>
+                <a href="{{ route('kua-daily.index') }}"
+                   class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:bg-gray-700/40 dark:text-teal-400">
+                    &larr; Kembali
+                </a>
+            </div>
+
             <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
                 <form method="POST" action="{{ isset($theme->id) ? route('kua-themes.update', $theme) : route('kua-themes.store') }}"
                       class="px-6 py-6 space-y-4">

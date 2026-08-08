@@ -12,9 +12,10 @@
             @endif
 
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                    Kelola tema pekerjaan yang tampil sebagai judul kolom pada Master Data Harian.
-                </p>
+                <a href="{{ route('kua-daily.index') }}"
+                   class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:bg-gray-700/40 dark:text-teal-400">
+                    &larr; Kembali ke Master Data Harian
+                </a>
 
                 <a href="{{ route('kua-themes.create') }}"
                    class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
