@@ -1,16 +1,17 @@
 # Surat Digital KUA
 
-Aplikasi web untuk pembuatan surat digital di Kantor Urusan Agama (KUA) berbasis **Laravel 13** dengan alur persetujuan, penomoran otomatis, ekspor PDF berkop KUA, tanda tangan digital, dan permohonan surat secara online.
+Aplikasi web untuk pembuatan surat digital di Kantor Urusan Agama (KUA) berbasis **Laravel 13** dengan alur persetujuan, ekspor PDF berkop KUA, laporan kinerja pegawai (PDF & Word), permohonan surat secara online, dan fitur layanan publik.
 
 ## Fitur
 
-- **Autentikasi & role**: staf KUA (membuat surat) dan Kepala KUA (persetujuan & tanda tangan)
-- **Master data**: jenis surat dengan field dinamis, template surat, pengaturan KUA (kop, alamat, kepala KUA, TTD)
-- **Modul surat**: alur `draft → diajukan → disetujui → terbit`, penomoran otomatis per jenis per tahun (contoh: `SKU.001/KUA.VIII/2026`)
-- **PDF**: ekspor surat berkop KUA dengan tanda tangan digital (gambar PNG transparan)
-- **Arsip**: daftar, filter (jenis/status/tahun), pencarian, unduh ulang PDF
-- **Permohonan online**: masyarakat mengisi form tanpa login; staf memverifikasi dan membuat surat dari data permohonan (terisi otomatis)
+- **Autentikasi & role**: staf KUA (membuat surat), Operator KUA (mengelola konten & data master), dan Kepala KUA (persetujuan, tanda tangan, & pengelolaan user)
+- **Master data**: 12 jenis surat dengan field dinamis (SPN, SKU, SPC, SUP, SIN, SP, SPD, SPA, SPM, SKN, PNL), template surat, pengaturan KUA (kop, alamat, kepala KUA, penanda posisi TTD), halaman statis & menu navbar dinamis
+- **Modul surat**: alur `draft → diajukan → disetujui → terbit`, PDF berkop KUA, nomor surat diisi manual (contoh: `B.001/KUA.35.07.06/PW.01/01/2026`)
+- **Laporan kinerja pegawai (lapkin)**: pencatatan kegiatan harian, master data harian & tema pekerjaan, template kalimat, ekspor **PDF & Word** (laporan per pegawai dan rekap per bulan/tahun)
+- **Permohonan online**: masyarakat mengisi form tanpa login (SPD, SPA, SKN, PNL); staf/operator memverifikasi dan membuat surat dari data permohonan (terisi otomatis)
+- **Layanan publik**: pengumuman, daftar pegawai, pusat unduhan, layanan pernikahan, dan kritik & saran
 - **Dashboard**: statistik surat & permohonan
+- **Email**: notifikasi lupa password via SMTP Gmail
 
 ## Persyaratan
 
@@ -29,6 +30,18 @@ php artisan db:seed --force        # membuat user awal & data master
 php artisan storage:link           # symlink public/storage -> storage/app/public (untuk logo/upload)
 npm install && npm run build
 ```
+
+Halaman login berada di **`/yukmasuk`**.
+
+User awal (ubah via `.env` sebelum seed):
+
+| Role | Email default | Password default |
+|---|---|---|
+| Staf | `staf@kua.local` | `password` |
+| Operator | `operator@kua.local` | `password` |
+| Kepala | `kepala@kua.local` | `password` |
+
+⚠️ Wajib mengganti password default setelah deploy pertama.
 
 ### Email (SMTP Gmail)
 
@@ -52,21 +65,51 @@ bash scripts/setup-mail.sh kuaampelgading83@gmail.com 'xxxx xxxx xxxx xxxx'
 
 > `MAIL_SCHEME` opsional — kosongkan, otomatis mengikuti port (`587` → smtp, `465` → smtps).
 
-User awal (ubah via `.env` sebelum seed):
+## Nomor Surat
 
-| Role | Email default | Password default |
-|---|---|---|
-| Staf | `staf@kua.local` | `password` |
-| Kepala | `kepala@kua.local` | `password` |
+Nomor surat **diisi manual** oleh pengguna di form pembuatan/penyuntingan surat (tidak ada penomoran otomatis). Contoh format:
 
-⚠️ Wajib mengganti password default setelah deploy pertama.
+```
+B.001/KUA.35.07.06/PW.01/01/2026
+```
+
+Surat baru dimulai sebagai `draft`; setelah dilengkapi nomor & tanggal, surat dapat diajukan, disetujui, lalu diterbitkan.
+
+## Kop & Tanda Tangan PDF
+
+- Kop surat dapat dikonfigurasi di **Pengaturan KUA** (`/kua-settings`): logo, teks kop (judul/sub-judul), ukuran kop, dan alamat.
+- Penanda posisi tanda tangan memakai simbol **anchor `^`** (dapat dimatikan via pengaturan `kop_anchor`); Kepala KUA menandatangani surat fisik di posisi tersebut.
 
 ## Deploy Otomatis ke VPS (GitHub Actions)
 
-Workflow di `.github/workflows/deploy.yml`:
+Workflow di `.github/workflows/deploy.yml` berisi 2 job:
 
 1. **Test** — menjalankan seluruh test (PHPUnit + SQLite) di setiap push ke `main`.
-2. **Deploy** — jika test lulus, menarik kode ke VPS via SSH, menjalankan `composer install`, `migrate`, dan cache.
+2. **Deploy** — jika test lulus **dan** Repository variable `DEPLOY_ENABLED=true`, mengirim webhook `POST` ke VPS.
+
+### Cara kerja
+
+Push ke `main` → job `test` (matrix PHP 8.3) → jika sukses & `vars.DEPLOY_ENABLED == 'true'`, GitHub Actions mengirim `POST` ke `DEPLOY_WEBHOOK_URL` dengan header:
+
+- `X-Deploy-Token: <DEPLOY_TOKEN>`
+- `X-GitHub-Event: push`
+- `X-GitHub-Delivery: <run_id>-<run_attempt>`
+
+Di VPS, endpoint `POST /deploy` (`DeployController`) memverifikasi token dari `.env` (`DEPLOY_TOKEN`), lalu menjalankan `scripts/deploy.sh`.
+
+### `scripts/deploy.sh` (di VPS)
+
+Path aplikasi di VPS: **`/ai/proyek`**. Langkah yang dijalankan:
+
+1. `git pull origin main`
+2. Install & salin font Liberation ke `storage/fonts/` (font PDF surat)
+3. `composer install --no-dev`
+4. `php artisan migrate --force`
+5. `npm install` + `npm run build`
+6. `php artisan storage:link --force`
+7. `config:cache`, `route:cache`, `view:cache`
+8. Set `upload_max_filesize`/`post_max_size` php-fpm
+9. `chown` storage & bootstrap/cache ke `www-data`, restart `php-fpm`
 
 ### Setup VPS (sekali saja)
 
@@ -82,26 +125,19 @@ sudo mysql -e "CREATE USER 'surdig'@'localhost' IDENTIFIED BY 'GANTI_PASSWORD'; 
 ```
 
 ```bash
-sudo mkdir -p /var/www/surdig
-sudo chown -R $USER /var/www/surdig
-cd /var/www/surdig
+sudo mkdir -p /ai/proyek
+sudo chown -R $USER /ai/proyek
+cd /ai/proyek
 git clone https://github.com/farhaanrobbani/surdig.git .
 composer install --no-dev --no-interaction
 cp .env.example .env
 php artisan key:generate
-# atur .env: APP_URL, DB_*, STAFF_EMAIL, STAFF_PASSWORD, KEPALA_EMAIL, KEPALA_PASSWORD
+# atur .env: APP_URL, APP_ENV=production, APP_DEBUG=false, DB_*, DEPLOY_TOKEN, MAIL_*, STAFF_EMAIL, STAFF_PASSWORD, KEPALA_EMAIL, KEPALA_PASSWORD
 php artisan migrate --force
 php artisan db:seed --force
 php artisan storage:link           # symlink untuk logo/upload (sekali saja)
 npm install && npm run build
 sudo chown -R www-data:www-data storage bootstrap/cache
-```
-
-Font PDF surat (Arial = Liberation Sans, harus tersedia di `storage/fonts/`):
-
-```bash
-mkdir -p storage/fonts
-cp /usr/share/fonts/truetype/liberation/LiberationSans-*.ttf storage/fonts/
 ```
 
 Config Nginx (`/etc/nginx/sites-available/surdig`):
@@ -110,7 +146,7 @@ Config Nginx (`/etc/nginx/sites-available/surdig`):
 server {
     listen 80;
     server_name kua.example.com;
-    root /var/www/surdig/public;
+    root /ai/proyek/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
@@ -145,25 +181,17 @@ sudo ln -s /etc/nginx/sites-available/surdig /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### Set GitHub Secrets
+### Konfigurasi GitHub Actions
 
-Di repo `surdig` → **Settings → Secrets and variables → Actions**, tambahkan:
+Di repo `surdig` → **Settings → Secrets and variables → Actions**:
 
-| Secret | Nilai |
-|---|---|
-| `DEPLOY_HOST` | IP/domain VPS |
-| `DEPLOY_USER` | user SSH di VPS (mis. `deploy`) |
-| `DEPLOY_SSH_KEY` | private SSH key yang terpasang di VPS (authorized_keys) |
-| `DEPLOY_PORT` | port SSH (`22`) |
-| `DEPLOY_PATH` | path aplikasi (`/var/www/surdig`) |
+| Tipe | Nama | Nilai |
+|---|---|---|
+| Secret | `DEPLOY_WEBHOOK_URL` | URL endpoint deploy di VPS (mis. `https://domainkua.example.com/deploy`) |
+| Secret | `DEPLOY_TOKEN` | token yang sama dengan `DEPLOY_TOKEN` di `.env` VPS |
+| Variable | `DEPLOY_ENABLED` | `true` untuk mengaktifkan job deploy |
 
-Lalu aktifkan deploy dengan menambahkan **Repository variable** `DEPLOY_ENABLED=true` (Settings → Secrets and variables → Actions → Variables). Job deploy akan berjalan otomatis setelah test lulus; selama variable belum diaktifkan, hanya test yang berjalan.
-
-Setelah secrets terpasang, setiap `git push origin main` akan otomatis men-deploy ke VPS.
-
-## Struktur Nomor Surat
-
-Format: `{KODE}.{urutan:3}/KUA.{bulan-romawi}/{tahun}` — contoh `SKU.001/KUA.VIII/2026`. Counter dihitung per jenis surat dan direset setiap tahun.
+Selama `DEPLOY_ENABLED` belum diaktifkan, hanya job `test` yang berjalan. Setelah terpasang, setiap `git push origin main` otomatis men-deploy ke VPS.
 
 ## Keamanan
 
@@ -171,7 +199,8 @@ Format: `{KODE}.{urutan:3}/KUA.{bulan-romawi}/{tahun}` — contoh `SKU.001/KUA.V
 - Escape output di Blade — bebas XSS
 - Validasi form di sisi server untuk semua input
 - Rate limit pada form permohonan publik + honeypot anti-bot
-- Kredensial hanya di `.env` (tidak pernah di-commit)
+- Kredensial & token hanya di `.env` (tidak pernah di-commit)
+- Verifikasi token pada endpoint webhook `/deploy`
 
 ## Test
 

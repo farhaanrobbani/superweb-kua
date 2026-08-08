@@ -25,7 +25,7 @@
                                 <x-input-label for="nomor" value="Nomor Surat" />
                                 <x-text-input id="nomor" name="nomor" class="mt-1 block w-full"
                                               value="{{ old('nomor', $letter->nomor) }}"
-                                              placeholder="Contoh: 001/KUA.10.02.07/VIII/2026" />
+                                              placeholder="Contoh: B.001/KUA.35.07.06/PW.01/01/2026" />
                                 <x-input-error :messages="$errors->get('nomor')" class="mt-2" />
                             </div>
 
