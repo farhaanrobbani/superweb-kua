@@ -113,14 +113,12 @@
             <td>
                 <div>Pejabat Penilai,</div>
                 <div style="height: 90px;"></div>
-                <div class="nama">{{ $kepala['nama'] }}</div>
-                <div class="nip">NIP. {{ $kepala['nip'] }}</div>
+                <div class="nama">{{ $kepala['nama'] }}<br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
             </td>
             <td>
                 <div>Pegawai yang Dinilai,</div>
                 <div style="height: 90px;"></div>
-                <div class="nama">{{ $user->name }}</div>
-                <div class="nip">NIP. {{ $user->nip }}</div>
+                <div class="nama">{{ $user->name }}<br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>
         </tr>
     </table>
