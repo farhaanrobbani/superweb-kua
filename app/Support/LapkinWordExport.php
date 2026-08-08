@@ -137,7 +137,7 @@ class LapkinWordExport
 
         $rek = $section->addTable(self::rekapStyle());
         $rek->addRow();
-        foreach ([771, 3662, 1928, 3277] as $index => $width) {
+        foreach ([771, 3162, 2428, 3277] as $index => $width) {
             $rek->addCell($width, ['valign' => 'center'])->addText(['NO', 'URAIAN', 'ADA / TIDAK ADA', 'KETERANGAN'][$index], ['bold' => true], ['alignment' => Jc::CENTER]);
         }
 
@@ -151,8 +151,8 @@ class LapkinWordExport
         foreach ($rows as [$uraian, $keterangan]) {
             $rek->addRow();
             $rek->addCell(771, ['valign' => 'center'])->addText((string) $no, ['bold' => true], ['alignment' => Jc::CENTER]);
-            $rek->addCell(3662, ['valign' => 'center'])->addText($uraian);
-            $rek->addCell(1928, ['valign' => 'center'])->addText('Ada', [], ['alignment' => Jc::CENTER]);
+            $rek->addCell(3162, ['valign' => 'center'])->addText($uraian);
+            $rek->addCell(2428, ['valign' => 'center'])->addText('Ada', [], ['alignment' => Jc::CENTER]);
             $rek->addCell(3277, ['valign' => 'center'])->addText($keterangan);
             $no++;
         }
