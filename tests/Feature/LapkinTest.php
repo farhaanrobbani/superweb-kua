@@ -326,6 +326,31 @@ class LapkinTest extends TestCase
         ]);
     }
 
+    public function test_staff_can_create_single_activity_from_modal_payload(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('kegiatan.store'), [
+                'items' => [
+                    '0' => [
+                        'tanggal' => '2026-08-05',
+                        'kegiatan' => 'Pelayanan Pendaftaran Nikah',
+                        'pekerjaan' => 'Memeriksa dan merekap berkas permohonan',
+                        'activity_type_key' => 'pendaftaran_nikah_kantor',
+                        'total_jumlah' => 3,
+                    ],
+                ],
+            ])
+            ->assertRedirect()
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('staff_activities', [
+            'user_id' => $this->staff->id,
+            'tanggal' => '2026-08-05',
+            'activity_type_key' => 'pendaftaran_nikah_kantor',
+            'total_jumlah' => 3,
+        ]);
+    }
+
     public function test_staff_sees_pull_master_data_button(): void
     {
         $this->actingAs($this->staff)

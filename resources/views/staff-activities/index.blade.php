@@ -157,14 +157,23 @@
                              this.itemError = 'Tanggal, Kalimat Kegiatan, dan Kalimat Pekerjaan wajib diisi.';
                              return;
                          }
-                         const fd = new FormData();
-                         fd.append('tanggal', this.item.tanggal);
-                         fd.append('kegiatan', this.item.kegiatan);
-                         fd.append('pekerjaan', this.item.pekerjaan);
-                         fd.append('activity_type_key', this.item.key);
-                         fd.append('total_jumlah', this.item.volume === '' ? (this.item.key === 'libur' ? 0 : 1) : this.item.volume);
-                         const isEdit = !! this.item.id;
-                         if (isEdit) fd.append('_method', 'PUT');
+                        const fd = new FormData();
+                        const isEdit = !! this.item.id;
+                        const volume = this.item.volume === '' ? (this.item.key === 'libur' ? 0 : 1) : this.item.volume;
+                        if (isEdit) {
+                            fd.append('_method', 'PUT');
+                            fd.append('tanggal', this.item.tanggal);
+                            fd.append('kegiatan', this.item.kegiatan);
+                            fd.append('pekerjaan', this.item.pekerjaan);
+                            fd.append('activity_type_key', this.item.key);
+                            fd.append('total_jumlah', volume);
+                        } else {
+                            fd.append('items[0][tanggal]', this.item.tanggal);
+                            fd.append('items[0][kegiatan]', this.item.kegiatan);
+                            fd.append('items[0][pekerjaan]', this.item.pekerjaan);
+                            fd.append('items[0][activity_type_key]', this.item.key);
+                            fd.append('items[0][total_jumlah]', volume);
+                        }
                          const res = await fetch(isEdit ? this.updateUrl.replace(':id', this.item.id) : this.storeUrl, {
                              method: 'POST',
                              headers: {
