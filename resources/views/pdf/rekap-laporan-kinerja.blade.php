@@ -18,8 +18,9 @@
         }
         table.identitas { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
         table.identitas td { padding: 3px 6px; vertical-align: top; }
-        table.identitas td.label { width: 30%; font-weight: bold; text-align: right; }
-        table.identitas td.nilai { width: 60%; }
+        table.identitas td.label { width: 30%; font-weight: bold; }
+        table.identitas td.colon { width: 3%; text-align: right; }
+        table.identitas td.nilai { width: 52%; }
         .foto { text-align: center; vertical-align: middle; }
         .foto img { width: 90px; height: auto; border: 1px solid #111; }
         table.border { width: 100%; border-collapse: collapse; }
@@ -40,7 +41,8 @@
 
     <table class="identitas">
         <tr>
-            <td class="label">Nama:</td>
+            <td class="label">Nama</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $user->name }}</td>
             <td class="foto" rowspan="6">
                 @php($fotoPath = $user->foto_profil_url ? \Illuminate\Support\Facades\Storage::disk('public')->path($user->foto_profil_url) : null)
@@ -50,23 +52,28 @@
             </td>
         </tr>
         <tr>
-            <td class="label">NIP:</td>
+            <td class="label">NIP</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $user->nip }}</td>
         </tr>
         <tr>
-            <td class="label">Jabatan:</td>
+            <td class="label">Jabatan</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $user->jabatan }}</td>
         </tr>
         <tr>
-            <td class="label">Instansi:</td>
+            <td class="label">Instansi</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $instansi }}</td>
         </tr>
         <tr>
-            <td class="label">Grade Tukin:</td>
+            <td class="label">Grade Tukin</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $user->grade_tukin ? 'Grade ' . $user->grade_tukin : '-' }}</td>
         </tr>
         <tr>
-            <td class="label">Nilai Tukin Kotor:</td>
+            <td class="label">Nilai Tukin Kotor</td>
+            <td class="colon">:</td>
             <td class="nilai">{{ $user->jumlah_tukin_kotor ? 'Rp ' . number_format($user->jumlah_tukin_kotor, 0, ',', '.') : '-' }}</td>
         </tr>
     </table>

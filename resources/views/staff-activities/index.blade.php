@@ -498,6 +498,16 @@
                                        class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
                             </div>
 
+                            <div class="mt-4">
+                                <x-input-label value="Tanggal Tanda Tangan (opsional)" />
+                                <input type="text" name="tanggal_ttd" placeholder="31 Agustus 2026"
+                                       maxlength="100"
+                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    Kosongkan untuk memakai tanggal terakhir bulan. Kota tetap otomatis dari pengaturan.
+                                </p>
+                            </div>
+
                             <div class="mt-4 flex items-center justify-end gap-3">
                                 <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
                                         class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>

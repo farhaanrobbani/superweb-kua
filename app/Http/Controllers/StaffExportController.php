@@ -56,6 +56,8 @@ class StaffExportController extends Controller
 
         PdfSupport::registerArialFonts();
 
+        $customTanggal = trim((string) $request->string('tanggal_ttd', '')->limit(100));
+
         $pdf = Pdf::loadView('pdf.rekap-laporan-kinerja', [
             'user' => $user,
             'month' => $month,
@@ -64,7 +66,7 @@ class StaffExportController extends Controller
             'instansi' => KuaSetting::get('instansi', $user->instansi) ?: '',
             'kota' => KuaSetting::get('kabupaten', '') ?: '',
             'totalHariKerja' => $totalHariKerja,
-            'signatureDate' => $this->signatureDate($month, $year),
+            'signatureDate' => $this->signatureDate($month, $year, $customTanggal),
             'kepala' => $this->kepala(),
             'kepalaJabatan' => trim('Kepala KUA ' . KuaSetting::get('kecamatan', '')),
         ]);
@@ -120,11 +122,12 @@ class StaffExportController extends Controller
         return tanggal_indonesia(Carbon::createFromDate($year, $month, 1)->endOfMonth(), 'j F Y');
     }
 
-    private function signatureDate(int $month, int $year): string
+    private function signatureDate(int $month, int $year, string $custom = ''): string
     {
         $kota = KuaSetting::get('kabupaten', '') ?: '';
+        $tanggal = $custom !== '' ? $custom : $this->printDate($month, $year);
 
-        return trim(($kota !== '' ? $kota . ', ' : '') . $this->printDate($month, $year));
+        return trim(($kota !== '' ? $kota . ', ' : '') . $tanggal);
     }
 
     private function kepala(): array

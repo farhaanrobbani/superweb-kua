@@ -131,6 +131,26 @@ class StaffExportTest extends TestCase
         $this->assertStringContainsString('%PDF', $content);
     }
 
+    public function test_staff_can_download_rekap_pdf_with_custom_signature_date(): void
+    {
+        $response = $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.rekap', [
+                'bulan' => 8,
+                'tahun' => 2026,
+                'total_hari_kerja' => 22,
+                'tanggal_ttd' => '20 Agustus 2026',
+            ]));
+
+        $response->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $this->assertStringContainsString('%PDF', $content);
+    }
+
     public function test_operator_can_export_rekap_for_staff(): void
     {
         $this->actingAs($this->operator)
