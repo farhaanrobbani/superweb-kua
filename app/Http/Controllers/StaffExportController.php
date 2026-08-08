@@ -66,7 +66,7 @@ class StaffExportController extends Controller
             'totalHariKerja' => $totalHariKerja,
             'signatureDate' => $this->signatureDate($month, $year),
             'kepala' => $this->kepala(),
-            'kepalaJabatan' => 'Kepala Kantor Urusan Agama',
+            'kepalaJabatan' => trim('Kepala KUA ' . KuaSetting::get('kecamatan', '')),
         ]);
 
         $fileName = sprintf(
