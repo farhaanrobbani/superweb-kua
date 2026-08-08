@@ -13,13 +13,13 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid #111;
             padding-bottom: 6px;
             margin-bottom: 12px;
         }
         table.border { width: 100%; border-collapse: collapse; }
         table.border th, table.border td { border: 1px solid #111; padding: 5px 7px; vertical-align: top; }
         table.border th { background: #eee; text-align: center; font-weight: bold; }
+        table.identitas { width: 100%; border-collapse: collapse; }
         table.identitas td { border: 1px solid #111; padding: 4px 8px; }
         table.identitas td.label { width: 34%; font-weight: bold; }
         .tanggal-cetak { margin: 10px 0; }
@@ -113,9 +113,6 @@
             <td>
                 <div>Pejabat Penilai,</div>
                 <div style="height: 90px;"></div>
-                @if ($kepala['pangkat'] !== '')
-                    <div style="font-weight: bold;">{{ $kepala['pangkat'] }}</div>
-                @endif
                 <div class="nama">{{ $kepala['nama'] }}</div>
                 <div class="nip">NIP. {{ $kepala['nip'] }}</div>
             </td>

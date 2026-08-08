@@ -88,9 +88,6 @@ class LapkinWordExport
         $kiri = $ttd->addCell(4819, ['valign' => 'top']);
         $kiri->addText('Pejabat Penilai,', [], ['alignment' => Jc::CENTER]);
         self::addSignatureSpace($kiri);
-        if ($data['kepala']['pangkat'] !== '') {
-            $kiri->addText($data['kepala']['pangkat'], ['bold' => true], ['alignment' => Jc::CENTER]);
-        }
         $kiri->addText($data['kepala']['nama'], ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
         $kiri->addText('NIP. ' . $data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
 
