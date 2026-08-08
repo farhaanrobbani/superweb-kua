@@ -15,10 +15,11 @@ class LapkinWordExport
     public static function download(string $type, array $data): Response
     {
         $docx = $type === 'rekap' ? self::buildRekap($data) : self::buildLaporan($data);
+        $filename = $data['fileName'] . '.docx';
 
         return response($docx, 200, [
             'Content-Type' => self::CONTENT_TYPE,
-            'Content-Disposition' => 'attachment; filename=' . $data['fileName'] . '.docx',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"; filename*=UTF-8''" . rawurlencode($filename),
         ]);
     }
 

@@ -179,7 +179,7 @@ class StaffExportTest extends TestCase
 
         $response->assertOk()
             ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-            ->assertHeader('content-disposition', 'attachment; filename=Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
+            ->assertHeader('content-disposition', 'attachment; filename="Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx"; filename*=UTF-8\'\'Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
 
         ob_start();
         $response->sendContent();
@@ -200,7 +200,7 @@ class StaffExportTest extends TestCase
 
         $response->assertOk()
             ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-            ->assertHeader('content-disposition', 'attachment; filename=Rekap_Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
+            ->assertHeader('content-disposition', 'attachment; filename="Rekap_Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx"; filename*=UTF-8\'\'Rekap_Laporan_Kinerja_Budi_Santoso_Agustus_2026.docx');
 
         ob_start();
         $response->sendContent();
