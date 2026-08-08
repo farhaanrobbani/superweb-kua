@@ -234,6 +234,14 @@ class LapkinTest extends TestCase
         ]);
     }
 
+    public function test_staff_sees_pull_master_data_button(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.index'))
+            ->assertOk()
+            ->assertSee('Ambil Data dari Operator');
+    }
+
     public function test_sidebar_shows_lapkin_menu_for_staff(): void
     {
         $this->actingAs($this->staff)
