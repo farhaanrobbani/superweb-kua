@@ -112,7 +112,7 @@
     <table class="ttd">
         <tr>
             <td>
-                <div>Pejabat Penilai,</div>
+                <div>Pejabat Penilai</div>
                 @if (($kop_anchor ?? '1') !== '0')
                     <div style="height: 30px;"></div>
                     <div class="anchor">^</div>
@@ -123,7 +123,7 @@
                 <div class="nama"><u>{{ $kepala['nama'] }}</u><br><span class="nip">NIP. {{ $kepala['nip'] }}</span></div>
             </td>
             <td>
-                <div>Pegawai yang Dinilai,</div>
+                <div>Pegawai yang Dinilai</div>
                 <div style="height: 90px;"></div>
                 <div class="nama"><u>{{ $user->name }}</u><br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>

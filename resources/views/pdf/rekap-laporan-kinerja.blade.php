@@ -132,7 +132,7 @@
             </td>
             <td class="kanan">
                 <div>{{ $signatureDate }}</div>
-                <div style="font-weight: bold;">Pegawai,</div>
+                <div style="font-weight: bold;">Pegawai</div>
                 <div style="height: 78px;"></div>
                 <div class="nama"><u>{{ $user->name }}</u><br><span class="nip">NIP. {{ $user->nip }}</span></div>
             </td>
