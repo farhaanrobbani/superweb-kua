@@ -124,7 +124,7 @@
                 @if (($kop_anchor ?? '1') !== '0')
                     <div style="height: 30px;"></div>
                     <div class="anchor">^</div>
-                    <div style="height: 30px;"></div>
+                    <div style="height: 7px;"></div>
                 @else
                     <div style="height: 78px;"></div>
                 @endif
