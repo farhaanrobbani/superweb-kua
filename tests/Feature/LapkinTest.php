@@ -69,19 +69,19 @@ class LapkinTest extends TestCase
             ])
             ->assertRedirect(route('kua-daily.index', ['bulan' => 8, 'tahun' => 2026]));
 
-        $this->assertDatabaseHas('kua_daily_data', [
-            'tanggal' => '2026-08-03',
-            'pendaftaran_nikah_kantor' => 5,
-            'pelaksanaan_wakaf' => 2,
-            'created_by' => $this->operator->id,
-        ]);
+        $record = KuaDailyData::where('tanggal', '2026-08-03')->first();
+
+        $this->assertNotNull($record);
+        $this->assertSame(5, $record->data['pendaftaran_nikah_kantor']);
+        $this->assertSame(2, $record->data['pelaksanaan_wakaf']);
+        $this->assertSame($this->operator->id, $record->created_by);
     }
 
     public function test_kua_daily_data_is_upserted_by_tanggal(): void
     {
         KuaDailyData::create([
             'tanggal' => '2026-08-03',
-            'pendaftaran_nikah_kantor' => 5,
+            'data' => ['pendaftaran_nikah_kantor' => 5],
             'created_by' => $this->operator->id,
         ]);
 
@@ -92,10 +92,9 @@ class LapkinTest extends TestCase
             ]);
 
         $this->assertDatabaseCount('kua_daily_data', 1);
-        $this->assertDatabaseHas('kua_daily_data', [
-            'tanggal' => '2026-08-03',
-            'pendaftaran_nikah_kantor' => 9,
-        ]);
+
+        $record = KuaDailyData::where('tanggal', '2026-08-03')->first();
+        $this->assertSame(9, $record->data['pendaftaran_nikah_kantor']);
     }
 
     public function test_staff_can_store_batch_activities(): void
@@ -123,7 +122,7 @@ class LapkinTest extends TestCase
     {
         KuaDailyData::create([
             'tanggal' => '2026-08-03',
-            'pendaftaran_nikah_kantor' => 7,
+            'data' => ['pendaftaran_nikah_kantor' => 7],
             'created_by' => $this->operator->id,
         ]);
 
