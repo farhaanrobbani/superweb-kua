@@ -24,7 +24,7 @@ class PageSeeder extends Seeder
             [
                 'title' => 'Pencarian Akta',
                 'description' => 'Fitur pencarian nomor akta nikah memudahkan masyarakat untuk mengecek data akta nikah. Jika data ditemukan, mohon segera menghubungi KUA Ampelgading untuk informasi dan layanan lebih lanjut.',
-                'embed_url' => 'https://datastudio.google.com/embed/reporting/e04bd5b7-c300-40f7-973d-60379a88b930/page/gPzuF',
+                'embed_url' => null,
                 'active' => true,
             ]
         );
