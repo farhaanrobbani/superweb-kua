@@ -89,7 +89,7 @@
                              });
                          });
                          this.picked = {};
-                         $dispatch('close-modal', { name: 'pull-master-data' });
+                         $dispatch('close-modal', 'pull-master-data');
                      }
                  }">
                 <div class="border-b border-gray-100 dark:border-gray-700 px-6 py-4">
@@ -101,10 +101,16 @@
                                 <span class="font-medium">Template</span> untuk menyimpan kalimat sebagai template pribadi.
                             </p>
                         </div>
-                        <button type="button" @click="$dispatch('open-modal', { name: 'pull-master-data' })"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
-                            + Ambil Data dari Operator
-                        </button>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <a href="{{ route('kegiatan.templates.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
+                                Atur Template Kalimat
+                            </a>
+                            <button type="button" @click="$dispatch('open-modal', 'pull-master-data')"
+                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150">
+                                + Ambil Data dari Operator
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <form method="POST" action="{{ route('kegiatan.store') }}" class="px-6 py-4 space-y-4">
@@ -181,7 +187,7 @@
                                     Kalimat template pribadi Anda akan terisi otomatis.
                                 </p>
                             </div>
-                            <button type="button" @click="$dispatch('close-modal', { name: 'pull-master-data' })"
+                            <button type="button" @click="$dispatch('close-modal', 'pull-master-data')"
                                     class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">&times;</button>
                         </div>
 
@@ -216,7 +222,7 @@
                                 </div>
 
                                 <div class="mt-4 flex items-center justify-end gap-3">
-                                    <button type="button" @click="$dispatch('close-modal', { name: 'pull-master-data' })"
+                                    <button type="button" @click="$dispatch('close-modal', 'pull-master-data')"
                                             class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
                                     <button type="button" @click="pullSelected()"
                                             x-show="pullCount() > 0"
