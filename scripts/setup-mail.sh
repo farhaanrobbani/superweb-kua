@@ -3,7 +3,7 @@ set -e
 
 if [ -z "$1" ] || [ -z "$2" ]; then
   echo "Usage: bash scripts/setup-mail.sh <gmail-address> '<app-password>'"
-  echo "Example: bash scripts/setup-mail.sh kuaampelgading83@gmail.com 'xxxx xxxx xxxx xxxx'"
+  echo "Example: bash scripts/setup-mail.sh misal.kuakamu@gmail.com 'xxxx xxxx xxxx xxxx'"
   exit 1
 fi
 
