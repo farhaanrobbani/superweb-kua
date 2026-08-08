@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\Element\Cell;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\SimpleType\Jc;
@@ -15,11 +16,11 @@ class LapkinWordExport
     public static function download(string $type, array $data): Response
     {
         $docx = $type === 'rekap' ? self::buildRekap($data) : self::buildLaporan($data);
-        $filename = $data['fileName'] . '.docx';
+        $filename = $data['fileName'].'.docx';
 
         return response($docx, 200, [
             'Content-Type' => self::CONTENT_TYPE,
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"; filename*=UTF-8''" . rawurlencode($filename),
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"; filename*=UTF-8''".rawurlencode($filename),
         ]);
     }
 
@@ -50,15 +51,15 @@ class LapkinWordExport
             $identitas->addCell(6238, ['valign' => 'center'])->addText($value);
         }
 
-        $section->addText('Tanggal Dicetak : ' . $data['printDate'], ['bold' => true], [
+        $section->addText('Tanggal Dicetak : '.$data['printDate'], ['bold' => true], [
             'spaceBefore' => 200,
             'spaceAfter' => 200,
         ]);
 
         $isi = $section->addTable(self::tableStyle());
         $isi->addRow();
-        foreach (['NO', 'KEGIATAN', 'PEKERJAAN', 'TANGGAL'] as $header) {
-            $isi->addCell(null, ['valign' => 'center'])->addText($header, ['bold' => true], ['alignment' => Jc::CENTER]);
+        foreach ([771, 3855, 3277, 1735] as $index => $width) {
+            $isi->addCell($width, ['valign' => 'center'])->addText(['NO', 'KEGIATAN', 'PEKERJAAN', 'TANGGAL'][$index], ['bold' => true], ['alignment' => Jc::CENTER]);
         }
 
         $groups = $data['activities']->groupBy('tanggal');
@@ -72,14 +73,14 @@ class LapkinWordExport
         $no = 1;
         foreach ($groups as $tanggal => $items) {
             $isi->addRow();
-            $isi->addCell(null, ['valign' => 'center'])->addText((string) $no, ['bold' => true], ['alignment' => Jc::CENTER]);
-            self::fillItems($isi->addCell(null, ['valign' => 'center']), $items, fn ($item) => $item->kegiatan);
+            $isi->addCell(771, ['valign' => 'center'])->addText((string) $no, ['bold' => true], ['alignment' => Jc::CENTER]);
+            self::fillItems($isi->addCell(3855, ['valign' => 'center']), $items, fn ($item) => $item->kegiatan);
             self::fillItems(
-                $isi->addCell(null, ['valign' => 'center']),
+                $isi->addCell(3277, ['valign' => 'center']),
                 $items,
-                fn ($item) => $item->isHoliday() ? '-' : $item->pekerjaan . ' (' . $item->total_jumlah . ')'
+                fn ($item) => $item->isHoliday() ? '-' : $item->pekerjaan.' ('.$item->total_jumlah.')'
             );
-            $isi->addCell(null, ['valign' => 'center'])->addText(tanggal_indonesia($tanggal, 'j F Y'), [], ['alignment' => Jc::CENTER]);
+            $isi->addCell(1735, ['valign' => 'center'])->addText(tanggal_indonesia($tanggal, 'j F Y'), [], ['alignment' => Jc::CENTER]);
             $no++;
         }
 
@@ -89,13 +90,13 @@ class LapkinWordExport
         $kiri->addText('Pejabat Penilai,', [], ['alignment' => Jc::CENTER]);
         self::addSignatureSpace($kiri);
         $kiri->addText($data['kepala']['nama'], ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kiri->addText('NIP. ' . $data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
+        $kiri->addText('NIP. '.$data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText('Pegawai yang Dinilai,', [], ['alignment' => Jc::CENTER]);
         self::addSignatureSpace($kanan);
         $kanan->addText($user->name, ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kanan->addText('NIP. ' . $user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
+        $kanan->addText('NIP. '.$user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
 
         return self::save($phpWord);
     }
@@ -108,7 +109,7 @@ class LapkinWordExport
         $section = $phpWord->addSection(self::pageSettings());
 
         $section->addText(
-            'REKAP LAPORAN KINERJA BULAN ' . strtoupper($data['monthName']) . ' TAHUN ' . $data['year'],
+            'REKAP LAPORAN KINERJA BULAN '.strtoupper($data['monthName']).' TAHUN '.$data['year'],
             ['bold' => true, 'size' => 14],
             ['alignment' => Jc::CENTER, 'spaceAfter' => 240]
         );
@@ -136,23 +137,23 @@ class LapkinWordExport
 
         $rek = $section->addTable(self::tableStyle());
         $rek->addRow();
-        foreach (['NO', 'URAIAN', 'ADA / TIDAK ADA', 'KETERANGAN'] as $header) {
-            $rek->addCell(null, ['valign' => 'center'])->addText($header, ['bold' => true], ['alignment' => Jc::CENTER]);
+        foreach ([771, 3662, 1928, 3277] as $index => $width) {
+            $rek->addCell($width, ['valign' => 'center'])->addText(['NO', 'URAIAN', 'ADA / TIDAK ADA', 'KETERANGAN'][$index], ['bold' => true], ['alignment' => Jc::CENTER]);
         }
 
         $rows = [
             ['Rekap Tunjangan Kinerja', $user->jumlah_tukin_kotor ? self::rupiah($user->jumlah_tukin_kotor) : '-'],
-            ['Rekap Kehadiran', $data['totalHariKerja'] . ' Hari'],
+            ['Rekap Kehadiran', $data['totalHariKerja'].' Hari'],
             ['Rekap Uang Makan', self::rupiah($data['totalHariKerja'] * ($user->jumlah_uang_makan_harian ?: 35150))],
             ['Laporan Kinerja', '1 Laporan'],
         ];
         $no = 1;
         foreach ($rows as [$uraian, $keterangan]) {
             $rek->addRow();
-            $rek->addCell(null, ['valign' => 'center'])->addText((string) $no, ['bold' => true], ['alignment' => Jc::CENTER]);
-            $rek->addCell(null, ['valign' => 'center'])->addText($uraian);
-            $rek->addCell(null, ['valign' => 'center'])->addText('Ada', [], ['alignment' => Jc::CENTER]);
-            $rek->addCell(null, ['valign' => 'center'])->addText($keterangan);
+            $rek->addCell(771, ['valign' => 'center'])->addText((string) $no, ['bold' => true], ['alignment' => Jc::CENTER]);
+            $rek->addCell(3662, ['valign' => 'center'])->addText($uraian);
+            $rek->addCell(1928, ['valign' => 'center'])->addText('Ada', [], ['alignment' => Jc::CENTER]);
+            $rek->addCell(3277, ['valign' => 'center'])->addText($keterangan);
             $no++;
         }
 
@@ -163,19 +164,19 @@ class LapkinWordExport
         $kiri->addText($data['kepalaJabatan'], ['bold' => true], ['alignment' => Jc::CENTER]);
         self::addSignatureSpace($kiri);
         $kiri->addText($data['kepala']['nama'], ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kiri->addText('NIP. ' . $data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
+        $kiri->addText('NIP. '.$data['kepala']['nip'], ['size' => 10], ['alignment' => Jc::CENTER]);
 
         $kanan = $ttd->addCell(4819, ['valign' => 'top']);
         $kanan->addText($data['signatureDate'], [], ['alignment' => Jc::CENTER]);
         $kanan->addText('Pegawai,', ['bold' => true], ['alignment' => Jc::CENTER]);
         self::addSignatureSpace($kanan);
         $kanan->addText($user->name, ['bold' => true, 'underline' => 'single'], ['alignment' => Jc::CENTER]);
-        $kanan->addText('NIP. ' . $user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
+        $kanan->addText('NIP. '.$user->nip, ['size' => 10], ['alignment' => Jc::CENTER]);
 
         $section->addText('Catatan:', ['bold' => true], ['spaceBefore' => 300]);
         $section->addText('Keterangan diisi dengan:');
         foreach (['Nominal tunjangan kinerja yang diterima', 'Jumlah kehadiran', 'Nominal uang makan yang diterima'] as $index => $catatan) {
-            $section->addText(($index + 1) . '. ' . $catatan);
+            $section->addText(($index + 1).'. '.$catatan);
         }
 
         return self::save($phpWord);
@@ -233,23 +234,23 @@ class LapkinWordExport
             ['NIP', (string) $user->nip],
             ['Jabatan', (string) $user->jabatan],
             ['Instansi', (string) ($data['instansi'] ?: '')],
-            ['Grade Tukin', $user->grade_tukin ? 'Grade ' . $user->grade_tukin : '-'],
-            ['Nilai Tukin Kotor', $user->jumlah_tukin_kotor ? 'Rp ' . self::rupiah($user->jumlah_tukin_kotor) : '-'],
+            ['Grade Tukin', $user->grade_tukin ? 'Grade '.$user->grade_tukin : '-'],
+            ['Nilai Tukin Kotor', $user->jumlah_tukin_kotor ? 'Rp '.self::rupiah($user->jumlah_tukin_kotor) : '-'],
         ];
     }
 
-    private static function fillItems(\PhpOffice\PhpWord\Element\Cell $cell, $items, callable $text): void
+    private static function fillItems(Cell $cell, $items, callable $text): void
     {
         $run = $cell->addTextRun();
         foreach ($items as $index => $item) {
             if ($index > 0) {
                 $run->addTextBreak();
             }
-            $run->addText(($items->count() > 1 ? ($index + 1) . '. ' : '') . $text($item));
+            $run->addText(($items->count() > 1 ? ($index + 1).'. ' : '').$text($item));
         }
     }
 
-    private static function addSignatureSpace(\PhpOffice\PhpWord\Element\Cell $cell): void
+    private static function addSignatureSpace(Cell $cell): void
     {
         $cell->addTextRun()->addTextBreak(4);
     }
