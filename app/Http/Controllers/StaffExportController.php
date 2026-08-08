@@ -62,7 +62,7 @@ class StaffExportController extends Controller
             'year' => $year,
             'monthName' => $this->monthName($month),
             'instansi' => KuaSetting::get('instansi', $user->instansi) ?: '',
-            'kota' => KuaSetting::get('kecamatan', '') ?: '',
+            'kota' => KuaSetting::get('kabupaten', '') ?: '',
             'totalHariKerja' => $totalHariKerja,
             'signatureDate' => $this->signatureDate($month, $year),
             'kepala' => $this->kepala(),
@@ -122,7 +122,7 @@ class StaffExportController extends Controller
 
     private function signatureDate(int $month, int $year): string
     {
-        $kota = KuaSetting::get('kecamatan', '') ?: '';
+        $kota = KuaSetting::get('kabupaten', '') ?: '';
 
         return trim(($kota !== '' ? $kota . ', ' : '') . $this->printDate($month, $year));
     }

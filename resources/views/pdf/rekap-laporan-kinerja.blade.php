@@ -18,7 +18,7 @@
         }
         table.identitas { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
         table.identitas td { padding: 3px 6px; vertical-align: top; }
-        table.identitas td.label { width: 30%; font-weight: bold; }
+        table.identitas td.label { width: 30%; font-weight: bold; text-align: right; }
         table.identitas td.nilai { width: 60%; }
         .foto { text-align: center; vertical-align: middle; }
         .foto img { width: 90px; height: auto; border: 1px solid #111; }
@@ -28,7 +28,7 @@
         .ttd { width: 100%; margin-top: 42px; border-collapse: collapse; }
         .ttd td { width: 50%; vertical-align: top; }
         .ttd td.kiri { text-align: left; }
-        .ttd td.kanan { text-align: center; }
+        .ttd td.kanan { text-align: left; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
         .ttd .nip { font-size: 10px; }
         .catatan { margin-top: 24px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 10px; }
