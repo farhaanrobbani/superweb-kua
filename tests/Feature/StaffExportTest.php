@@ -157,7 +157,9 @@ class StaffExportTest extends TestCase
             ->get(route('kegiatan.export.index', ['bulan' => 8, 'tahun' => 2026]))
             ->assertOk()
             ->assertSee('Export Laporan Kinerja')
-            ->assertSee('Export Rekap');
+            ->assertSee('Export Rekap')
+            ->assertSee('export-laporan')
+            ->assertSee('export-rekap');
     }
 
     public function test_operator_export_page_requires_staff_selection(): void

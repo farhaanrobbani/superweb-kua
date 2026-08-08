@@ -28,6 +28,16 @@
                              }
                          });
                          $dispatch('open-modal', 'export-rekap');
+                     },
+                     syncLaporan() {
+                         ['bulan', 'tahun', 'user_id'].forEach((key) => {
+                             const source = document.getElementById('filter-' + key);
+                             const target = document.getElementById('laporan-' + key);
+                             if (source && target) {
+                                 target.value = source.value;
+                             }
+                         });
+                         $dispatch('open-modal', 'export-laporan');
                      }
                  }">
                 <div class="flex items-start justify-between gap-4 px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700">
@@ -67,13 +77,9 @@
                                 </select>
                             </div>
                         @endif
-                        <button type="submit"
+                        <button type="button" @click="syncLaporan()"
                                 class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
                             Export Laporan Kinerja
-                        </button>
-                        <button type="submit" name="format" value="word"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 transition ease-in-out duration-150">
-                            Export Word
                         </button>
                         <button type="button" @click="syncRekap()"
                                 class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
@@ -120,6 +126,41 @@
 
                         <div class="mt-4 flex items-center justify-end gap-3">
                             <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
+                                    class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
+                            <button type="submit" name="format" value="word"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 transition ease-in-out duration-150">
+                                Export Word
+                            </button>
+                            <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-teal-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-500 focus:bg-teal-500 active:bg-teal-700 transition ease-in-out duration-150">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </x-modal>
+
+            <x-modal name="export-laporan" maxWidth="md">
+                <form method="GET" action="{{ route('kegiatan.export.laporan') }}">
+                    <input type="hidden" name="bulan" id="laporan-bulan" value="{{ $month }}" />
+                    <input type="hidden" name="tahun" id="laporan-tahun" value="{{ $year }}" />
+                    @if ($users->isNotEmpty())
+                        <input type="hidden" name="user_id" id="laporan-user_id" value="{{ $selectedUserId ?? 0 }}" />
+                    @endif
+                    <div class="px-6 py-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-100">Export Laporan Kinerja</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                    Pilih format file laporan kinerja bulan {{ tanggal_indonesia(now()->month($month), 'F') }} {{ $year }}.
+                                </p>
+                            </div>
+                            <button type="button" @click="$dispatch('close-modal', 'export-laporan')"
+                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">&times;</button>
+                        </div>
+
+                        <div class="mt-4 flex items-center justify-end gap-3">
+                            <button type="button" @click="$dispatch('close-modal', 'export-laporan')"
                                     class="text-sm text-gray-600 dark:text-gray-300 hover:underline">Batal</button>
                             <button type="submit" name="format" value="word"
                                     class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 transition ease-in-out duration-150">
