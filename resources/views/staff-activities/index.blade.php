@@ -97,8 +97,9 @@
                         <div>
                             <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Input Kegiatan</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                Jumlah otomatis terisi dari Master Data Harian jika jenis kegiatan dipilih. Centang
-                                <span class="font-medium">Template</span> untuk menyimpan kalimat sebagai template pribadi.
+                                Gunakan <span class="font-medium">Ambil Data dari Operator</span> untuk mengisi otomatis dari
+                                Master Data Harian sesuai template kalimat pribadi Anda. Centang
+                                <span class="font-medium">Tpl</span> untuk menyimpan kalimat sebagai template pribadi.
                             </p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3">
@@ -115,57 +116,54 @@
                 </div>
                 <form method="POST" action="{{ route('kegiatan.store') }}" class="px-6 py-4 space-y-4">
                     @csrf
-                    <div>
-                        <x-input-label for="tanggal" value="Tanggal" />
-                        <input type="date" x-model="tanggal" id="tanggal" required
-                               class="mt-1 block w-full sm:w-56 border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
-                    </div>
 
-                    <div class="space-y-3">
-                        <template x-for="(row, i) in rows" :key="i">
-                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 space-y-3">
-                                <div class="grid grid-cols-1 gap-3 lg:grid-cols-12">
-                                    <div class="lg:col-span-3">
-                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Jenis Kegiatan</label>
-                                        <select x-model="row.key" @change="onKeyChange(row)"
-                                                :name="'items[' + i + '][activity_type_key]'"
-                                                class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
-                                            <option value="">— Lainnya —</option>
-                                            @foreach ($columns as $key => $label)
-                                                <option value="{{ $key }}">{{ $label }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="lg:col-span-4">
-                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Kegiatan</label>
-                                        <textarea x-model="row.kegiatan" :name="'items[' + i + '][kegiatan]'" rows="2" required
-                                                  placeholder="Uraian kegiatan yang dilaksanakan"
-                                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
-                                    </div>
-                                    <div class="lg:col-span-3">
-                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Pekerjaan</label>
-                                        <textarea x-model="row.pekerjaan" :name="'items[' + i + '][pekerjaan]'" rows="2" required
-                                                  placeholder="Hasil / pekerjaan yang diselesaikan"
-                                                  class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
-                                    </div>
-                                    <div class="lg:col-span-1">
-                                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Jumlah</label>
-                                        <input type="number" x-model="row.jumlah" :name="'items[' + i + '][total_jumlah]'" min="0"
-                                               class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
-                                    </div>
-                                    <div class="lg:col-span-1 flex items-end justify-between gap-2">
-                                        <label class="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300">
-                                            <input type="checkbox" x-model="row.save_template" :name="'items[' + i + '][save_template]'" value="1"
-                                                   class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
-                                            Template
-                                        </label>
-                                        <button type="button" @click="removeRow(i)" x-show="rows.length > 1"
-                                                class="text-red-600 dark:text-red-400 hover:underline text-sm">Hapus</button>
-                                    </div>
-                                </div>
-                                <input type="hidden" :name="'items[' + i + '][tanggal]'" :value="tanggal" />
-                            </div>
-                        </template>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700/40">
+                                <tr>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Tanggal</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Kalimat Kegiatan</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Kalimat Pekerjaan</th>
+                                    <th class="px-4 py-2.5 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Banyaknya</th>
+                                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Edit / Hapus</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                                <template x-for="(row, i) in rows" :key="i">
+                                    <tr>
+                                        <td class="px-4 py-2 align-top">
+                                            <input type="date" x-model="tanggal" :name="'items[' + i + '][tanggal]'" required
+                                                   class="block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
+                                        </td>
+                                        <td class="px-4 py-2 align-top w-1/3">
+                                            <textarea x-model="row.kegiatan" :name="'items[' + i + '][kegiatan]'" rows="2" required
+                                                      placeholder="Uraian kegiatan yang dilaksanakan"
+                                                      class="block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
+                                        </td>
+                                        <td class="px-4 py-2 align-top w-1/3">
+                                            <textarea x-model="row.pekerjaan" :name="'items[' + i + '][pekerjaan]'" rows="2" required
+                                                      placeholder="Hasil / pekerjaan yang diselesaikan"
+                                                      class="block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"></textarea>
+                                        </td>
+                                        <td class="px-4 py-2 align-top">
+                                            <input type="number" x-model="row.jumlah" :name="'items[' + i + '][total_jumlah]'" min="0"
+                                                   class="block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm" />
+                                        </td>
+                                        <td class="px-4 py-2 align-top whitespace-nowrap">
+                                            <div class="flex items-start gap-3">
+                                                <label class="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-300">
+                                                    <input type="checkbox" x-model="row.save_template" :name="'items[' + i + '][save_template]'" value="1"
+                                                           class="rounded border-gray-300 text-teal-600 dark:text-teal-400 focus:ring-teal-500">
+                                                    Tpl
+                                                </label>
+                                                <button type="button" @click="removeRow(i)" x-show="rows.length > 1"
+                                                        class="text-red-600 dark:text-red-400 hover:underline text-sm">Hapus</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="flex items-center gap-3">
