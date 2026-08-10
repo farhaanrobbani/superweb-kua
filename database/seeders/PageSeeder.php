@@ -42,8 +42,8 @@ class PageSeeder extends Seeder
         Page::updateOrCreate(
             ['key' => 'keagamaan'],
             [
-                'title' => 'Keagamaan',
-                'description' => null,
+                'title' => 'Layanan Keagamaan',
+                'description' => 'Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan keagamaan di KUA, termasuk bimbingan perkawinan, penyuluhan agama, dan pembinaan umat beragama.',
                 'embed_url' => null,
                 'active' => true,
             ]

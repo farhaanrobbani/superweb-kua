@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MarriageService;
 use App\Models\NavbarItem;
 use App\Models\Page;
+use App\Models\ReligiousService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -47,6 +48,7 @@ class PageController extends Controller
             'pages' => $pages,
             'page' => $page,
             'marriageServices' => MarriageService::ordered()->paginate(15),
+            'religiousServices' => ReligiousService::ordered()->paginate(15),
         ]);
     }
 

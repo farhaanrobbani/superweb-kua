@@ -28,11 +28,6 @@ class LayananController extends Controller
         return $this->placeholder('wakaf', 'Wakaf');
     }
 
-    public function keagamaan(): View
-    {
-        return $this->placeholder('keagamaan', 'Keagamaan');
-    }
-
     private function placeholder(string $key, string $defaultTitle): View
     {
         try {

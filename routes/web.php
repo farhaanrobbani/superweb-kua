@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\LetterTypeController;
 use App\Http\Controllers\Admin\MarriageServiceController;
 use App\Http\Controllers\Admin\NavbarController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\ReligiousServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\Admin\UserController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReligiousServicePublicController;
 use App\Http\Controllers\StaffActivityController;
 use App\Http\Controllers\StaffExportController;
 use App\Http\Controllers\StaffPublicController;
@@ -36,7 +38,7 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/cari-akta', [LayananController::class, 'cariAkta'])->name('layanan.cari-akta');
 Route::get('/wakaf', [LayananController::class, 'wakaf'])->name('layanan.wakaf');
-Route::get('/keagamaan', [LayananController::class, 'keagamaan'])->name('layanan.keagamaan');
+Route::get('/keagamaan', [ReligiousServicePublicController::class, 'index'])->name('layanan.keagamaan');
 
 Route::get('/favicon.ico', FaviconController::class);
 
@@ -114,6 +116,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
+    Route::resource('religious-services', ReligiousServiceController::class)->except(['index', 'show']);
     Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
     Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');

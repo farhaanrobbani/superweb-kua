@@ -66,6 +66,13 @@
                         @include('admin.marriage-services._table', ['marriageServices' => $marriageServices])
                     </div>
                 @endif
+
+                @if ($page->key === 'keagamaan')
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Topik Layanan Keagamaan</h3>
+                        @include('admin.religious-services._table', ['religiousServices' => $religiousServices])
+                    </div>
+                @endif
             </div>
         </div>
     </div>
