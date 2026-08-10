@@ -307,7 +307,7 @@ class ServicesAnnouncementsTest extends TestCase
             'key' => 'cari-akta',
             'title' => 'Pencarian Akta',
             'description' => 'Cek data akta nikah secara online.',
-            'embed_url' => 'https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF',
+            'embed_url' => 'https://datastudio.google.com/embed/reporting/abc123/page/x',
             'active' => true,
         ]);
 
@@ -315,7 +315,7 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertOk()
             ->assertSee('Pencarian Akta')
             ->assertSee('Cek data akta nikah secara online.')
-            ->assertSee('https://datastudio.google.com/embed/reporting/a67ad441-873f-4189-8cca-d4e6325397ca/page/gPzuF')
+            ->assertSee('https://datastudio.google.com/embed/reporting/abc123/page/x')
             ->assertSee('sandbox');
     }
 
