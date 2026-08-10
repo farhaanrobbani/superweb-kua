@@ -59,7 +59,6 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIP</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pangkat/Golongan</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kontak</th>
                         </tr>
                     </thead>
@@ -70,7 +69,6 @@
                                 <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $staff->nama }}</td>
                                 <td class="px-6 py-4 text-sm font-mono text-gray-500">{{ $staff->nip ?? '—' }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $staff->jabatan }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">{{ $staff->pangkat_golongan ?? '—' }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $staff->kontak ?? '—' }}</td>
                             </tr>
                         @endforeach
