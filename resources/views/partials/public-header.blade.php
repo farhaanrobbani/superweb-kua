@@ -1,5 +1,5 @@
 @php($navbarItems = kua_navbar())
-<header class="sticky top-0 z-10 border-b border-[#19140012] bg-white/90 backdrop-blur">
+<header class="sticky top-0 z-10 border-b border-[#19140012] bg-white/90 backdrop-blur" x-data="{ mobileMenuOpen: false }">
     <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
         <div class="flex items-center gap-2">
             @if (\App\Models\KuaSetting::logoUrl())
@@ -10,6 +10,19 @@
             @endif
             <span class="text-sm font-semibold tracking-wide">{{ kua_setting('instansi', 'Surat Digital KUA') }}</span>
         </div>
+        <button type="button" @click="mobileMenuOpen = ! mobileMenuOpen" :aria-expanded="mobileMenuOpen"
+                aria-label="Menu" class="rounded-md p-2 text-teal-800 transition-colors duration-150 hover:bg-teal-50 sm:hidden">
+            <template x-if="! mobileMenuOpen">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </template>
+            <template x-if="mobileMenuOpen">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </template>
+        </button>
         <nav class="hidden items-center gap-2 text-sm font-medium sm:flex">
             @foreach ($navbarItems as $item)
                 @php($activeChildren = $item->has_submenu ? $item->children->where('active', true) : collect())
@@ -49,7 +62,15 @@
             @endforeach
         </nav>
     </div>
-    <nav class="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
+    <nav x-show="mobileMenuOpen"
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0 -translate-y-1"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-1"
+         x-cloak
+         class="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[#19140012] px-6 py-2 text-sm font-medium sm:hidden">
         @foreach ($navbarItems as $item)
             @php($activeChildren = $item->has_submenu ? $item->children->where('active', true) : collect())
             @if ($item->has_submenu && $activeChildren->isNotEmpty())
