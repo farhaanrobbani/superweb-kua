@@ -32,8 +32,8 @@ class PageSeeder extends Seeder
         Page::updateOrCreate(
             ['key' => 'wakaf'],
             [
-                'title' => 'Wakaf',
-                'description' => null,
+                'title' => 'Layanan Wakaf',
+                'description' => 'Pilih topik di bawah untuk melihat persyaratan, alur, dan prosedur layanan perwakafan di KUA, termasuk pendaftaran akta ikrar wakaf, nadzir, hingga sertifikasi tanah wakaf.',
                 'embed_url' => null,
                 'active' => true,
             ]

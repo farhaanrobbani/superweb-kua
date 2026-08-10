@@ -22,27 +22,4 @@ class LayananController extends Controller
 
         return view('public.layanan.show', compact('page'));
     }
-
-    public function wakaf(): View
-    {
-        return $this->placeholder('wakaf', 'Wakaf');
-    }
-
-    private function placeholder(string $key, string $defaultTitle): View
-    {
-        try {
-            $page = Page::active()->where('key', $key)->first();
-        } catch (\Throwable) {
-            $page = null;
-        }
-
-        if (! $page) {
-            $page = (object) ['title' => $defaultTitle, 'description' => null, 'embed_url' => null];
-        }
-
-        return view('public.layanan.placeholder', [
-            'page' => $page,
-            'defaultTitle' => $defaultTitle,
-        ]);
-    }
 }

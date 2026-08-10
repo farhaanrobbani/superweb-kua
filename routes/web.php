@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\ReligiousServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WakafServiceController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeployController;
@@ -31,13 +32,14 @@ use App\Http\Controllers\StaffExportController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\StaffTemplateController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\WakafServicePublicController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/cari-akta', [LayananController::class, 'cariAkta'])->name('layanan.cari-akta');
-Route::get('/wakaf', [LayananController::class, 'wakaf'])->name('layanan.wakaf');
+Route::get('/wakaf', [WakafServicePublicController::class, 'index'])->name('layanan.wakaf');
 Route::get('/keagamaan', [ReligiousServicePublicController::class, 'index'])->name('layanan.keagamaan');
 
 Route::get('/favicon.ico', FaviconController::class);
@@ -117,6 +119,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::resource('download-items', DownloadItemController::class)->except('show');
     Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
     Route::resource('religious-services', ReligiousServiceController::class)->except(['index', 'show']);
+    Route::resource('wakaf-services', WakafServiceController::class)->except(['index', 'show']);
     Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
     Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');

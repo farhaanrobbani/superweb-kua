@@ -217,7 +217,7 @@ class PageTest extends TestCase
     {
         Page::factory()->create([
             'key' => 'wakaf',
-            'title' => 'Wakaf',
+            'title' => 'Layanan Wakaf',
             'description' => 'Info program wakaf KUA.',
             'embed_url' => 'https://datastudio.google.com/embed/reporting/wakaf123/page/x',
             'active' => true,
@@ -226,7 +226,7 @@ class PageTest extends TestCase
         $this->get(route('layanan.wakaf'))
             ->assertOk()
             ->assertSee('Info program wakaf KUA.')
-            ->assertSee('https://datastudio.google.com/embed/reporting/wakaf123/page/x');
+            ->assertDontSee('<iframe');
     }
 
     public function test_public_cari_akta_page_uses_custom_title_description_and_embed(): void

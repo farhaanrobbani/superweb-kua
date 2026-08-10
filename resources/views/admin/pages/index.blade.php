@@ -73,6 +73,13 @@
                         @include('admin.religious-services._table', ['religiousServices' => $religiousServices])
                     </div>
                 @endif
+
+                @if ($page->key === 'wakaf')
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Topik Layanan Wakaf</h3>
+                        @include('admin.wakaf-services._table', ['wakafServices' => $wakafServices])
+                    </div>
+                @endif
             </div>
         </div>
     </div>
