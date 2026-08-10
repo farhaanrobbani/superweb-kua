@@ -5,11 +5,11 @@ Aplikasi web untuk pembuatan surat digital di Kantor Urusan Agama (KUA) berbasis
 ## Fitur
 
 - **Autentikasi & role**: staf KUA (membuat surat), Operator KUA (mengelola konten & data master), dan Kepala KUA (persetujuan, tanda tangan, & pengelolaan user)
-- **Master data**: 12 jenis surat dengan field dinamis (SPN, SKU, SPC, SUP, SIN, SP, SPD, SPA, SPM, SKN, PNL), template surat, pengaturan KUA (kop, alamat, kepala KUA, penanda posisi TTD), halaman statis & menu navbar dinamis
+- **Master data**: 11 jenis surat dengan field dinamis (SPN, SKU, SPC, SUP, SIN, SP, SPD, SPA, SPM, SKN, PNL), template surat, pengaturan KUA (kop, alamat, kepala KUA, penanda posisi TTD), halaman statis & menu navbar dinamis
 - **Modul surat**: alur `draft → diajukan → disetujui → terbit`, PDF berkop KUA, nomor surat diisi manual (contoh: `B.001/KUA.01.01.01/PW.01/01/2026`)
 - **Laporan kinerja pegawai (lapkin)**: pencatatan kegiatan harian, master data harian & tema pekerjaan, template kalimat, ekspor **PDF & Word** (laporan per pegawai dan rekap per bulan/tahun)
 - **Permohonan online**: masyarakat mengisi form tanpa login (SPD, SPA, SKN, PNL); staf/operator memverifikasi dan membuat surat dari data permohonan (terisi otomatis)
-- **Layanan publik**: pengumuman, daftar pegawai, pusat unduhan, layanan pernikahan, dan kritik & saran
+- **Layanan publik**: pengumuman, daftar pegawai, pusat unduhan, layanan pernikahan, keagamaan & wakaf (accordion topik berisi persyaratan, alur, dan SOP), dan kritik & saran
 - **Dashboard**: statistik surat & permohonan
 - **Email**: notifikasi lupa password via SMTP Gmail
 
