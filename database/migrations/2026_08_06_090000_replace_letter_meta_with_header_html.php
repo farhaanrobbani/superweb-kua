@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('letters', function (Blueprint $table) {
+            $table->dropColumn('meta');
+        });
+
+        Schema::table('letters', function (Blueprint $table) {
+            $table->text('header_html')->nullable()->after('perihal');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('letters', function (Blueprint $table) {
+            $table->dropColumn('header_html');
+        });
+
+        Schema::table('letters', function (Blueprint $table) {
+            $table->json('meta')->nullable()->after('perihal');
+        });
+    }
+};
