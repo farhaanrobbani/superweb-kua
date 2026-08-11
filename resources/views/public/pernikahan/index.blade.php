@@ -40,7 +40,7 @@
                         @if (trim((string) $service->persyaratan) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->persyaratan_label ?: 'Persyaratan' }}</h3>
-                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                <div class="konten-pengumuman mt-2 text-sm text-[#1b1b18]">
                                     {!! \App\Support\HtmlSanitizer::normalize($service->persyaratan) !!}
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                         @if (trim((string) $service->alur) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->alur_label ?: 'Alur' }}</h3>
-                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                <div class="konten-pengumuman mt-2 text-sm text-[#1b1b18]">
                                     {!! \App\Support\HtmlSanitizer::normalize($service->alur) !!}
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                         @if (trim((string) $service->sop) !== '')
                             <div class="mb-5">
                                 <h3 class="text-xs font-bold uppercase tracking-wide text-teal-800">{{ $service->sop_label ?: 'SOP' }}</h3>
-                                <div class="prose-sm mt-2 text-sm text-[#1b1b18]">
+                                <div class="konten-pengumuman mt-2 text-sm text-[#1b1b18]">
                                     {!! \App\Support\HtmlSanitizer::normalize($service->sop) !!}
                                 </div>
                             </div>
