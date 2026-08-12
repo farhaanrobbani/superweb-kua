@@ -33,6 +33,14 @@ npm install && npm run build
 
 Halaman login berada di **`/yukmasuk`**.
 
+### HTTPS & Mixed Content
+
+Aplikasi **wajib diakses lewat HTTPS di produksi** (fetch dari modal kegiatan diblokir browser jika URL-nya `http://`). Secara default semua URL dipaksa `https` di lingkungan non-`local`/`testing`.
+
+- Saat deploy, set di `.env`: `APP_URL=https://domain-anda` (jangan `http://`).
+- Jika menjalankan http-only (mis. di LAN/lokal non-dev), set `APP_FORCE_HTTPS=false` di `.env`.
+- Disarankan nginx meneruskan `proxy_set_header X-Forwarded-Proto $scheme;` di blok `location /`.
+
 User awal (ubah via `.env` sebelum seed):
 
 | Role | Email default | Password default |
