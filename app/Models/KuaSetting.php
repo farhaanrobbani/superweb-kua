@@ -63,7 +63,7 @@ class KuaSetting extends Model
                 return null;
             }
 
-            return Storage::url($path);
+            return asset('storage/'.$path);
         } catch (\Throwable) {
             return null;
         }
