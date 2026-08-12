@@ -129,12 +129,14 @@
 
                      openNew() {
                          const keys = Object.keys(this.themes);
+                         const key = keys[0] || '';
+                         const t = this.templates[key] || {};
                          this.item = {
                              id: null,
                              tanggal: this.today,
-                             key: keys[0] || '',
-                             kegiatan: this.themes[keys[0]] || '',
-                             pekerjaan: '',
+                             key,
+                             kegiatan: t.kegiatan || this.themes[key] || '',
+                             pekerjaan: t.pekerjaan || '',
                              volume: '',
                          };
                          this.itemError = '';
@@ -168,7 +170,9 @@
                              if (this.item.kegiatan === 'Hari Libur / Libur Nasional') this.item.kegiatan = '';
                              if (this.item.pekerjaan === '-') this.item.pekerjaan = '';
                          } else {
-                             this.item.kegiatan = this.themes[this.item.key] || this.item.kegiatan;
+                             const t = this.templates[this.item.key] || {};
+                             this.item.kegiatan = t.kegiatan || this.themes[this.item.key] || this.item.kegiatan;
+                             this.item.pekerjaan = t.pekerjaan || this.item.pekerjaan;
                          }
                          this.syncVolume();
                      },
@@ -207,7 +211,8 @@
                              location.reload();
                          } else {
                              const json = await res.json().catch(() => ({}));
-                             this.itemError = json.message || 'Gagal menyimpan kegiatan.';
+                             const errors = json.errors ? Object.values(json.errors).flat() : [];
+                             this.itemError = errors[0] || json.message || 'Gagal menyimpan kegiatan.';
                          }
                      }
                  }"

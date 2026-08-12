@@ -361,6 +361,58 @@ class LapkinTest extends TestCase
             ->assertSee('Volume Berkas');
     }
 
+    public function test_modal_payload_returns_json_success_when_request_expects_json(): void
+    {
+        $this->actingAs($this->staff)
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'X-Requested-With' => 'XMLHttpRequest',
+            ])
+            ->post(route('kegiatan.store'), [
+                'items' => [
+                    '0' => [
+                        'tanggal' => '2026-08-05',
+                        'kegiatan' => 'Pelayanan Pendaftaran Nikah',
+                        'pekerjaan' => 'Memeriksa dan merekap berkas permohonan',
+                        'activity_type_key' => 'pendaftaran_nikah_kantor',
+                        'total_jumlah' => 3,
+                    ],
+                ],
+            ])
+            ->assertCreated()
+            ->assertJson(['message' => '1 kegiatan berhasil ditambahkan ke laporan.']);
+
+        $this->assertDatabaseHas('staff_activities', [
+            'user_id' => $this->staff->id,
+            'tanggal' => '2026-08-05',
+            'activity_type_key' => 'pendaftaran_nikah_kantor',
+        ]);
+    }
+
+    public function test_modal_payload_returns_json_validation_errors_when_request_expects_json(): void
+    {
+        $this->actingAs($this->staff)
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'X-Requested-With' => 'XMLHttpRequest',
+            ])
+            ->post(route('kegiatan.store'), [
+                'items' => [
+                    '0' => [
+                        'tanggal' => '2026-08-05',
+                        'kegiatan' => 'Pelayanan Pendaftaran Nikah',
+                        'pekerjaan' => '',
+                        'activity_type_key' => 'pendaftaran_nikah_kantor',
+                        'total_jumlah' => 1,
+                    ],
+                ],
+            ])
+            ->assertUnprocessable()
+            ->assertJsonStructure(['message', 'errors' => ['items.0.pekerjaan']]);
+
+        $this->assertDatabaseCount('staff_activities', 0);
+    }
+
     public function test_staff_cannot_store_kegiatan_without_uraian_pekerjaan(): void
     {
         $this->actingAs($this->staff)

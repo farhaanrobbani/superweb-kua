@@ -7,6 +7,7 @@ use App\Models\KuaDailyData;
 use App\Models\StaffActivity;
 use App\Models\User;
 use App\Models\UserActivityTemplate;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -61,7 +62,7 @@ class StaffActivityController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $data = $request->validate([
             'items' => ['required', 'array', 'min:1', 'max:50'],
@@ -96,7 +97,13 @@ class StaffActivityController extends Controller
             $count++;
         }
 
-        return back()->with('success', "{$count} kegiatan berhasil ditambahkan ke laporan.");
+        $message = "{$count} kegiatan berhasil ditambahkan ke laporan.";
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $message], 201);
+        }
+
+        return back()->with('success', $message);
     }
 
     public function edit(Request $request, StaffActivity $kegiatan): View
