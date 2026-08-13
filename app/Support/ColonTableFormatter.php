@@ -13,7 +13,7 @@ class ColonTableFormatter
 
     private const MIN_LABEL_LENGTH = 2;
 
-    public static function format(?string $html): string
+    public static function format(?string $html, int $minLabelWidth = 100): string
     {
         if ($html === null || $html === '') {
             return '';
@@ -52,13 +52,13 @@ class ColonTableFormatter
                 }
             }
 
-            $items = array_merge($items, self::flushPending($pendingRows, $pendingIndent, $doc));
+            $items = array_merge($items, self::flushPending($pendingRows, $pendingIndent, $doc, $minLabelWidth));
             $pendingRows = [];
             $pendingIndent = null;
             $items[] = $node;
         }
 
-        $items = array_merge($items, self::flushPending($pendingRows, $pendingIndent, $doc));
+        $items = array_merge($items, self::flushPending($pendingRows, $pendingIndent, $doc, $minLabelWidth));
 
         foreach (iterator_to_array($body->childNodes) as $node) {
             $body->removeChild($node);
@@ -186,13 +186,13 @@ class ColonTableFormatter
      * @param  array<int, array{0: string, 1: string}>  $rows
      * @return array<int, DOMNode>
      */
-    private static function flushPending(array $rows, ?int $indent, DOMDocument $doc): array
+    private static function flushPending(array $rows, ?int $indent, DOMDocument $doc, int $minLabelWidth): array
     {
         if ($rows === []) {
             return [];
         }
 
-        $width = self::labelWidth($rows);
+        $width = self::labelWidth($rows, $minLabelWidth);
         $html = '<table style="border-collapse:collapse;margin-bottom:12px;'
             .($indent ? 'margin-left:'.$indent.'px;' : '')
             .'">';
@@ -218,13 +218,13 @@ class ColonTableFormatter
     /**
      * @param  array<int, array{0: string, 1: string}>  $rows
      */
-    private static function labelWidth(array $rows): int
+    private static function labelWidth(array $rows, int $minLabelWidth): int
     {
         $max = 0;
         foreach ($rows as [$label]) {
             $max = max($max, mb_strlen($label, 'UTF-8'));
         }
 
-        return max(100, (int) ceil($max * 6.5));
+        return max($minLabelWidth, (int) ceil($max * 6.5));
     }
 }

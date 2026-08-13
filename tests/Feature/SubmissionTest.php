@@ -400,6 +400,60 @@ class SubmissionTest extends TestCase
         );
     }
 
+    public function test_permohonan_body_colon_lines_form_aligned_table(): void
+    {
+        $this->type->update([
+            'fields' => [
+                ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+                ['name' => 'nik', 'label' => 'NIK', 'type' => 'text', 'required' => true],
+                ['name' => 'ttl', 'label' => 'Tempat Lahir', 'type' => 'text', 'required' => false],
+            ],
+            'permohonan_body' => '<p>Dengan ini memberikan kuasa kepada:</p>'
+                . '<p>Nama : [nama]</p>'
+                . '<p>NIK : [nik]</p>'
+                . '<p>Tempat Lahir : [ttl]</p>'
+                . '<p>Demikian surat ini dibuat.</p>',
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi Setiawan', 'nik' => '123456', 'ttl' => 'Malang'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = \App\Support\SubmissionPdf::bodyHtml($submission);
+
+        $this->assertSame(1, substr_count($body, '<table'));
+        $this->assertStringContainsString('Nama</td><td style="width:14px', $body);
+        $this->assertStringContainsString('NIK</td><td style="width:14px', $body);
+        $this->assertStringContainsString('Tempat Lahir</td><td style="width:14px', $body);
+        $this->assertStringContainsString('Andi Setiawan', $body);
+        $this->assertStringContainsString('123456', $body);
+        $this->assertStringNotContainsString('[nama]', $body);
+    }
+
+    public function test_permohonan_body_colon_table_uses_identity_column_width(): void
+    {
+        $this->type->update([
+            'permohonan_body' => '<p>Nama : [nama]</p><p>Alamat : -</p>',
+        ]);
+
+        $submission = Submission::create([
+            'letter_type_id' => $this->type->id,
+            'nama_pemohon' => 'Andi',
+            'kontak' => '0812',
+            'data' => ['nama' => 'Andi'],
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $body = \App\Support\SubmissionPdf::bodyHtml($submission);
+
+        $this->assertSame(1, substr_count($body, '<table'));
+        $this->assertStringContainsString('width:190px', $body);
+    }
+
     public function test_identity_value_formats_dates_and_falls_back(): void
     {
         $submission = Submission::create([
