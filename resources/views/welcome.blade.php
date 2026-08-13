@@ -68,12 +68,18 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                     <div class="mt-6 space-y-3">
                         @foreach ($announcements as $announcement)
                             <a href="{{ route('pengumuman.show', $announcement) }}"
-                               class="block rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
-                                <h3 class="font-semibold text-teal-900">{{ $announcement->title }}</h3>
-                                <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ str(strip_tags($announcement->content))->limit(130) }}</p>
-                                <p class="mt-2 text-xs text-[#1b1b1870]">
-                                    {{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd F Y') }}
-                                </p>
+                               class="flex gap-4 rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
+                                @if ($announcement->imageUrl())
+                                    <img src="{{ $announcement->imageUrl() }}" alt="{{ $announcement->title }}"
+                                         class="hidden h-24 w-32 shrink-0 rounded-md object-cover sm:block" />
+                                @endif
+                                <div class="min-w-0">
+                                    <h3 class="font-semibold text-teal-900">{{ $announcement->title }}</h3>
+                                    <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ str(strip_tags($announcement->content))->limit(130) }}</p>
+                                    <p class="mt-2 text-xs text-[#1b1b1870]">
+                                        {{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd F Y') }}
+                                    </p>
+                                </div>
                             </a>
                         @endforeach
                     </div>
@@ -84,3 +90,4 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
         @include('partials.public-footer')
     </body>
 </html>
+
