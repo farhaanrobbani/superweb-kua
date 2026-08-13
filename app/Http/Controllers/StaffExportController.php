@@ -35,6 +35,8 @@ class StaffExportController extends Controller
         $month = $this->month($request);
         $year = $this->year($request);
 
+        $customTanggal = trim((string) $request->string('tanggal_ttd', '')->limit(100));
+
         $data = [
             'user' => $user,
             'activities' => StaffActivity::query()
@@ -45,7 +47,7 @@ class StaffExportController extends Controller
                 ->orderBy('id')
                 ->get(),
             'monthName' => $this->monthName($month),
-            'printDate' => $this->printDate($month, $year),
+            'printDate' => $this->printDate($month, $year, $customTanggal),
             'kepala' => $this->kepala(),
             'kop_anchor' => KuaSetting::get('kop_anchor', '1'),
             'fileName' => sprintf(
@@ -144,9 +146,9 @@ class StaffExportController extends Controller
         return tanggal_indonesia(now()->month($month), 'F');
     }
 
-    private function printDate(int $month, int $year): string
+    private function printDate(int $month, int $year, string $custom = ''): string
     {
-        return tanggal_indonesia(Carbon::createFromDate($year, $month, 1)->endOfMonth(), 'j F Y');
+        return $custom !== '' ? $custom : tanggal_indonesia(Carbon::createFromDate($year, $month, 1)->endOfMonth(), 'j F Y');
     }
 
     private function signatureDate(int $month, int $year, string $custom = ''): string

@@ -223,4 +223,57 @@ class StaffExportTest extends TestCase
             ->assertOk()
             ->assertHeader('content-type', 'application/pdf');
     }
+
+    public function test_laporan_kinerja_word_uses_custom_print_date(): void
+    {
+        $xml = $this->laporanWordDocument([
+            'format' => 'word',
+            'tanggal_ttd' => '20 Agustus 2026',
+        ]);
+
+        $this->assertStringContainsString('20 Agustus 2026', $xml);
+        $this->assertStringNotContainsString('31 Agustus 2026', $xml);
+    }
+
+    public function test_laporan_kinerja_word_defaults_print_date_to_end_of_month(): void
+    {
+        $xml = $this->laporanWordDocument(['format' => 'word']);
+
+        $this->assertStringContainsString('31 Agustus 2026', $xml);
+    }
+
+    public function test_export_page_shows_custom_print_date_field(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('kegiatan.export.index', ['bulan' => 8, 'tahun' => 2026]))
+            ->assertOk()
+            ->assertSee('Tanggal Dicetak (opsional)');
+    }
+
+    private function laporanWordDocument(array $extra): string
+    {
+        $response = $this->actingAs($this->staff)->get(route('kegiatan.export.laporan', array_merge([
+            'bulan' => 8,
+            'tahun' => 2026,
+        ], $extra)));
+
+        $response->assertOk();
+
+        ob_start();
+        $response->sendContent();
+        $content = ob_get_clean();
+
+        $tmp = tempnam(sys_get_temp_dir(), 'lapkin');
+        file_put_contents($tmp, $content);
+
+        $zip = new \ZipArchive;
+        $zip->open($tmp);
+        $xml = $zip->getFromName('word/document.xml');
+        $zip->close();
+        unlink($tmp);
+
+        $this->assertIsString($xml);
+
+        return $xml;
+    }
 }
