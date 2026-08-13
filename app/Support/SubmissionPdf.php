@@ -19,9 +19,16 @@ class SubmissionPdf
         $pdf = Pdf::loadView('pdf.permohonan', [
             'submission' => $submission,
             'kabupaten' => $kabupaten,
-            'body' => PdfSupport::resolveLocalImages($submission->renderPermohonanBody()),
+            'body' => self::bodyHtml($submission),
         ])->setPaper('a4');
 
         return [$pdf, 'surat-permohonan-' . $submission->id . '.pdf'];
+    }
+
+    public static function bodyHtml(Submission $submission): string
+    {
+        return PdfSupport::resolveLocalImages(
+            ColonTableFormatter::format($submission->renderPermohonanBody(), 190)
+        );
     }
 }
