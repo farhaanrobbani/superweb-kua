@@ -3,14 +3,60 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LetterType;
 use App\Models\Submission;
+use App\Support\SubmissionForm;
 use App\Support\SubmissionPdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SubmissionAdminController extends Controller
 {
+    public function create(Request $request): View
+    {
+        $selectedType = null;
+
+        if ($request->has('jenis')) {
+            $selectedType = LetterType::where('code', $request->input('jenis'))
+                ->where('active', true)
+                ->firstOrFail();
+        }
+
+        return view('admin.submissions.create', [
+            'letterTypes' => LetterType::where('active', true)->orderBy('name')->get(),
+            'selectedType' => $selectedType,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'jenis' => ['required', 'exists:letter_types,code'],
+            'nama_pemohon' => ['required', 'string', 'max:150'],
+            'kontak' => ['required', 'string', 'max:100'],
+        ]);
+
+        $letterType = LetterType::where('code', $request->input('jenis'))
+            ->where('active', true)
+            ->firstOrFail();
+
+        $request->validate(SubmissionForm::fieldRules($letterType));
+        $safeData = SubmissionForm::safeData($letterType, $request);
+
+        $submission = Submission::create([
+            'letter_type_id' => $letterType->id,
+            'nama_pemohon' => $request->input('nama_pemohon'),
+            'kontak' => $request->input('kontak'),
+            'data' => $safeData,
+            'status' => Submission::STATUS_BARU,
+            'token' => Str::random(40),
+        ]);
+
+        return redirect()->route('submissions.show', $submission)
+            ->with('success', 'Permohonan berhasil dibuat.');
+    }
     public function index(Request $request): View
     {
         $query = Submission::with('letterType')->latest();
@@ -74,3 +120,4 @@ class SubmissionAdminController extends Controller
         return $pdf->download($fileName);
     }
 }
+

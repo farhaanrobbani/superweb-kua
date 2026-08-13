@@ -6,6 +6,7 @@ use App\Models\KuaSetting;
 use App\Models\LetterType;
 use App\Models\Page;
 use App\Models\Submission;
+use App\Support\SubmissionForm;
 use App\Support\SubmissionPdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -52,29 +53,8 @@ class SubmissionController extends Controller
 
         $letterType = LetterType::where('code', $request->input('jenis'))->publik()->firstOrFail();
 
-        $rules = [];
-        $fields = $letterType->fields ?? [];
-        foreach ($fields as $field) {
-            if (! empty($field['internal'])) {
-                continue;
-            }
-
-            $fieldRules = ['string', 'max:1000'];
-            if (! empty($field['required'])) {
-                $fieldRules[] = 'required';
-            }
-            $rules['data.' . $field['name']] = $fieldRules;
-        }
-        $validated = $request->validate($rules);
-
-        $safeData = [];
-        foreach ($fields as $field) {
-            if (! empty($field['internal'])) {
-                continue;
-            }
-
-            $safeData[$field['name']] = $request->input('data.' . $field['name']);
-        }
+        $request->validate(SubmissionForm::fieldRules($letterType));
+        $safeData = SubmissionForm::safeData($letterType, $request);
 
         $submission = Submission::create([
             'letter_type_id' => $letterType->id,
@@ -104,3 +84,4 @@ class SubmissionController extends Controller
         return view('public.submissions.sukses');
     }
 }
+

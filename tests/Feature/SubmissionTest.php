@@ -539,4 +539,117 @@ class SubmissionTest extends TestCase
         $this->assertStringContainsString('Andi &lt;b&gt;Setiawan&lt;/b&gt;', $body);
         $this->assertStringNotContainsString('<b>Setiawan</b>', $body);
     }
+
+    public function test_staff_can_view_create_submission_form(): void
+    {
+        $this->actingAs($this->staff)
+            ->get(route('submissions.create'))
+            ->assertOk()
+            ->assertSee('Buat Permohonan Surat')
+            ->assertSee('Surat Permohonan Duplikat Akta Nikah');
+    }
+
+    public function test_staff_can_view_create_form_for_non_public_type(): void
+    {
+        LetterType::factory()->create([
+            'code' => 'SKU',
+            'name' => 'Surat Keterangan Umum',
+            'publik' => false,
+        ]);
+
+        $this->actingAs($this->staff)
+            ->get(route('submissions.create', ['jenis' => 'SKU']))
+            ->assertOk()
+            ->assertSee('Surat Keterangan Umum');
+    }
+
+    public function test_staff_create_form_hides_internal_fields(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => false, 'internal' => true],
+        ]]);
+
+        $this->actingAs($this->staff)
+            ->get(route('submissions.create', ['jenis' => 'SPD']))
+            ->assertOk()
+            ->assertSee('Nama')
+            ->assertDontSee('Catatan Petugas');
+    }
+
+    public function test_staff_can_create_submission_for_non_public_type(): void
+    {
+        $type = LetterType::factory()->create([
+            'code' => 'SKU',
+            'name' => 'Surat Keterangan Umum',
+            'publik' => false,
+            'fields' => [
+                ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ],
+        ]);
+
+        $this->actingAs($this->staff)
+            ->post(route('submissions.store'), [
+                'jenis' => 'SKU',
+                'nama_pemohon' => 'Budi',
+                'kontak' => '08123456789',
+                'data' => ['nama' => 'Budi Hartono'],
+            ])
+            ->assertRedirect();
+
+        $submission = Submission::where('nama_pemohon', 'Budi')->firstOrFail();
+
+        $this->assertSame($type->id, $submission->letter_type_id);
+        $this->assertSame('baru', $submission->status);
+        $this->assertNotNull($submission->token);
+        $this->assertSame(['nama' => 'Budi Hartono'], $submission->data);
+    }
+
+    public function test_staff_create_submission_redirects_to_show(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('submissions.store'), [
+                'jenis' => 'SPD',
+                'nama_pemohon' => 'Budi',
+                'kontak' => '08123456789',
+                'data' => ['nama' => 'Budi Hartono'],
+            ])
+            ->assertRedirect(route('submissions.show', Submission::where('nama_pemohon', 'Budi')->firstOrFail()));
+    }
+
+    public function test_staff_created_submission_ignores_internal_fields(): void
+    {
+        $this->type->update(['fields' => [
+            ['name' => 'nama', 'label' => 'Nama', 'type' => 'text', 'required' => true],
+            ['name' => 'catatan_petugas', 'label' => 'Catatan Petugas', 'type' => 'text', 'required' => true, 'internal' => true],
+        ]]);
+
+        $this->actingAs($this->staff)
+            ->post(route('submissions.store'), [
+                'jenis' => 'SPD',
+                'nama_pemohon' => 'Budi',
+                'kontak' => '08123456789',
+                'data' => ['nama' => 'Budi Hartono'],
+            ])
+            ->assertRedirect();
+
+        $submission = Submission::where('nama_pemohon', 'Budi')->firstOrFail();
+        $this->assertArrayNotHasKey('catatan_petugas', $submission->data);
+    }
+
+    public function test_guest_cannot_access_create_submission_form(): void
+    {
+        $this->get(route('submissions.create'))->assertRedirect(route('login'));
+    }
+
+    public function test_staff_create_submission_requires_contact(): void
+    {
+        $this->actingAs($this->staff)
+            ->post(route('submissions.store'), [
+                'jenis' => 'SPD',
+                'nama_pemohon' => 'Budi',
+                'data' => ['nama' => 'Budi'],
+            ])->assertSessionHasErrors('kontak');
+    }
 }
+

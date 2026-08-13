@@ -11,23 +11,29 @@
                 </div>
             @endif
 
-            <form method="GET" class="mb-4 flex flex-wrap items-end gap-3">
-                <div>
-                    <label class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Status</label>
-                    <select name="status" class="rounded-md border-gray-300 text-sm">
-                        <option value="">Semua</option>
-                        @foreach ($statuses as $key => $label)
-                            <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Cari</label>
-                    <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Nama pemohon"
-                           class="rounded-md border-gray-300 text-sm">
-                </div>
-                <button class="px-3 py-2 bg-gray-800 text-white text-xs rounded-md">Filter</button>
-            </form>
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <form method="GET" class="flex flex-wrap items-end gap-3">
+                    <div>
+                        <label class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Status</label>
+                        <select name="status" class="rounded-md border-gray-300 text-sm">
+                            <option value="">Semua</option>
+                            @foreach ($statuses as $key => $label)
+                                <option value="{{ $key }}" {{ request('status') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">Cari</label>
+                        <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Nama pemohon"
+                               class="rounded-md border-gray-300 text-sm">
+                    </div>
+                    <button class="px-3 py-2 bg-gray-800 text-white text-xs rounded-md">Filter</button>
+                </form>
+                <a href="{{ route('submissions.create') }}"
+                   class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                    + Buat Permohonan
+                </a>
+            </div>
 
             <div class="bg-white overflow-x-auto shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -83,3 +89,4 @@
         </div>
     </div>
 </x-app-layout>
+
