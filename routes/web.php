@@ -77,6 +77,8 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     Route::get('letters/{letter}/preview', [LetterController::class, 'preview'])->name('letters.preview');
 
     Route::get('/submissions', [SubmissionAdminController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/buat', [SubmissionAdminController::class, 'create'])->name('submissions.create');
+    Route::post('/submissions', [SubmissionAdminController::class, 'store'])->name('submissions.store');
     Route::get('/submissions/{submission}', [SubmissionAdminController::class, 'show'])->name('submissions.show');
     Route::put('/submissions/{submission}', [SubmissionAdminController::class, 'updateStatus'])->name('submissions.update');
     Route::delete('/submissions/{submission}', [SubmissionAdminController::class, 'destroy'])->name('submissions.destroy');
