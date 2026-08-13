@@ -217,4 +217,21 @@ class AnnouncementImageTest extends TestCase
             ->assertDontSee('<script>')
             ->assertSee('<p>Teks aman.</p>', false);
     }
+
+    public function test_welcome_shows_cover_thumbnail_for_latest_announcement(): void
+    {
+        Storage::fake('public');
+
+        $path = UploadedFile::fake()->image('cover.png', 800, 400)->store('announcements/covers', 'public');
+        Announcement::factory()->create([
+            'title' => 'Pengumuman Berfoto',
+            'content' => 'isi pengumuman.',
+            'image' => $path,
+        ]);
+
+        $this->get(route('welcome'))
+            ->assertOk()
+            ->assertSee('Pengumuman Berfoto')
+            ->assertSee('storage/announcements/covers/', false);
+    }
 }
