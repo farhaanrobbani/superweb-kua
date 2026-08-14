@@ -1,7 +1,7 @@
 @php($navbarItems = kua_navbar())
 <header class="sticky top-0 z-10 border-b border-[#19140012] bg-white/90 backdrop-blur" x-data="{ mobileMenuOpen: false }">
     <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
-        <div class="flex items-center gap-2">
+        <a href="{{ route('welcome') }}" class="flex items-center gap-2">
             @if (\App\Models\KuaSetting::logoUrl())
                 <img src="{{ \App\Models\KuaSetting::logoUrl() }}" alt="Logo {{ kua_setting('instansi', 'KUA') }}"
                      class="h-9 w-9 rounded-md object-contain" />
@@ -9,7 +9,7 @@
                 <div class="flex h-8 w-8 items-center justify-center rounded-md bg-teal-700 text-sm font-bold text-white">K</div>
             @endif
             <span class="text-sm font-semibold tracking-wide">{{ kua_setting('instansi', 'Surat Digital KUA') }}</span>
-        </div>
+        </a>
         <button type="button" @click="mobileMenuOpen = ! mobileMenuOpen" :aria-expanded="mobileMenuOpen"
                 aria-label="Menu" class="rounded-md p-2 text-teal-800 transition-colors duration-150 hover:bg-teal-50 sm:hidden">
             <template x-if="! mobileMenuOpen">
