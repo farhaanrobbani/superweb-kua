@@ -32,7 +32,7 @@
                    class="flex gap-4 rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
                     @if ($announcement->imageUrl())
                         <img src="{{ $announcement->imageUrl() }}" alt="{{ $announcement->title }}"
-                             class="h-20 w-24 shrink-0 rounded-md object-cover sm:h-24 sm:w-32" />
+                             class="h-full w-24 shrink-0 rounded-md object-cover sm:w-32" />
                     @endif
                     <div class="min-w-0">
                         <h2 class="font-semibold text-teal-900">{{ $announcement->title }}</h2>
