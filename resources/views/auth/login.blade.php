@@ -32,6 +32,11 @@
             </label>
         </div>
 
+        @if (config('services.turnstile.site_key'))
+            <div class="cf-turnstile mt-4" data-sitekey="{{ config('services.turnstile.site_key') }}"></div>
+            <x-input-error :messages="$errors->get('cf-turnstile-response')" class="mt-2" />
+        @endif
+
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500" href="{{ route('password.request') }}">
@@ -44,4 +49,8 @@
             </x-primary-button>
         </div>
     </form>
+
+    @if (config('services.turnstile.site_key'))
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @endif
 </x-guest-layout>
