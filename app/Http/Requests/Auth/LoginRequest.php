@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Rules\Turnstile;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -30,7 +31,30 @@ class LoginRequest extends FormRequest
         return [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
+            'cf-turnstile-response' => $this->turnstileEnabled()
+                ? ['required', new Turnstile]
+                : ['nullable'],
         ];
+    }
+
+    /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'cf-turnstile-response.required' => 'Verifikasi Turnstile tidak valid. Silakan muat ulang halaman dan coba lagi.',
+        ];
+    }
+
+    /**
+     * Whether Cloudflare Turnstile is enabled (secret key configured).
+     */
+    private function turnstileEnabled(): bool
+    {
+        return (bool) config('services.turnstile.secret_key');
     }
 
     /**
