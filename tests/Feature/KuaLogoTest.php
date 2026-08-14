@@ -259,6 +259,13 @@ class KuaLogoTest extends TestCase
             ->assertSee('storage/logos/', false);
     }
 
+    public function test_public_logo_links_to_homepage(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('href="' . route('welcome') . '"', false);
+    }
+
     private function basePayload(array $extra = []): array
     {
         return array_merge([
