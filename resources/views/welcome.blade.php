@@ -65,20 +65,27 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                             Lihat Semua Pengumuman
                         </a>
                     </div>
-                    <div class="mt-6 space-y-3">
+                    <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($announcements as $announcement)
                             <a href="{{ route('pengumuman.show', $announcement) }}"
-                               class="flex gap-4 rounded-lg border border-teal-100 bg-white p-5 shadow-sm transition hover:border-teal-300">
-                                @if ($announcement->imageUrl())
-                                    <img src="{{ $announcement->imageUrl() }}" alt="{{ $announcement->title }}"
-                                         class="h-20 w-24 shrink-0 rounded-md object-cover sm:h-24 sm:w-32" />
-                                @endif
-                                <div class="min-w-0">
-                                    <h3 class="font-semibold text-teal-900">{{ $announcement->title }}</h3>
-                                    <p class="mt-1 text-sm leading-relaxed text-[#1b1b1870]">{{ str(strip_tags($announcement->content))->limit(130) }}</p>
-                                    <p class="mt-2 text-xs text-[#1b1b1870]">
-                                        {{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd F Y') }}
-                                    </p>
+                               class="group overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-sm transition hover:shadow-md">
+                                <div class="flex h-40 items-center justify-center bg-teal-50 text-4xl">
+                                    @if ($announcement->imageUrl())
+                                        <img src="{{ $announcement->imageUrl() }}" alt="{{ $announcement->title }}"
+                                             class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                                    @else
+                                        <svg class="h-10 w-10 text-teal-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3.75 3.75m0 0L11.25 16.5m-3.75-3.75h3m-6.75 2.25a3.75 3.75 0 013.75-3.75H5.25a3.75 3.75 0 013.75-3.75h4.5a3.75 3.75 0 013.75 3.75v2.25a3.75 3.75 0 01-3.75 3.75H9.75a3.75 3.75 0 01-3.75-3.75z" />
+                                        </svg>
+                                    @endif
+                                </div>
+                                <div class="p-5">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <span class="rounded-full px-3 py-1 text-xs font-semibold {{ $announcement->category?->color() ?? 'bg-teal-100 text-teal-800' }}">{{ $announcement->category?->label() ?? 'Pengumuman' }}</span>
+                                        <span class="shrink-0 text-xs text-slate-500">{{ tanggal_indonesia($announcement->published_at ?? $announcement->created_at, 'd M Y') }}</span>
+                                    </div>
+                                    <h3 class="mt-3 font-semibold leading-snug text-slate-900 group-hover:text-teal-700">{{ $announcement->title }}</h3>
+                                    <p class="mt-2 line-clamp-3 text-sm text-slate-500">{{ $announcement->excerpt() }}</p>
                                 </div>
                             </a>
                         @endforeach
