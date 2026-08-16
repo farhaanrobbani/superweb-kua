@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', ($page->title ?? 'Pengumuman').' — '.kua_setting('instansi', 'Surat Digital KUA'))
+@section('title', (kua_navbar_page_label('pengumuman', $page->title ?? 'Pengumuman')).' — '.kua_setting('instansi', 'Surat Digital KUA'))
 
 @section('metaDescription', $page?->description)
 

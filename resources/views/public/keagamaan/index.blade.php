@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', kua_setting('instansi', 'Surat Digital KUA').' — '.($page->title ?? 'Layanan Keagamaan'))
+@section('title', kua_setting('instansi', 'Surat Digital KUA').' — '.kua_navbar_page_label('keagamaan', $page->title ?? 'Layanan Keagamaan'))
 
 @section('content')
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">

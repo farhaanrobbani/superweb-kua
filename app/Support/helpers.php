@@ -92,6 +92,39 @@ if (! function_exists('kua_navbar_page_url')) {
     }
 }
 
+if (! function_exists('kua_navbar_page_label')) {
+    function kua_navbar_page_label(string $key, ?string $default = null): ?string
+    {
+        $defaults = [
+            'pengumuman' => 'Pengumuman',
+            'pernikahan' => 'Layanan Pernikahan',
+            'wakaf' => 'Layanan Wakaf',
+            'keagamaan' => 'Layanan Keagamaan',
+            'layanan-permohonan' => 'Permohonan Surat',
+            'cari-akta' => 'Pencarian Akta',
+            'pegawai' => 'Daftar Pegawai',
+            'unduhan' => 'Download Center',
+            'kritik-saran' => 'Kritik & Saran',
+        ];
+
+        $default = $default ?? ($defaults[$key] ?? null);
+
+        try {
+            $item = NavbarItem::query()
+                ->where('key', $key)
+                ->active()
+                ->whereNotNull('label')
+                ->where('label', '!=', '')
+                ->ordered()
+                ->first();
+
+            return $item?->label ?: $default;
+        } catch (Throwable) {
+            return $default;
+        }
+    }
+}
+
 if (! function_exists('tanggal_indonesia')) {
     function tanggal_indonesia(Carbon|string $date, string $format = 'd F Y'): string
     {
