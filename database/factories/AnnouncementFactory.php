@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AnnouncementCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,6 +15,7 @@ class AnnouncementFactory extends Factory
         return [
             'title' => fake()->sentence(6),
             'content' => fake()->paragraph(3),
+            'category' => fake()->randomElement(AnnouncementCategory::cases()),
             'published_at' => now(),
             'active' => true,
         ];

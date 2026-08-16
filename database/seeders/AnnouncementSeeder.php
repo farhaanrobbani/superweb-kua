@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Announcement;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class AnnouncementSeeder extends Seeder
 {
@@ -42,6 +43,9 @@ class AnnouncementSeeder extends Seeder
                 ['title' => $announcement['title']],
                 [
                     'content' => $announcement['content'],
+                    'excerpt' => Str::limit(strip_tags($announcement['content']), 160),
+                    'slug' => Str::slug($announcement['title']),
+                    'category' => 'announcement',
                     'published_at' => $announcement['published_at'],
                     'active' => true,
                 ]
