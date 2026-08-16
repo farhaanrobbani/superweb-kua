@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Announcement;
 use App\Models\NavbarItem;
+use App\Models\Page;
 use Database\Seeders\NavbarItemSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -91,5 +92,25 @@ class CustomNavbarUrlTest extends TestCase
     public function test_unknown_url_returns_404(): void
     {
         $this->get('/halaman-tidak-ada')->assertNotFound();
+    }
+
+    public function test_tab_title_follows_navbar_label(): void
+    {
+        $this->setUrl('pengumuman', '/cobaaa');
+        NavbarItem::where('key', 'pengumuman')->firstOrFail()->update(['label' => 'Berita']);
+
+        $this->get('/cobaaa')
+            ->assertOk()
+            ->assertSee('<title>Berita — Surat Digital KUA</title>', false);
+    }
+
+    public function test_tab_title_falls_back_to_page_title(): void
+    {
+        NavbarItem::where('key', 'pengumuman')->delete();
+        Page::create(['key' => 'pengumuman', 'title' => 'Berita KUA', 'active' => true]);
+
+        $this->get('/pengumuman')
+            ->assertOk()
+            ->assertSee('<title>Berita KUA — Surat Digital KUA</title>', false);
     }
 }
