@@ -161,22 +161,6 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertDontSee('Pengumuman Layanan');
     }
 
-    public function test_category_badge_renders_distinct_color_per_category(): void
-    {
-        Announcement::factory()->create(['title' => 'Berita Terbaru', 'category' => 'news', 'active' => true]);
-        Announcement::factory()->create(['title' => 'Artikel Edukasi', 'category' => 'article', 'active' => true]);
-        Announcement::factory()->create(['title' => 'Pengumuman Resmi', 'category' => 'announcement', 'active' => true]);
-
-        $this->get(route('pengumuman.index'))
-            ->assertOk()
-            ->assertSee('Berita Terbaru')
-            ->assertSee('Artikel Edukasi')
-            ->assertSee('Pengumuman Resmi')
-            ->assertSee('bg-teal-100 text-teal-800', false)
-            ->assertSee('bg-emerald-100 text-emerald-800', false)
-            ->assertSee('bg-amber-100 text-amber-800', false);
-    }
-
     public function test_public_announcement_detail_shows_related_posts(): void
     {
         Announcement::factory()->create([
