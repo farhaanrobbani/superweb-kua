@@ -108,28 +108,10 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group(function () {
     Route::resource('letter-types', LetterTypeController::class)->except('show');
     Route::resource('letter-templates', LetterTemplateController::class)->except('show');
-    Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
-    Route::get('/navbar/create', [NavbarController::class, 'create'])->name('navbar.create');
-    Route::post('/navbar', [NavbarController::class, 'store'])->name('navbar.store');
-    Route::get('/navbar/{navbarItem}/edit', [NavbarController::class, 'edit'])->name('navbar.edit');
-    Route::put('/navbar/{navbarItem}', [NavbarController::class, 'update'])->name('navbar.update');
-    Route::delete('/navbar/{navbarItem}', [NavbarController::class, 'destroy'])->name('navbar.destroy');
-    Route::get('/navbar/{navbarItem}/sub/create', [NavbarController::class, 'createSub'])->name('navbar.sub.create');
-    Route::post('/navbar/{navbarItem}/sub', [NavbarController::class, 'storeSub'])->name('navbar.sub.store');
-    Route::get('/navbar/sub/{subItem}/edit', [NavbarController::class, 'editSub'])->name('navbar.sub.edit');
-    Route::put('/navbar/sub/{subItem}', [NavbarController::class, 'updateSub'])->name('navbar.sub.update');
-    Route::delete('/navbar/sub/{subItem}', [NavbarController::class, 'destroySub'])->name('navbar.sub.destroy');
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('download-items', DownloadItemController::class)->except('show');
-    Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
-    Route::resource('religious-services', ReligiousServiceController::class)->except(['index', 'show']);
-    Route::resource('wakaf-services', WakafServiceController::class)->except(['index', 'show']);
-    Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
-    Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
-    Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
-    Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
 
     Route::get('/lapkin/master', [KuaDailyController::class, 'index'])->name('kua-daily.index');
     Route::get('/lapkin/master/create', [KuaDailyController::class, 'create'])->name('kua-daily.create');
@@ -147,6 +129,24 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
 });
 
 Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function () {
+    Route::get('/navbar', [NavbarController::class, 'index'])->name('navbar.index');
+    Route::get('/navbar/create', [NavbarController::class, 'create'])->name('navbar.create');
+    Route::post('/navbar', [NavbarController::class, 'store'])->name('navbar.store');
+    Route::get('/navbar/{navbarItem}/edit', [NavbarController::class, 'edit'])->name('navbar.edit');
+    Route::put('/navbar/{navbarItem}', [NavbarController::class, 'update'])->name('navbar.update');
+    Route::delete('/navbar/{navbarItem}', [NavbarController::class, 'destroy'])->name('navbar.destroy');
+    Route::get('/navbar/{navbarItem}/sub/create', [NavbarController::class, 'createSub'])->name('navbar.sub.create');
+    Route::post('/navbar/{navbarItem}/sub', [NavbarController::class, 'storeSub'])->name('navbar.sub.store');
+    Route::get('/navbar/sub/{subItem}/edit', [NavbarController::class, 'editSub'])->name('navbar.sub.edit');
+    Route::put('/navbar/sub/{subItem}', [NavbarController::class, 'updateSub'])->name('navbar.sub.update');
+    Route::delete('/navbar/sub/{subItem}', [NavbarController::class, 'destroySub'])->name('navbar.sub.destroy');
+    Route::resource('marriage-services', MarriageServiceController::class)->except(['index', 'show']);
+    Route::resource('religious-services', ReligiousServiceController::class)->except(['index', 'show']);
+    Route::resource('wakaf-services', WakafServiceController::class)->except(['index', 'show']);
+    Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
+    Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
+    Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
+    Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
     Route::resource('users', UserController::class)->except('show');
 });
 

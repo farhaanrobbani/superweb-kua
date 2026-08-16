@@ -19,7 +19,7 @@ class MarriageServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $this->user = User::factory()->create(['role' => User::ROLE_KEPALA]);
     }
 
     public function test_staff_can_access_create_and_edit_forms(): void

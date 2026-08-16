@@ -19,7 +19,7 @@ class PageTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => User::ROLE_OPERATOR]);
+        $this->user = User::factory()->create(['role' => User::ROLE_KEPALA]);
     }
 
     public function test_guest_cannot_access_admin_pages(): void

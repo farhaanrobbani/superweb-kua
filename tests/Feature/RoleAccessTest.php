@@ -51,6 +51,16 @@ class RoleAccessTest extends TestCase
         ];
     }
 
+    public static function kepalaOnlyRoutes(): array
+    {
+        return [
+            'navbar' => ['navbar.index'],
+            'page' => ['pages.index'],
+            'pengaturan web' => ['kua-settings.edit'],
+            'layanan pernikahan' => ['marriage-services.create'],
+        ];
+    }
+
     public function test_staff_can_access_dashboard_letters_submissions_and_kritik_saran(): void
     {
         foreach (self::staffAccessibleRoutes() as $label => [$route]) {
@@ -72,6 +82,7 @@ class RoleAccessTest extends TestCase
     public function test_operator_can_access_all_manageable_menus(): void
     {
         $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes());
+        $menus = array_diff_key($menus, self::kepalaOnlyRoutes());
         unset($menus['akun']);
 
         foreach ($menus as $label => [$route]) {
@@ -88,6 +99,15 @@ class RoleAccessTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_operator_cannot_access_kepala_only_menus(): void
+    {
+        foreach (self::kepalaOnlyRoutes() as $label => [$route]) {
+            $this->actingAs($this->operator)
+                ->get(route($route))
+                ->assertForbidden("Operator tidak boleh akses $label");
+        }
+    }
+
     public function test_operator_cannot_approve_or_reject_letters(): void
     {
         $letter = Letter::factory()->create(['status' => Letter::STATUS_DIAJUKAN]);
@@ -99,7 +119,7 @@ class RoleAccessTest extends TestCase
 
     public function test_kepala_can_access_all_menus(): void
     {
-        $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes());
+        $menus = array_merge(self::staffAccessibleRoutes(), self::staffForbiddenRoutes(), self::kepalaOnlyRoutes());
 
         foreach ($menus as $label => [$route]) {
             $this->actingAs($this->kepala)
@@ -139,6 +159,16 @@ class RoleAccessTest extends TestCase
             ->assertSee('Download Center')
             ->assertSee('Daftar Staf')
             ->assertSee('Jenis Surat')
-            ->assertSee('Pengaturan Web');
+            ->assertDontSee('Pengaturan Web')
+            ->assertDontSee('Navbar')
+            ->assertDontSee(route('pages.index'));
+    }
+
+    public function test_admin_layout_has_mini_sidebar_toggle(): void
+    {
+        $this->actingAs($this->operator)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Mini sidebar', false);
     }
 }
