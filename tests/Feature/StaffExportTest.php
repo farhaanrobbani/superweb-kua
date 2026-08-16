@@ -277,4 +277,3 @@ class StaffExportTest extends TestCase
         return $xml;
     }
 }
-

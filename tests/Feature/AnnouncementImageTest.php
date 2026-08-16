@@ -217,6 +217,7 @@ class AnnouncementImageTest extends TestCase
             ->assertDontSee('<script>')
             ->assertSee('<p>Teks aman.</p>', false);
     }
+
     public function test_welcome_shows_cover_thumbnail_for_latest_announcement(): void
     {
         Storage::fake('public');

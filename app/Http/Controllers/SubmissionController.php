@@ -84,4 +84,3 @@ class SubmissionController extends Controller
         return view('public.submissions.sukses');
     }
 }
-

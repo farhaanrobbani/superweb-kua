@@ -120,4 +120,3 @@ class SubmissionAdminController extends Controller
         return $pdf->download($fileName);
     }
 }
-

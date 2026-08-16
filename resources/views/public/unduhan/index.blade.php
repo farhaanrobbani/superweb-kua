@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', ($page->title ?? 'Download Center').' — '.kua_setting('instansi', 'Surat Digital KUA'))
+@section('title', (kua_navbar_page_label('unduhan', $page->title ?? 'Download Center')).' — '.kua_setting('instansi', 'Surat Digital KUA'))
 
 @section('content')
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">

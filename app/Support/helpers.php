@@ -10,7 +10,7 @@ if (! function_exists('kua_setting')) {
     {
         try {
             return KuaSetting::get($key) ?? $default;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return $default;
         }
     }
@@ -51,11 +51,77 @@ if (! function_exists('kua_navbar')) {
                 ->ordered()
                 ->with('children')
                 ->get();
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return $defaults;
         }
 
         return $items->isEmpty() ? $defaults : $items;
+    }
+}
+
+if (! function_exists('kua_navbar_page_url')) {
+    function kua_navbar_page_url(string $key, ?string $default = null): ?string
+    {
+        $defaults = [
+            'pengumuman' => '/pengumuman',
+            'pernikahan' => '/pernikahan',
+            'wakaf' => '/wakaf',
+            'keagamaan' => '/keagamaan',
+            'layanan-permohonan' => '/permohonan',
+            'cari-akta' => '/cari-akta',
+            'pegawai' => '/daftar-pegawai',
+            'unduhan' => '/unduhan',
+            'kritik-saran' => '/kritik-saran',
+        ];
+
+        $default = $default ?? ($defaults[$key] ?? null);
+
+        try {
+            $item = NavbarItem::query()
+                ->where('key', $key)
+                ->active()
+                ->whereNotNull('url')
+                ->where('url', '!=', '')
+                ->ordered()
+                ->first();
+
+            return $item?->url ?: $default;
+        } catch (Throwable) {
+            return $default;
+        }
+    }
+}
+
+if (! function_exists('kua_navbar_page_label')) {
+    function kua_navbar_page_label(string $key, ?string $default = null): ?string
+    {
+        $defaults = [
+            'pengumuman' => 'Pengumuman',
+            'pernikahan' => 'Layanan Pernikahan',
+            'wakaf' => 'Layanan Wakaf',
+            'keagamaan' => 'Layanan Keagamaan',
+            'layanan-permohonan' => 'Permohonan Surat',
+            'cari-akta' => 'Pencarian Akta',
+            'pegawai' => 'Daftar Pegawai',
+            'unduhan' => 'Download Center',
+            'kritik-saran' => 'Kritik & Saran',
+        ];
+
+        $default = $default ?? ($defaults[$key] ?? null);
+
+        try {
+            $item = NavbarItem::query()
+                ->where('key', $key)
+                ->active()
+                ->whereNotNull('label')
+                ->where('label', '!=', '')
+                ->ordered()
+                ->first();
+
+            return $item?->label ?: $default;
+        } catch (Throwable) {
+            return $default;
+        }
     }
 }
 

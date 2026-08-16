@@ -127,6 +127,65 @@ class ServicesAnnouncementsTest extends TestCase
             ->assertSee('KUA tutup pada hari Jumat.');
     }
 
+    public function test_public_announcement_detail_uses_slug_url(): void
+    {
+        $announcement = Announcement::factory()->create([
+            'title' => 'Perayaan Hari Raya',
+            'content' => 'Pelayanan diliburkan.',
+            'active' => true,
+        ]);
+
+        $this->assertSame('perayaan-hari-raya', $announcement->slug);
+
+        $this->get(route('pengumuman.show', $announcement))
+            ->assertOk()
+            ->assertSee('perayaan-hari-raya');
+    }
+
+    public function test_public_announcement_category_filter(): void
+    {
+        $berita = Announcement::factory()->create([
+            'title' => 'Kegiatan Sosialisasi',
+            'category' => 'news',
+            'active' => true,
+        ]);
+        Announcement::factory()->create([
+            'title' => 'Pengumuman Layanan',
+            'category' => 'announcement',
+            'active' => true,
+        ]);
+
+        $this->get(route('pengumuman.index', ['category' => 'news']))
+            ->assertOk()
+            ->assertSee('Kegiatan Sosialisasi')
+            ->assertDontSee('Pengumuman Layanan');
+    }
+
+    public function test_public_announcement_detail_shows_related_posts(): void
+    {
+        Announcement::factory()->create([
+            'title' => 'Kabar Terbaru Satu',
+            'category' => 'news',
+            'active' => true,
+        ]);
+        Announcement::factory()->create([
+            'title' => 'Kabar Terbaru Dua',
+            'category' => 'news',
+            'active' => true,
+        ]);
+        $current = Announcement::factory()->create([
+            'title' => 'Kabar Terbaru Tiga',
+            'category' => 'news',
+            'active' => true,
+        ]);
+
+        $this->get(route('pengumuman.show', $current))
+            ->assertOk()
+            ->assertSee('Pengumuman Lainnya')
+            ->assertSee('Kabar Terbaru Satu')
+            ->assertSee('Kabar Terbaru Dua');
+    }
+
     public function test_scheduled_announcement_detail_returns_404(): void
     {
         $announcement = Announcement::factory()->create([

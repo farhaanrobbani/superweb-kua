@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Kritik & Saran — '.kua_setting('instansi', 'KUA'))
+@section('title', (kua_navbar_page_label('kritik-saran', 'Kritik & Saran')).' — '.kua_setting('instansi', 'KUA'))
 
 @section('content')
     <section class="mx-auto max-w-3xl px-6 py-14">

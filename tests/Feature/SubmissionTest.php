@@ -706,4 +706,3 @@ class SubmissionTest extends TestCase
             ])->assertSessionHasErrors('kontak');
     }
 }
-
