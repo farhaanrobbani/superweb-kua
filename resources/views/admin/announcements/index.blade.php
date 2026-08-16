@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Pengumuman</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Posts</h2>
     </x-slot>
 
     <div class="py-12">
@@ -14,7 +14,7 @@
             <div class="mb-4 flex justify-end">
                 <a href="{{ route('announcements.create') }}"
                    class="inline-flex items-center px-4 py-2 bg-teal-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-teal-600">
-                    + Tambah Pengumuman
+                    + Tambah Post
                 </a>
             </div>
 
@@ -62,7 +62,7 @@
                                 <td class="px-6 py-4 text-sm space-x-2">
                                     <a href="{{ route('announcements.edit', $announcement) }}" class="text-blue-600 dark:text-blue-400 hover:underline">Edit</a>
                                     <form action="{{ route('announcements.destroy', $announcement) }}" method="POST" class="inline"
-                                          onsubmit="return confirm('Hapus pengumuman ini?')">
+                                          onsubmit="return confirm('Hapus post ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="text-red-600 dark:text-red-400 hover:underline">Hapus</button>
@@ -71,7 +71,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada pengumuman.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada post.</td>
                             </tr>
                         @endforelse
                     </tbody>

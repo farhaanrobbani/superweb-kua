@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Pengumuman</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Post</h2>
     </x-slot>
 
     @push('editor')
@@ -28,7 +28,7 @@
                         <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm">
                             <textarea id="content" name="content" data-editor rows="16"
                                       data-upload-url="{{ route('announcements.gambar') }}"
-                                      placeholder="Tulis isi pengumuman di sini..."
+                                      placeholder="Tulis isi post di sini..."
                                       class="block w-full">{{ old('content') }}</textarea>
                         </div>
                     </div>

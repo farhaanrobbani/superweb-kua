@@ -39,7 +39,7 @@ class AnnouncementController extends Controller
         Announcement::create($data);
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Pengumuman berhasil ditambahkan.');
+            ->with('success', 'Post berhasil ditambahkan.');
     }
 
     public function edit(Announcement $announcement): View
@@ -58,7 +58,7 @@ class AnnouncementController extends Controller
         $announcement->update($data);
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Pengumuman berhasil diperbarui.');
+            ->with('success', 'Post berhasil diperbarui.');
     }
 
     public function destroy(Announcement $announcement): RedirectResponse
@@ -70,7 +70,7 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Pengumuman berhasil dihapus.');
+            ->with('success', 'Post berhasil dihapus.');
     }
 
     public function uploadImage(Request $request): JsonResponse
