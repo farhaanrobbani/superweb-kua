@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\AnnouncementCategory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-#[Fillable(['title', 'content', 'image', 'published_at', 'active'])]
+#[Fillable(['title', 'slug', 'content', 'excerpt', 'category', 'image', 'author_id', 'published_at', 'active'])]
 class Announcement extends Model
 {
     use HasFactory;
@@ -18,6 +21,31 @@ class Announcement extends Model
         return $this->image && Storage::disk('public')->exists($this->image)
             ? Storage::disk('public')->url($this->image)
             : null;
+    }
+
+    public function excerpt(): string
+    {
+        return $this->excerpt
+            ?: Str::limit(strip_tags((string) $this->content), 160);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Announcement $announcement) {
+            if (! $announcement->slug) {
+                $announcement->slug = Str::slug((string) $announcement->title) ?: 'pengumuman';
+            }
+        });
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function scopePublished(Builder $query): Builder
@@ -33,6 +61,7 @@ class Announcement extends Model
         return [
             'active' => 'boolean',
             'published_at' => 'datetime',
+            'category' => AnnouncementCategory::class,
         ];
     }
 }
