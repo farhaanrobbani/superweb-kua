@@ -99,6 +99,37 @@
                             <x-input-error :messages="$errors->get('image')" class="mt-2" />
                         </div>
                     </div>
+
+                    <div class="bg-white rounded-lg shadow-sm dark:bg-gray-800">
+                        <div class="border-b border-gray-100 dark:border-gray-700 px-4 py-3">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-500">Kategori & Slug</h3>
+                        </div>
+                        <div class="px-4 py-4 space-y-4">
+                            <div>
+                                <x-input-label for="category" value="Kategori" />
+                                <select name="category" id="category"
+                                        class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
+                                    @foreach ($categories as $item)
+                                        <option value="{{ $item->value }}" @selected((string) old('category', $announcement->category?->value ?? 'announcement') === $item->value)>{{ $item->label() }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <x-input-label for="slug" value="Slug (opsional)" />
+                                <input type="text" name="slug" id="slug" maxlength="220"
+                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"
+                                       value="{{ old('slug', $announcement->slug) }}" placeholder="otomatis dari judul" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="excerpt" value="Ringkasan (opsional)" />
+                                <textarea name="excerpt" id="excerpt" rows="3" maxlength="500"
+                                          class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"
+                                          placeholder="otomatis dari isi konten">{{ old('excerpt', $announcement->excerpt) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

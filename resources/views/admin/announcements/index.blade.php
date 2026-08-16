@@ -23,6 +23,7 @@
                     <thead class="bg-gray-50 dark:bg-gray-700/40">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Judul</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Kategori</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Tanggal Terbit</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Aksi</th>
@@ -38,9 +39,17 @@
                                         @endif
                                         <div>
                                             <span class="font-medium">{{ $announcement->title }}</span>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-0.5">{{ str(strip_tags($announcement->content))->limit(80) }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-0.5">{{ str($announcement->excerpt())->limit(80) }}</p>
+                                            @if ($announcement->author)
+                                                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">oleh {{ $announcement->author->name }}</p>
+                                            @endif
                                         </div>
                                     </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {{ $announcement->category?->color() ?? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' }}">
+                                        {{ $announcement->category?->label() ?? 'Pengumuman' }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                     {{ $announcement->published_at ? tanggal_indonesia($announcement->published_at, 'd F Y') : 'Segera' }}
@@ -62,7 +71,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada pengumuman.</td>
+                                <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada pengumuman.</td>
                             </tr>
                         @endforelse
                     </tbody>
