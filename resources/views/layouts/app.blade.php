@@ -25,14 +25,15 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-white dark:from-gray-900 dark:via-gray-900 dark:to-teal-950">
+        <div x-data="{ sidebarOpen: false, sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === '1' }" class="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-white dark:from-gray-900 dark:via-gray-900 dark:to-teal-950">
             @include('layouts.navigation')
 
             <!-- Mobile overlay -->
             <div x-show="sidebarOpen" x-cloak @click="sidebarOpen = false" x-transition.opacity
                  class="fixed inset-0 z-20 bg-gray-900/50 lg:hidden"></div>
 
-            <div class="flex min-h-screen flex-col lg:pl-64">
+            <div class="flex min-h-screen flex-col transition-[padding] duration-200 ease-in-out"
+                 :class="sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'">
                 <!-- Mobile topbar -->
                 <div class="sticky top-0 z-10 flex h-16 items-center justify-between bg-teal-700 px-4 lg:hidden">
                     <button @click="sidebarOpen = ! sidebarOpen" class="p-2 text-teal-200 hover:text-white">
