@@ -25,6 +25,7 @@ use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\MarriageServicePublicController;
+use App\Http\Controllers\NavbarPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReligiousServicePublicController;
 use App\Http\Controllers\StaffActivityController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\StaffTemplateController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\WakafServicePublicController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Middleware\RedirectLegacyPengumuman;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
@@ -44,8 +46,10 @@ Route::get('/keagamaan', [ReligiousServicePublicController::class, 'index'])->na
 
 Route::get('/favicon.ico', FaviconController::class);
 
-Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name('pengumuman.index');
-Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
+Route::middleware(RedirectLegacyPengumuman::class)->group(function () {
+    Route::get('/pengumuman', [AnnouncementPublicController::class, 'index'])->name('pengumuman.index');
+    Route::get('/pengumuman/{announcement}', [AnnouncementPublicController::class, 'show'])->name('pengumuman.show');
+});
 
 Route::get('/daftar-pegawai', [StaffPublicController::class, 'index'])->name('pegawai.index');
 
@@ -152,3 +156,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::match(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'], '{any}', [NavbarPageController::class, 'resolve'])
+    ->where('any', '.*')
+    ->fallback();

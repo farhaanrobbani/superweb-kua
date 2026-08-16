@@ -41,10 +41,15 @@ class AnnouncementPublicController extends Controller
 
     public function show(Announcement $announcement): View
     {
-        abort_unless(
-            $announcement->active && ($announcement->published_at === null || $announcement->published_at->lte(now())),
-            404
-        );
+        return $this->showBySlug($announcement->slug);
+    }
+
+    public function showBySlug(string $slug): View
+    {
+        $announcement = Announcement::with('author')
+            ->published()
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         $related = Announcement::with('author')
             ->published()
