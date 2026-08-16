@@ -5,7 +5,7 @@
 @section('metaDescription', $announcement->excerpt())
 
 @php
-    $shareUrl = route('pengumuman.show', $announcement);
+    $shareUrl = url(kua_navbar_page_url('pengumuman').'/'.$announcement->slug);
     $shareText = $announcement->title;
 @endphp
 
@@ -29,7 +29,7 @@
     <section class="bg-gradient-to-br from-teal-900 via-teal-950 to-teal-950 py-14 text-white">
         <div class="mx-auto max-w-4xl px-6">
             <nav class="text-sm text-teal-200/80">
-                <a href="{{ route('pengumuman.index') }}" class="hover:text-white">Semua Pengumuman</a>
+                <a href="{{ kua_navbar_page_url('pengumuman') }}" class="hover:text-white">Semua Pengumuman</a>
                 <span class="mx-2">/</span>
                 <span>{{ $announcement->category?->label() ?? 'Pengumuman' }}</span>
             </nav>
@@ -91,7 +91,7 @@
 
             <div class="konten-pengumuman mt-6 leading-relaxed">{!! \App\Support\HtmlSanitizer::sanitize($announcement->content) !!}</div>
 
-            <a href="{{ route('pengumuman.index') }}"
+            <a href="{{ kua_navbar_page_url('pengumuman') }}"
                class="mt-10 inline-block rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-600">
                 &larr; Semua Pengumuman
             </a>
@@ -104,7 +104,7 @@
                 <h2 class="text-2xl font-bold text-slate-900">Pengumuman Lainnya</h2>
                 <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $item)
-                        <a href="{{ route('pengumuman.show', $item) }}"
+                        <a href="{{ kua_navbar_page_url('pengumuman').'/'.$item->slug }}"
                            class="group overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-sm transition hover:shadow-md">
                             <div class="flex h-32 items-center justify-center bg-teal-50 text-3xl">
                                 @if ($item->imageUrl())

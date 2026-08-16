@@ -5,6 +5,16 @@
 @section('metaDescription', $page?->description)
 
 @section('content')
+    @php
+        $pengumumanUrl = kua_navbar_page_url('pengumuman');
+        $semuaUrl = $pengumumanUrl.($q !== '' ? '?'.http_build_query(['q' => $q]) : '');
+        $kategoriUrl = fn (string $value) => $pengumumanUrl.'?'.http_build_query(array_filter([
+            'category' => $value,
+            'q' => $q !== '' ? $q : null,
+        ]));
+        $hapusUrl = $pengumumanUrl.($category ? '?'.http_build_query(['category' => $category]) : '');
+    @endphp
+
     <section class="bg-gradient-to-br from-teal-900 via-teal-950 to-teal-950 py-14 text-white">
         <div class="mx-auto max-w-7xl px-6">
             <p class="text-sm font-semibold text-teal-300">PENGUMUMAN & BERITA</p>
@@ -13,7 +23,7 @@
                 <p class="mt-3 max-w-2xl text-sm text-teal-100/80">{{ $page->description }}</p>
             @endif
 
-            <form method="GET" action="{{ route('pengumuman.index') }}" class="mt-6 flex max-w-md gap-2">
+            <form method="GET" action="{{ $pengumumanUrl }}" class="mt-6 flex max-w-md gap-2">
                 @if ($category)
                     <input type="hidden" name="category" value="{{ $category }}">
                 @endif
@@ -31,12 +41,12 @@
     <section class="py-12">
         <div class="mx-auto max-w-7xl px-6">
             <div class="mb-8 flex flex-wrap gap-3">
-                <a href="{{ route('pengumuman.index', ['q' => $q !== '' ? $q : null]) }}"
+                <a href="{{ $semuaUrl }}"
                    class="rounded-full border px-4 py-1.5 text-sm font-medium {{ ! $category ? 'border-teal-700 bg-teal-700 text-white' : 'border-teal-200 text-teal-800 hover:border-teal-400 hover:text-teal-700' }}">
                     Semua
                 </a>
                 @foreach ($categories as $item)
-                    <a href="{{ route('pengumuman.index', ['category' => $item->value, 'q' => $q !== '' ? $q : null]) }}"
+                    <a href="{{ $kategoriUrl($item->value) }}"
                        class="rounded-full border px-4 py-1.5 text-sm font-medium {{ $category === $item->value ? 'border-teal-700 bg-teal-700 text-white' : 'border-teal-200 text-teal-800 hover:border-teal-400 hover:text-teal-700' }}">
                         {{ $item->label() }}
                     </a>
@@ -46,13 +56,13 @@
             @if ($q !== '')
                 <p class="mb-6 text-sm text-[#1b1b1870]">
                     Hasil pencarian untuk <strong>"{{ $q }}"</strong> —
-                    <a href="{{ route('pengumuman.index', ['category' => $category]) }}" class="text-teal-700 hover:underline">hapus pencarian</a>
+                    <a href="{{ $hapusUrl }}" class="text-teal-700 hover:underline">hapus pencarian</a>
                 </p>
             @endif
 
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @forelse ($announcements as $announcement)
-                    <a href="{{ route('pengumuman.show', $announcement) }}"
+                    <a href="{{ $pengumumanUrl.'/'.$announcement->slug }}"
                        class="group overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-sm transition hover:shadow-md">
                         <div class="flex h-44 items-center justify-center bg-teal-50 text-4xl">
                             @if ($announcement->imageUrl())

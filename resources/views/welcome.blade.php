@@ -61,13 +61,13 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 <section class="mx-auto max-w-5xl px-6 pb-16">
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-bold">Pengumuman Terbaru</h2>
-                        <a href="{{ route('pengumuman.index') }}" class="text-sm font-medium text-teal-700 hover:underline">
+                        <a href="{{ kua_navbar_page_url('pengumuman') }}" class="text-sm font-medium text-teal-700 hover:underline">
                             Lihat Semua Pengumuman
                         </a>
                     </div>
                     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($announcements as $announcement)
-                            <a href="{{ route('pengumuman.show', $announcement) }}"
+                            <a href="{{ kua_navbar_page_url('pengumuman').'/'.$announcement->slug }}"
                                class="group overflow-hidden rounded-2xl border border-teal-100 bg-white shadow-sm transition hover:shadow-md">
                                 <div class="flex h-40 items-center justify-center bg-teal-50 text-4xl">
                                     @if ($announcement->imageUrl())
