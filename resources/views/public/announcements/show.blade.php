@@ -85,10 +85,6 @@
                 </button>
             </div>
 
-            @if ($announcement->excerpt)
-                <p class="mt-8 text-lg font-medium leading-relaxed text-[#1b1b18]/90">{{ $announcement->excerpt }}</p>
-            @endif
-
             <div class="konten-pengumuman mt-6 leading-relaxed">{!! \App\Support\HtmlSanitizer::sanitize($announcement->content) !!}</div>
 
             <a href="{{ kua_navbar_page_url('pengumuman') }}"
