@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Surat {{ $letter->nomor }}</title>
     <style>
-        @page { margin: 0.8cm 3cm 3cm 4cm; }
+        @page { margin: 0.8cm 3cm 3cm 3cm; }
         * { font-family: 'Arial', 'DejaVu Sans', sans-serif; }
         body { font-size: 12px; line-height: 1.5; color: #111; }
 
