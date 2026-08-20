@@ -127,4 +127,87 @@ class SendSubmissionStatusTelegramNotificationTest extends TestCase
 
         Queue::assertNotPushed(SendSubmissionStatusTelegramNotification::class);
     }
+
+    public function test_job_includes_whatsapp_link_when_kontak_is_phone(): void
+    {
+        $submission = Submission::factory()->create([
+            'kontak' => '081234567890',
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $job = new SendSubmissionStatusTelegramNotification(
+            $submission,
+            Submission::STATUS_BARU,
+            Submission::STATUS_DIPROSES,
+        );
+
+        Http::fake();
+        $job->handle(new TelegramService);
+
+        Http::assertSent(function ($request) {
+            $text = $request->data()['text'] ?? '';
+
+            return str_contains($text, 'wa.me/6281234567890')
+                && str_contains($text, 'Kirim ke WhatsApp');
+        });
+    }
+
+    public function test_job_omits_whatsapp_link_when_kontak_is_email(): void
+    {
+        $submission = Submission::factory()->create([
+            'kontak' => 'budi@yahoo.com',
+            'status' => Submission::STATUS_BARU,
+        ]);
+
+        $job = new SendSubmissionStatusTelegramNotification(
+            $submission,
+            Submission::STATUS_BARU,
+            Submission::STATUS_DIPROSES,
+        );
+
+        Http::fake();
+        $job->handle(new TelegramService);
+
+        Http::assertSent(function ($request) {
+            $text = $request->data()['text'] ?? '';
+
+            return ! str_contains($text, 'wa.me')
+                && ! str_contains($text, 'Kirim ke WhatsApp');
+        });
+    }
+
+    public function test_build_whatsapp_url_converts_local_number(): void
+    {
+        $this->assertEquals(
+            'https://wa.me/6281234567890?text=Hello',
+            TelegramService::buildWhatsAppUrl('081234567890', 'Hello')
+        );
+    }
+
+    public function test_build_whatsapp_url_handles_plus_prefix(): void
+    {
+        $this->assertEquals(
+            'https://wa.me/6281234567890?text=Hello',
+            TelegramService::buildWhatsAppUrl('+6281234567890', 'Hello')
+        );
+    }
+
+    public function test_build_whatsapp_url_handles_international_number(): void
+    {
+        $this->assertEquals(
+            'https://wa.me/6281234567890?text=Hello',
+            TelegramService::buildWhatsAppUrl('6281234567890', 'Hello')
+        );
+    }
+
+    public function test_build_whatsapp_url_returns_null_for_email(): void
+    {
+        $this->assertNull(TelegramService::buildWhatsAppUrl('ahmad@gmail.com', 'Hello'));
+    }
+
+    public function test_build_whatsapp_url_returns_null_for_empty(): void
+    {
+        $this->assertNull(TelegramService::buildWhatsAppUrl('', 'Hello'));
+        $this->assertNull(TelegramService::buildWhatsAppUrl(null, 'Hello'));
+    }
 }

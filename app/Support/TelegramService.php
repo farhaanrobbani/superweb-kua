@@ -35,4 +35,23 @@ class TelegramService
             return false;
         }
     }
+
+    public static function buildWhatsAppUrl(?string $kontak, string $text): ?string
+    {
+        if (empty($kontak)) {
+            return null;
+        }
+
+        $clean = preg_replace('/[\s\-\(\)\+]/', '', $kontak);
+
+        if (preg_match('/^0(\d{9,13})$/', $clean, $m)) {
+            $number = '62' . $m[1];
+        } elseif (preg_match('/^62(\d{9,13})$/', $clean)) {
+            $number = $clean;
+        } else {
+            return null;
+        }
+
+        return 'https://wa.me/' . $number . '?text=' . urlencode($text);
+    }
 }
