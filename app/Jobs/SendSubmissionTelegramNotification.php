@@ -43,7 +43,7 @@ class SendSubmissionTelegramNotification implements ShouldQueue
 
         $lines[] = '';
         if ($this->submission->token) {
-            $lines[] = 'Kode Tracking: ' . $this->submission->token;
+            $lines[] = 'Kode Tracking: <code>' . $this->submission->token . '</code>';
             $lines[] = '<a href="' . route('permohonan.track', $this->submission->token) . '">Lihat Status Permohonan</a>';
         }
 
@@ -58,6 +58,7 @@ class SendSubmissionTelegramNotification implements ShouldQueue
         if ($this->submission->token) {
             $waLines[] = '';
             $waLines[] = 'Kode Tracking: ' . $this->submission->token;
+            $waLines[] = '';
             $waLines[] = 'Tracking: ' . route('permohonan.track', $this->submission->token);
         }
 
