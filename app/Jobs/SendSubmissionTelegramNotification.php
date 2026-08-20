@@ -43,6 +43,7 @@ class SendSubmissionTelegramNotification implements ShouldQueue
 
         $lines[] = '';
         if ($this->submission->token) {
+            $lines[] = 'Kode Tracking: ' . substr($this->submission->token, 0, 8) . '...';
             $lines[] = '<a href="' . route('permohonan.track', $this->submission->token) . '">Lihat Status Permohonan</a>';
         }
 
