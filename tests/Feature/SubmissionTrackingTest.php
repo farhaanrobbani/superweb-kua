@@ -68,4 +68,27 @@ class SubmissionTrackingTest extends TestCase
             ->assertOk()
             ->assertSee($submission->letterType->name);
     }
+
+    public function test_public_can_view_cek_page(): void
+    {
+        $this->get(route('permohonan.cek'))
+            ->assertOk()
+            ->assertSee('Cek Status Permohonan')
+            ->assertSee('token');
+    }
+
+    public function test_cek_submit_redirects_to_track_with_valid_token(): void
+    {
+        Submission::factory()->create(['token' => 'valid-token-abc']);
+
+        $this->post(route('permohonan.cek.submit'), ['token' => 'valid-token-abc'])
+            ->assertRedirect(route('permohonan.track', 'valid-token-abc'));
+    }
+
+    public function test_cek_submit_returns_error_with_invalid_token(): void
+    {
+        $this->post(route('permohonan.cek.submit'), ['token' => 'nonexistent'])
+            ->assertRedirect()
+            ->assertSessionHasErrors('token');
+    }
 }
