@@ -61,6 +61,7 @@ Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->na
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
 Route::get('/permohonan/unduh/{token}', [SubmissionController::class, 'download'])->name('permohonan.download')->middleware('throttle:10,1');
+Route::get('/permohonan/track/{token}', [SubmissionController::class, 'track'])->name('permohonan.track');
 Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name('permohonan.sukses');
 
 Route::get('/kritik-saran', [KritikSaranPublicController::class, 'create'])->name('kritik-saran.create');
