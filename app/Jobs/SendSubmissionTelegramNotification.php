@@ -57,6 +57,7 @@ class SendSubmissionTelegramNotification implements ShouldQueue
         $waLines[] = 'Tanggal: ' . $this->submission->created_at->format('d/m/Y H:i');
         if ($this->submission->token) {
             $waLines[] = '';
+            $waLines[] = 'Kode Tracking: ' . $this->submission->token;
             $waLines[] = 'Tracking: ' . route('permohonan.track', $this->submission->token);
         }
 
