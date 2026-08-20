@@ -42,6 +42,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Pemohon</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Jenis Surat</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Tanggal</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Kode Tracking</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 uppercase">Aksi</th>
                         </tr>
@@ -55,6 +56,16 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">{{ $submission->letterType->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">{{ $submission->created_at->format('d M Y H:i') }}</td>
+                                <td class="px-6 py-4 text-sm">
+                                    @if ($submission->token)
+                                        <a href="{{ route('permohonan.track', $submission->token) }}" target="_blank"
+                                           class="font-mono text-xs text-blue-600 dark:text-blue-400 hover:underline" title="{{ $submission->token }}">
+                                            {{ substr($submission->token, 0, 8) }}...
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400">—</span>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4">
                                     @php
                                         $color = match ($submission->status) {
@@ -78,7 +89,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada permohonan.</td>
+                                <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Belum ada permohonan.</td>
                             </tr>
                         @endforelse
                     </tbody>
