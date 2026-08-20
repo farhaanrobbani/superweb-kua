@@ -4,6 +4,7 @@ namespace Tests\Feature\Jobs;
 
 use App\Jobs\SendKritikSaranTelegramNotification;
 use App\Models\KritikSaran;
+use App\Models\KuaSetting;
 use App\Support\TelegramService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -18,8 +19,8 @@ class SendKritikSaranTelegramNotificationTest extends TestCase
     {
         parent::setUp();
 
-        config(['services.telegram.bot_token' => 'test-token']);
-        config(['services.telegram.chat_id' => '-1001234567890']);
+        KuaSetting::set('telegram_bot_token', 'test-token');
+        KuaSetting::set('telegram_chat_id', '-1001234567890');
     }
 
     public function test_job_sends_telegram_message_with_kritik_saran_data(): void

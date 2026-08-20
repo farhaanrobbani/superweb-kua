@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Pengaturan Web</h2>
     </x-slot>
 
-    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'kepala'], true) ? request('tab') : 'web')
+    @php($activeTab = in_array(request('tab'), ['web', 'instansi', 'surat', 'kepala', 'notif'], true) ? request('tab') : 'web')
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -34,6 +34,11 @@
                             :class="tab === 'kepala' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
                             class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
                         Kepala &amp; Tanda Tangan
+                    </button>
+                    <button type="button" @click="tab = 'notif'"
+                            :class="tab === 'notif' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
+                            class="-mb-px border-b-2 px-4 py-2 text-sm font-semibold">
+                        Notifikasi
                     </button>
                 </div>
 
@@ -349,6 +354,30 @@
                                 </div>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">Simbol <code>^</code> ditampilkan di antara "Kepala," dan nama penandatangan pada kop surat PDF sebagai penanda posisi tanda tangan.</p>
                                 <x-input-error :messages="$errors->get('kop_anchor')" class="mt-2" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="tab === 'notif'" x-cloak>
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Telegram Bot</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Konfigurasi bot Telegram untuk mengirim notifikasi otomatis ke grup saat ada permohonan baru atau kritik/saran masuk.</p>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div class="sm:col-span-2">
+                                <x-input-label for="telegram_bot_token" value="Bot Token" />
+                                <input id="telegram_bot_token" name="telegram_bot_token" type="password"
+                                       class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                       placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz" autocomplete="off"
+                                       value="{{ old('telegram_bot_token', $settings['telegram_bot_token']['value']) }}" />
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dapatkan dari @BotFather di Telegram. Kosongkan jika tidak ingin mengubah.</p>
+                                <x-input-error :messages="$errors->get('telegram_bot_token')" class="mt-2" />
+                            </div>
+                            <div class="sm:col-span-2">
+                                <x-input-label for="telegram_chat_id" value="Chat ID Grup" />
+                                <x-text-input id="telegram_chat_id" name="telegram_chat_id" class="mt-1 block w-full"
+                                              placeholder="-1001234567890"
+                                              value="{{ old('telegram_chat_id', $settings['telegram_chat_id']['value']) }}" />
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chat ID grup Telegram (angka negatif). Kosongkan jika tidak ingin mengubah.</p>
+                                <x-input-error :messages="$errors->get('telegram_chat_id')" class="mt-2" />
                             </div>
                         </div>
                     </div>
