@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\KritikSaran;
+use App\Models\Submission;
+use App\Observers\KritikSaranObserver;
+use App\Observers\SubmissionObserver;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Submission::observe(SubmissionObserver::class);
+        KritikSaran::observe(KritikSaranObserver::class);
+
         $explicit = env('APP_FORCE_HTTPS');
 
         if ($explicit === null) {
