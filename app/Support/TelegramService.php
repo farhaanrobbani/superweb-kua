@@ -9,8 +9,8 @@ class TelegramService
 {
     public function send(string $message): bool
     {
-        $botToken = config('services.telegram.bot_token');
-        $chatId = config('services.telegram.chat_id');
+        $botToken = kua_setting('telegram_bot_token');
+        $chatId = kua_setting('telegram_chat_id');
 
         if (empty($botToken) || empty($chatId)) {
             Log::warning('Telegram config belum diisi (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)');

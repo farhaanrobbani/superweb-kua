@@ -60,6 +60,13 @@ class KuaSettingController extends Controller
                 'kop_anchor',
             ],
         ],
+        'notif' => [
+            'label' => 'Notifikasi',
+            'keys' => [
+                'telegram_bot_token',
+                'telegram_chat_id',
+            ],
+        ],
     ];
 
     public function edit(): View
@@ -111,6 +118,8 @@ class KuaSettingController extends Controller
             'bg_hapus' => ['sometimes', 'in:1'],
             'hero_judul' => ['nullable', 'string', 'max:255'],
             'hero_subjudul' => ['nullable', 'string', 'max:500'],
+            'telegram_bot_token' => ['nullable', 'string', 'max:200'],
+            'telegram_chat_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         if ($request->hasFile('hero')) {
@@ -182,8 +191,13 @@ class KuaSettingController extends Controller
         }
 
         $ignored = ['hero', 'hero_hapus', 'bg', 'bg_hapus', 'logo', 'logo_hapus', 'logo2', 'logo2_hapus'];
+        $passwordFields = ['telegram_bot_token', 'telegram_chat_id'];
         foreach ($validated as $key => $value) {
             if (in_array($key, $ignored, true)) {
+                continue;
+            }
+
+            if (in_array($key, $passwordFields, true) && $value === '') {
                 continue;
             }
 
