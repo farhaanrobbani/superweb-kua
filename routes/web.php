@@ -62,6 +62,8 @@ Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permoh
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
 Route::get('/permohonan/unduh/{token}', [SubmissionController::class, 'download'])->name('permohonan.download')->middleware('throttle:10,1');
 Route::get('/permohonan/track/{token}', [SubmissionController::class, 'track'])->name('permohonan.track');
+Route::get('/permohonan/cek', [SubmissionController::class, 'cek'])->name('permohonan.cek');
+Route::post('/permohonan/cek', [SubmissionController::class, 'cekSubmit'])->name('permohonan.cek.submit');
 Route::get('/permohonan/sukses', [SubmissionController::class, 'sukses'])->name('permohonan.sukses');
 
 Route::get('/kritik-saran', [KritikSaranPublicController::class, 'create'])->name('kritik-saran.create');

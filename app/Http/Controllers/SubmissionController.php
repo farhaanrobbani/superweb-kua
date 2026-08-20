@@ -91,4 +91,24 @@ class SubmissionController extends Controller
 
         return view('public.submissions.track', compact('submission'));
     }
+
+    public function cek(): View
+    {
+        return view('public.submissions.cek');
+    }
+
+    public function cekSubmit(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'token' => ['required', 'string', 'max:50'],
+        ]);
+
+        $submission = Submission::where('token', $request->input('token'))->first();
+
+        if (! $submission) {
+            return back()->withErrors(['token' => 'Token tidak ditemukan. Periksa kembali token Anda.']);
+        }
+
+        return redirect()->route('permohonan.track', $submission->token);
+    }
 }

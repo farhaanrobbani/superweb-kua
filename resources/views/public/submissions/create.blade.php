@@ -15,9 +15,15 @@
 
     <main class="flex-1 py-10">
         <div class="max-w-5xl mx-auto px-4">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">{{ $service->title ?? 'Form Permohonan Surat' }}</h2>
-                <p class="text-sm text-gray-500 mt-1">{{ $service->description ?? 'Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.' }}</p>
+            <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">{{ $service->title ?? 'Form Permohonan Surat' }}</h2>
+                    <p class="text-sm text-gray-500 mt-1">{{ $service->description ?? 'Isi form berikut, kemudian petugas KUA akan memproses permohonan Anda.' }}</p>
+                </div>
+                <a href="{{ route('permohonan.cek') }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:border-teal-400 hover:text-teal-700 transition shrink-0">
+                    🔍 Cek Status Permohonan
+                </a>
             </div>
 
             @if ($errors->any())
