@@ -147,6 +147,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:kepala'])->group(function
     Route::put('/pages/{key}', [PageController::class, 'update'])->name('pages.update')->where('key', '[a-z0-9-]+');
     Route::get('/kua-settings', [KuaSettingController::class, 'edit'])->name('kua-settings.edit');
     Route::put('/kua-settings', [KuaSettingController::class, 'update'])->name('kua-settings.update');
+    Route::post('/kua-settings/test-telegram', [KuaSettingController::class, 'testTelegram'])->name('kua-settings.test-telegram');
     Route::resource('users', UserController::class)->except('show');
 });
 
