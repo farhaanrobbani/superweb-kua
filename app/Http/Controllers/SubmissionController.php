@@ -83,4 +83,12 @@ class SubmissionController extends Controller
     {
         return view('public.submissions.sukses');
     }
+
+    public function track(string $token): View
+    {
+        $submission = Submission::where('token', $token)->firstOrFail();
+        $submission->load('letterType');
+
+        return view('public.submissions.track', compact('submission'));
+    }
 }

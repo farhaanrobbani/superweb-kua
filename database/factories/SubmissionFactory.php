@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\LetterType;
 use App\Models\Submission;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Submission>
@@ -22,6 +23,7 @@ class SubmissionFactory extends Factory
             'data' => ['nama' => fake()->name()],
             'status' => Submission::STATUS_BARU,
             'catatan' => null,
+            'token' => Str::random(40),
         ];
     }
 }
