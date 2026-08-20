@@ -56,8 +56,22 @@ class SendSubmissionStatusTelegramNotification implements ShouldQueue
             $lines[] = '<a href="' . route('permohonan.track', $this->submission->token) . '">Lihat Status Permohonan</a>';
         }
 
-        $plainText = strip_tags(implode("\n", $lines));
-        $waUrl = TelegramService::buildWhatsAppUrl($this->submission->kontak, $plainText);
+        $waLines = [];
+        $waLines[] = "{$emoji} Status Permohonan Diperbarui";
+        $waLines[] = '';
+        $waLines[] = 'Jenis Surat: ' . $this->submission->letterType->name;
+        $waLines[] = 'Pemohon: ' . e($this->submission->nama_pemohon);
+        $waLines[] = "Status: {$oldLabel} → {$newLabel}";
+        if ($this->submission->catatan) {
+            $waLines[] = 'Catatan: ' . e($this->submission->catatan);
+        }
+        $waLines[] = 'Tanggal: ' . now()->format('d/m/Y H:i');
+        if ($this->submission->token) {
+            $waLines[] = '';
+            $waLines[] = 'Tracking: ' . route('permohonan.track', $this->submission->token);
+        }
+
+        $waUrl = TelegramService::buildWhatsAppUrl($this->submission->kontak, implode("\n", $waLines));
         if ($waUrl) {
             $lines[] = '<a href="' . $waUrl . '">📲 Kirim ke WhatsApp</a>';
         }
