@@ -400,7 +400,7 @@
                                             testLoading = false;
                                         "
                                         :disabled="testLoading"
-                                        class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white text-sm font-semibold rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 disabled:opacity-50 transition">
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 dark:bg-teal-600 text-white text-sm font-semibold rounded-md hover:bg-teal-700 dark:hover:bg-teal-500 disabled:opacity-50 transition">
                                     <span x-show="!testLoading">🧪 Tes Koneksi</span>
                                     <span x-show="testLoading" class="flex items-center gap-1">
                                         <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
