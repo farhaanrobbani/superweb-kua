@@ -53,4 +53,43 @@ class SendSubmissionTelegramNotificationTest extends TestCase
 
         Queue::assertPushed(SendSubmissionTelegramNotification::class);
     }
+
+    public function test_job_includes_whatsapp_link_when_kontak_is_phone(): void
+    {
+        $submission = Submission::factory()->create([
+            'nama_pemohon' => 'Ahmad Fauzi',
+            'kontak' => '081234567890',
+        ]);
+
+        $job = new SendSubmissionTelegramNotification($submission);
+
+        Http::fake();
+        $job->handle(new TelegramService);
+
+        Http::assertSent(function ($request) {
+            $text = $request->data()['text'] ?? '';
+
+            return str_contains($text, 'wa.me/6281234567890')
+                && str_contains($text, 'Kirim ke WhatsApp');
+        });
+    }
+
+    public function test_job_omits_whatsapp_link_when_kontak_is_email(): void
+    {
+        $submission = Submission::factory()->create([
+            'kontak' => 'ahmad@gmail.com',
+        ]);
+
+        $job = new SendSubmissionTelegramNotification($submission);
+
+        Http::fake();
+        $job->handle(new TelegramService);
+
+        Http::assertSent(function ($request) {
+            $text = $request->data()['text'] ?? '';
+
+            return ! str_contains($text, 'wa.me')
+                && ! str_contains($text, 'Kirim ke WhatsApp');
+        });
+    }
 }
