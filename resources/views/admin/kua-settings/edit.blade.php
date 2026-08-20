@@ -13,7 +13,7 @@
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6" x-data="{ tab: '{{ $activeTab }}' }">
+            <div class="bg-white overflow-hidden shadow-sm dark:bg-gray-800 sm:rounded-lg p-6" x-data="{ tab: '{{ $activeTab }}', testLoading: false, testResult: null }">
                 <div class="mb-6 flex flex-wrap gap-1 border-b border-gray-200 dark:border-gray-700">
                     <button type="button" @click="tab = 'web'"
                             :class="tab === 'web' ? 'border-teal-700 text-teal-700 dark:text-teal-400' : 'border-transparent text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:text-gray-500'"
@@ -378,6 +378,41 @@
                                               value="{{ old('telegram_chat_id', $settings['telegram_chat_id']['value']) }}" />
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Chat ID grup Telegram (angka negatif). Kosongkan jika tidak ingin mengubah.</p>
                                 <x-input-error :messages="$errors->get('telegram_chat_id')" class="mt-2" />
+                            </div>
+                            <div class="sm:col-span-2">
+                                <button type="button"
+                                        @click="
+                                            testLoading = true;
+                                            testResult = null;
+                                            const fd = new FormData();
+                                            fd.append('telegram_bot_token', document.getElementById('telegram_bot_token').value);
+                                            fd.append('telegram_chat_id', document.getElementById('telegram_chat_id').value);
+                                            fd.append('_token', '{{ csrf_token() }}');
+                                            try {
+                                                const res = await fetch('{{ route('kua-settings.test-telegram') }}', {
+                                                    method: 'POST',
+                                                    body: fd,
+                                                });
+                                                testResult = await res.json();
+                                            } catch (e) {
+                                                testResult = { ok: false, message: 'Gagal menghubungi server.' };
+                                            }
+                                            testLoading = false;
+                                        "
+                                        :disabled="testLoading"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white text-sm font-semibold rounded-md hover:bg-gray-700 dark:hover:bg-gray-600 disabled:opacity-50 transition">
+                                    <span x-show="!testLoading">🧪 Tes Koneksi</span>
+                                    <span x-show="testLoading" class="flex items-center gap-1">
+                                        <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                                        Mengirim...
+                                    </span>
+                                </button>
+                                <div x-show="testResult"
+                                     x-transition
+                                     :class="testResult?.ok ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800'"
+                                     class="mt-3 px-4 py-3 rounded-md border text-sm">
+                                    <span x-text="testResult?.message"></span>
+                                </div>
                             </div>
                         </div>
                     </div>

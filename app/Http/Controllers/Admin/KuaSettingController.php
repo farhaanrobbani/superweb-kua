@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KuaSetting;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -206,5 +208,48 @@ class KuaSettingController extends Controller
 
         return redirect()->route('kua-settings.edit')
             ->with('success', 'Pengaturan Web berhasil disimpan.');
+    }
+
+    public function testTelegram(Request $request): JsonResponse
+    {
+        $botToken = $request->input('telegram_bot_token') ?: kua_setting('telegram_bot_token');
+        $chatId = $request->input('telegram_chat_id') ?: kua_setting('telegram_chat_id');
+
+        if (empty($botToken) || empty($chatId)) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Bot Token dan Chat ID harus diisi.',
+            ]);
+        }
+
+        try {
+            $response = Http::timeout(10)->post(
+                "https://api.telegram.org/bot{$botToken}/sendMessage",
+                [
+                    'chat_id' => $chatId,
+                    'text' => "✅ <b>Test Koneksi Berhasil</b>\n\nNotifikasi Telegram dari surdig sudah terhubung.",
+                    'parse_mode' => 'HTML',
+                ]
+            );
+
+            if ($response->successful()) {
+                return response()->json([
+                    'ok' => true,
+                    'message' => 'Pesan test berhasil dikirim! Cek grup Telegram.',
+                ]);
+            }
+
+            $error = $response->json('description') ?? 'Unknown error';
+
+            return response()->json([
+                'ok' => false,
+                'message' => "Gagal: {$error}",
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Gagal terhubung: ' . $e->getMessage(),
+            ]);
+        }
     }
 }
