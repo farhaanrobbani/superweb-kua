@@ -13,7 +13,7 @@
 
         @if ($announcements->isNotEmpty())
             @php
-                $grouped = $announcements->groupBy(fn ($a) => $a->tanggal_akad->format('Y-m-d'));
+                $grouped = $announcements->groupBy(fn ($a) => $a->tanggal_akad->format('Y-m-d'))->take(6);
             @endphp
             <div class="mt-8 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
                 <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
@@ -30,7 +30,7 @@
                             <div class="min-w-0">
                                 <p class="truncate text-sm font-semibold text-teal-900">{{ tanggal_indonesia($date, 'l, d F Y') }}</p>
                                 <p class="text-xs text-[#1b1b1870]">
-                                    {{ $items->count() }} peristiwa{{ $items->first()->tempat_nikah ? ' • '.$items->first()->tempat_nikah : '' }}
+                                    {{ $items->count() }} peristiwa
                                 </p>
                             </div>
                         </div>
