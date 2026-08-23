@@ -40,8 +40,18 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                      class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
             @endif
 
+            @if ($marriageAnnouncements->isNotEmpty())
+                <section class="mx-auto max-w-5xl px-6 pt-12">
+                    @include('partials.ringkasan-jadwal', ['announcements' => $marriageAnnouncements])
+                    <div class="mt-4 text-center">
+                        <a href="{{ kua_navbar_page_url('pengumuman-nikah', '/pengumuman-nikah') }}"
+                           class="text-sm font-medium text-teal-700 hover:underline">Lihat Daftar Lengkap Pengumuman Nikah →</a>
+                    </div>
+                </section>
+            @endif
+
             @if ($services->isNotEmpty())
-                <section class="mx-auto max-w-5xl px-6 pb-16">
+                <section class="mx-auto max-w-5xl px-6 pt-12">
                     <h2 class="text-center text-xl font-bold">Layanan Kami</h2>
                     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($services as $service)
@@ -53,16 +63,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                                 </div>
                             </a>
                         @endforeach
-                    </div>
-                </section>
-            @endif
-
-            @if ($marriageAnnouncements->isNotEmpty())
-                <section class="mx-auto max-w-5xl px-6 pb-16">
-                    @include('partials.ringkasan-jadwal', ['announcements' => $marriageAnnouncements])
-                    <div class="mt-4 text-center">
-                        <a href="{{ kua_navbar_page_url('pengumuman-nikah', '/pengumuman-nikah') }}"
-                           class="text-sm font-medium text-teal-700 hover:underline">Lihat Daftar Lengkap Pengumuman Nikah →</a>
                     </div>
                 </section>
             @endif
