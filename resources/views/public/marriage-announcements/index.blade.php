@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="mx-auto max-w-4xl px-6 pb-16 pt-12">
-        <div class="print:hidden">
+        <div>
             <h1 class="text-center text-2xl font-bold">{{ $page->title ?? 'Pengumuman Kehendak Nikah' }}</h1>
             <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-[#1b1b1870]">
                 {{ $page->description ?? 'Berdasarkan Pasal 9 PMA No. 30 Tahun 2024, kami mengumumkan kehendak nikah calon pasangan berikut. Apabila ada yang menghalangi atau mengetahui adanya penghalang perkawinan, dapat menyampaikannya kepada KUA.' }}
@@ -12,11 +12,16 @@
         </div>
 
         @if ($announcements->isNotEmpty())
-            <div class="mt-6 flex justify-end print:hidden">
-                <button type="button" onclick="window.print()"
-                        class="inline-flex items-center gap-2 rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-600">
-                    🖨️ Cetak
-                </button>
+            @php
+                $grouped = $announcements->groupBy(fn ($a) => $a->tanggal_akad->format('Y-m-d'));
+            @endphp
+            <div class="mt-6 rounded-lg border border-teal-100 bg-teal-50/60 px-5 py-4 text-sm">
+                <p class="font-semibold text-teal-900">Ringkasan Jadwal</p>
+                <ul class="mt-2 space-y-1 text-[#1b1b1870]">
+                    @foreach ($grouped as $date => $items)
+                        <li>{{ tanggal_indonesia($date) }} — {{ $items->count() }} peristiwa</li>
+                    @endforeach
+                </ul>
             </div>
 
             <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
@@ -59,7 +64,7 @@
                 </div>
             </div>
 
-            <p class="mt-4 text-center text-xs text-[#1b1b1870] print:block">
+            <p class="mt-4 text-center text-xs text-[#1b1b1870]">
                 Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }} WIB
             </p>
         @else
@@ -68,12 +73,4 @@
             </div>
         @endif
     </section>
-
-    <style>
-        @media print {
-            body {
-                background: white !important;
-            }
-        }
-    </style>
 @endsection
