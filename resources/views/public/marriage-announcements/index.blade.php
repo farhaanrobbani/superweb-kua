@@ -85,6 +85,12 @@
             <p class="mt-4 text-center text-xs text-[#1b1b1870]">
                 Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }} WIB
             </p>
+
+            <div class="mt-4 text-center">
+                <a href="{{ route('pengumuman-nikah.arsip') }}" class="text-sm text-teal-700 hover:underline">
+                    Lihat Arsip →
+                </a>
+            </div>
         @else
             <div class="mt-8 rounded-lg border border-teal-100 bg-white p-8 text-center text-sm text-[#1b1b1870]">
                 Belum ada pengumuman kehendak nikah.

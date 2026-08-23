@@ -125,6 +125,68 @@ class MarriageAnnouncementTest extends TestCase
         $this->assertDatabaseMissing('marriage_announcements', ['id' => $announcement->id]);
     }
 
+    public function test_arsip_shows_past_and_hides_future(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Sudah Lewat', 'tanggal_akad' => now()->subDays(3)]);
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Hari Ini', 'tanggal_akad' => today()]);
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Masih Aktif', 'tanggal_akad' => now()->addDay()]);
+
+        $this->get('/pengumuman-nikah/arsip')
+            ->assertOk()
+            ->assertSee('Arsip Pengumuman Kehendak Nikah')
+            ->assertSee('Sudah Lewat')
+            ->assertDontSee('Hari Ini')
+            ->assertDontSee('Masih Aktif');
+    }
+
+    public function test_arsip_filter_by_date_range(): void
+    {
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Target Arsip', 'tanggal_akad' => now()->subDays(5)]);
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Luar Rentang', 'tanggal_akad' => now()->subDays(30)]);
+
+        $from = now()->subDays(6)->toDateString();
+        $to = now()->subDays(4)->toDateString();
+
+        $this->get("/pengumuman-nikah/arsip?dari={$from}&sampai={$to}")
+            ->assertOk()
+            ->assertSee('Target Arsip')
+            ->assertDontSee('Luar Rentang');
+
+        $this->get('/pengumuman-nikah/arsip?dari='.now()->addDay()->toDateString())
+            ->assertOk()
+            ->assertSee('Tidak ada arsip yang sesuai filter');
+    }
+
+    public function test_arsip_search_by_no_and_name(): void
+    {
+        MarriageAnnouncement::factory()->create(['no_pendaftaran' => '2026/0999/PKN', 'nama_pria' => 'Target Nama', 'tanggal_akad' => now()->subDays(2)]);
+        MarriageAnnouncement::factory()->create(['nama_pria' => 'Lain Nama', 'tanggal_akad' => now()->subDays(2)]);
+
+        $this->get('/pengumuman-nikah/arsip?q=Target+Nama')
+            ->assertOk()
+            ->assertSee('Target Nama')
+            ->assertDontSee('Lain Nama');
+
+        $this->get('/pengumuman-nikah/arsip?q=2026%2F0999%2FPKN')
+            ->assertOk()
+            ->assertSee('Target Nama');
+
+        $this->get('/pengumuman-nikah/arsip?q=TIADA-XYZ')
+            ->assertOk()
+            ->assertSee('Tidak ada arsip yang sesuai filter');
+    }
+
+    public function test_index_shows_link_to_arsip(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        MarriageAnnouncement::factory()->create(['tanggal_akad' => now()->addDay()]);
+
+        $this->get('/pengumuman-nikah')->assertOk()->assertSee('Lihat Arsip');
+    }
+
     public function test_staff_cannot_access_admin_pages(): void
     {
         $staff = User::factory()->create(['role' => User::ROLE_STAFF]);

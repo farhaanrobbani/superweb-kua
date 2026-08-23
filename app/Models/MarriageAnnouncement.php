@@ -36,6 +36,14 @@ class MarriageAnnouncement extends Model
             ->orderBy('id');
     }
 
+    public function scopeBerlalu(Builder $query): Builder
+    {
+        return $query->where('active', true)
+            ->whereDate('tanggal_akad', '<', today())
+            ->orderByDesc('tanggal_akad')
+            ->orderByDesc('id');
+    }
+
     public function isBerlalu(): bool
     {
         return $this->tanggal_akad->isPast() && ! $this->tanggal_akad->isToday();

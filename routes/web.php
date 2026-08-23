@@ -60,6 +60,7 @@ Route::get('/unduhan/{downloadItem}/unduh', [DownloadPublicController::class, 'd
 
 Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->name('pernikahan.index');
 
+Route::get('/pengumuman-nikah/arsip', [MarriageAnnouncementPublicController::class, 'arsip'])->name('pengumuman-nikah.arsip');
 Route::get('/pengumuman-nikah', [MarriageAnnouncementPublicController::class, 'index'])->name('pengumuman-nikah.index');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
