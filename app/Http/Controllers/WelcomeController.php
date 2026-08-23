@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use App\Models\KuaSetting;
 use App\Models\LetterType;
+use App\Models\MarriageAnnouncement;
 use App\Models\NavbarItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -18,6 +19,7 @@ class WelcomeController extends Controller
             'letterTypes' => $this->letterTypes(),
             'services' => $this->services(),
             'announcements' => $this->announcements(),
+            'marriageAnnouncements' => $this->marriageAnnouncements(),
         ]);
     }
 
@@ -72,6 +74,15 @@ class WelcomeController extends Controller
     {
         try {
             return Announcement::query()->published()->take(3)->get(['id', 'title', 'slug', 'content', 'excerpt', 'category', 'published_at', 'created_at', 'image']);
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function marriageAnnouncements(): Collection
+    {
+        try {
+            return MarriageAnnouncement::query()->aktif()->get();
         } catch (\Throwable) {
             return collect();
         }

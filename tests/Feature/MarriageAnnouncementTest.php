@@ -178,6 +178,30 @@ class MarriageAnnouncementTest extends TestCase
             ->assertSee('Tidak ada arsip yang sesuai filter');
     }
 
+    public function test_welcome_shows_ringkasan_jadwal_teaser_when_announcements_exist(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        MarriageAnnouncement::factory()->create([
+            'tanggal_akad' => now()->addDays(3),
+        ]);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Ringkasan Jadwal')
+            ->assertSee('1 peristiwa')
+            ->assertSee('Lihat Daftar Lengkap Pengumuman Nikah');
+    }
+
+    public function test_welcome_hides_teaser_when_no_announcements(): void
+    {
+        $this->seed(NavbarItemSeeder::class);
+
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('Lihat Daftar Lengkap Pengumuman Nikah');
+    }
+
     public function test_index_shows_link_to_arsip(): void
     {
         $this->seed(NavbarItemSeeder::class);
