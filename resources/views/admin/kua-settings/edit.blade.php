@@ -192,49 +192,48 @@
                             </div>
                         </div>
                         <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-2">Isi URL lengkap dengan <code>https://</code>. Link tampil di footer beranda dengan ikon platform. Kosongkan untuk menyembunyikan platform tersebut.</p>
-                    </div>
 
-                    <div x-data="{
-                        links: @json(json_decode(kua_setting('link_terkait', '[]'), true) ?? [])
-                    }">
-                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Link Terkait</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1 mb-2">Tambahkan link eksternal yang ingin ditampilkan di footer (misal: SIMKAH, AIW, SIMAS, dsb). Label bersifat custom.</p>
-                        <template x-for="(link, i) in links" :key="i">
-                            <div class="grid grid-cols-12 gap-3 items-end mb-3">
-                                <div class="col-span-5">
-                                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Label</label>
-                                    <input type="text"
-                                           x-model="link.label"
-                                           class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
-                                           placeholder="SIMKAH">
+                        <div x-data="{
+                            links: @json(json_decode(kua_setting('link_terkait', '[]'), true) ?? [])
+                        }" class="mt-8">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Link Terkait</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1 mb-2">Tambahkan link eksternal yang ingin ditampilkan di footer (misal: SIMKAH, AIW, SIMAS, dsb). Label bersifat custom.</p>
+                            <template x-for="(link, i) in links" :key="i">
+                                <div class="grid grid-cols-12 gap-3 items-end mb-3">
+                                    <div class="col-span-5">
+                                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Label</label>
+                                        <input type="text"
+                                               x-model="link.label"
+                                               class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                               placeholder="SIMKAH">
+                                    </div>
+                                    <div class="col-span-6">
+                                        <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">URL</label>
+                                        <input type="url"
+                                               x-model="link.url"
+                                               class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
+                                               placeholder="https://...">
+                                    </div>
+                                    <div class="col-span-1 flex items-end pb-0.5">
+                                        <button type="button" @click="links.splice(i, 1)"
+                                                class="text-red-400 hover:text-red-300" title="Hapus link">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-span-6">
-                                    <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">URL</label>
-                                    <input type="url"
-                                           x-model="link.url"
-                                           class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm"
-                                           placeholder="https://...">
-                                </div>
-                                <div class="col-span-1 flex items-end pb-0.5">
-                                    <button type="button" @click="links.splice(i, 1)"
-                                            class="text-red-400 hover:text-red-300" title="Hapus link">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </template>
-                        <button type="button" @click="links.push({label: '', url: ''})"
-                                class="mt-2 text-sm text-teal-600 hover:text-teal-700 font-medium inline-flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Tambah Link
-                        </button>
-                        <input type="hidden" name="link_terkait" :value="JSON.stringify(links)">
+                            </template>
+                            <button type="button" @click="links.push({label: '', url: ''})"
+                                    class="mt-2 text-sm text-teal-600 hover:text-teal-700 font-medium inline-flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Tambah Link
+                            </button>
+                            <input type="hidden" name="link_terkait" :value="JSON.stringify(links)">
+                        </div>
                     </div>
-                </div>
 
                     <div x-show="tab === 'surat'" x-cloak>
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Logo KUA</h3>
