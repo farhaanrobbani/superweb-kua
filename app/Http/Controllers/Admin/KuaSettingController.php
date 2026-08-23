@@ -37,6 +37,7 @@ class KuaSettingController extends Controller
                 'sosmed_instagram',
                 'sosmed_tiktok',
                 'sosmed_whatsapp',
+                'link_terkait',
             ],
         ],
         'surat' => [
@@ -98,6 +99,7 @@ class KuaSettingController extends Controller
             'sosmed_instagram' => ['nullable', 'url', 'max:255'],
             'sosmed_tiktok' => ['nullable', 'url', 'max:255'],
             'sosmed_whatsapp' => ['nullable', 'url', 'max:255'],
+            'link_terkait' => ['nullable', 'string', 'max:5000'],
             'jam_layanan' => ['nullable', 'string', 'max:255'],
             'kepala_nama' => ['required', 'string', 'max:150'],
             'kepala_nip' => ['nullable', 'string', 'max:50'],
@@ -190,6 +192,19 @@ class KuaSettingController extends Controller
             }
 
             KuaSetting::set('logo2_path', '');
+        }
+
+        if (isset($validated['link_terkait'])) {
+            $rawLinks = json_decode($validated['link_terkait'], true);
+            if (! is_array($rawLinks)) {
+                $rawLinks = [];
+            }
+            $links = collect($rawLinks)
+                ->filter(fn (array $l) => ! empty(trim($l['label'] ?? '')) && ! empty(trim($l['url'] ?? '')))
+                ->map(fn (array $l) => ['label' => trim($l['label']), 'url' => trim($l['url'])])
+                ->values()
+                ->all();
+            $validated['link_terkait'] = json_encode($links, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
         $ignored = ['hero', 'hero_hapus', 'bg', 'bg_hapus', 'logo', 'logo_hapus', 'logo2', 'logo2_hapus'];
