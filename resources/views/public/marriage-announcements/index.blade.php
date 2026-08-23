@@ -15,7 +15,12 @@
             @php
                 $grouped = $announcements->groupBy(fn ($a) => $a->tanggal_akad->format('Y-m-d'))->take(6);
             @endphp
-            <div class="mt-8 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
+            <div class="mt-6 flex items-center justify-between gap-4 text-xs text-[#1b1b1870]">
+                <span>Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }}</span>
+                <a href="{{ route('pengumuman-nikah.arsip') }}" class="shrink-0 font-medium text-teal-700 hover:underline">Lihat Arsip →</a>
+            </div>
+
+            <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
                 <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
                     <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Ringkasan Jadwal</p>
                     <span class="rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white">{{ $announcements->count() }} pasangan</span>
@@ -36,11 +41,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-
-            <div class="mt-4 flex items-center justify-between gap-4 text-xs text-[#1b1b1870]">
-                <span>Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }}</span>
-                <a href="{{ route('pengumuman-nikah.arsip') }}" class="shrink-0 font-medium text-teal-700 hover:underline">Lihat Arsip →</a>
             </div>
 
             <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
