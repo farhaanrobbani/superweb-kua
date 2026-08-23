@@ -29,7 +29,7 @@
     <section class="bg-gradient-to-br from-teal-900 via-teal-950 to-teal-950 py-14 text-white">
         <div class="mx-auto max-w-4xl px-6">
             <nav class="text-sm text-teal-200/80">
-                <a href="{{ kua_navbar_page_url('pengumuman') }}" class="hover:text-white">Semua Pengumuman</a>
+                <a href="{{ kua_navbar_page_url('pengumuman') }}" class="hover:text-white">Semua {{ kua_navbar_page_label('pengumuman', 'Berita') }}</a>
                 <span class="mx-2">/</span>
                 <span>{{ $announcement->category?->label() ?? 'Pengumuman' }}</span>
             </nav>
@@ -89,7 +89,7 @@
 
             <a href="{{ kua_navbar_page_url('pengumuman') }}"
                class="mt-10 inline-block rounded-lg bg-teal-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-600">
-                &larr; Semua Pengumuman
+                &larr; Semua {{ kua_navbar_page_label('pengumuman', 'Berita') }}
             </a>
         </div>
     </section>

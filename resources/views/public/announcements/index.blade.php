@@ -28,7 +28,7 @@
                     <input type="hidden" name="category" value="{{ $category }}">
                 @endif
                 <input type="text" name="q" value="{{ $q }}"
-                       placeholder="Cari pengumuman..."
+                       placeholder="Cari {{ mb_strtolower(kua_navbar_page_label('pengumuman', $page->title ?? 'berita')) }}..."
                        class="block w-full rounded-md border-0 px-4 py-2 text-sm text-[#1b1b18] shadow-sm focus:ring-2 focus:ring-teal-400" />
                 <button type="submit"
                         class="shrink-0 rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-500">
