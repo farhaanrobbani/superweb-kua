@@ -11,35 +11,19 @@
             ->values()
             ->all();
 
-        $gridClass = $sosmeds ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3';
+        $cols = 3 + ($sosmeds ? 1 : 0) + ($linkTerkaits ? 1 : 0);
+        $gridClass = match ($cols) {
+            5 => 'sm:grid-cols-2 lg:grid-cols-5',
+            4 => 'sm:grid-cols-2 lg:grid-cols-4',
+            default => 'sm:grid-cols-3',
+        };
     @endphp
     <div class="mx-auto grid max-w-5xl gap-6 px-6 py-10 text-sm {{ $gridClass }}">
-        <div class="space-y-6">
-            <div>
-                <p class="font-semibold">{{ kua_setting('instansi', 'Kantor Urusan Agama') }}</p>
-                <p class="mt-2 leading-relaxed text-teal-100/70">
-                    {{ kua_setting('kecamatan') ? 'Kecamatan '.kua_setting('kecamatan').(kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '') : '' }} {{ kua_setting('kode_pos') ? '('.kua_setting('kode_pos').')' : '' }}
-                </p>
-            </div>
-            
-            @if ($linkTerkaits)
-                <div>
-                    <p class="font-semibold">Link Terkait</p>
-                    <ul class="mt-2 space-y-2 text-teal-100/70">
-                        @foreach ($linkTerkaits as $link)
-                            <li>
-                                <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
-                                   class="inline-flex items-center gap-2 transition hover:text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
-                                    </svg>
-                                    {{ $link['label'] }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        <div>
+            <p class="font-semibold">{{ kua_setting('instansi', 'Kantor Urusan Agama') }}</p>
+            <p class="mt-2 leading-relaxed text-teal-100/70">
+                {{ kua_setting('kecamatan') ? 'Kecamatan '.kua_setting('kecamatan').(kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '') : '' }} {{ kua_setting('kode_pos') ? '('.kua_setting('kode_pos').')' : '' }}
+            </p>
         </div>
         <div>
             <p class="font-semibold">Kontak</p>
@@ -69,6 +53,24 @@
                                class="inline-flex items-center gap-2 transition hover:text-white">
                                 @include('partials.sosmed-icon', ['platform' => $sosmed['platform'], 'class' => 'h-4 w-4 shrink-0'])
                                 {{ $sosmed['label'] }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if ($linkTerkaits)
+            <div>
+                <p class="font-semibold">Link Terkait</p>
+                <ul class="mt-2 space-y-2 text-teal-100/70">
+                    @foreach ($linkTerkaits as $link)
+                        <li>
+                            <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center gap-2 transition hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                                </svg>
+                                {{ $link['label'] }}
                             </a>
                         </li>
                     @endforeach
