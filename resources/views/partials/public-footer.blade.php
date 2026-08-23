@@ -10,22 +10,15 @@
             ->filter(fn ($l) => ! empty($l['url']) && ! empty($l['label']))
             ->values()
             ->all();
-
-        $cols = 3 + ($sosmeds ? 1 : 0) + ($linkTerkaits ? 1 : 0);
-        $gridClass = match ($cols) {
-            5 => 'sm:grid-cols-2 lg:grid-cols-5',
-            4 => 'sm:grid-cols-2 lg:grid-cols-4',
-            default => 'sm:grid-cols-3',
-        };
     @endphp
-    <div class="mx-auto grid max-w-5xl gap-6 px-6 py-10 text-sm {{ $gridClass }}">
-        <div>
+    <div class="mx-auto grid max-w-5xl grid-cols-1 gap-x-6 gap-y-8 px-6 py-10 text-sm sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-between lg:gap-x-8">
+        <div class="lg:max-w-[16rem]">
             <p class="font-semibold">{{ kua_setting('instansi', 'Kantor Urusan Agama') }}</p>
             <p class="mt-2 leading-relaxed text-teal-100/70">
                 {{ kua_setting('kecamatan') ? 'Kecamatan '.kua_setting('kecamatan').(kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '') : '' }} {{ kua_setting('kode_pos') ? '('.kua_setting('kode_pos').')' : '' }}
             </p>
         </div>
-        <div>
+        <div class="lg:max-w-[17rem]">
             <p class="font-semibold">Kontak</p>
             <p class="mt-2 break-words leading-relaxed text-teal-100/70">
                 @if (kua_setting('alamat')) {{ kua_setting('alamat') }}<br>@endif
