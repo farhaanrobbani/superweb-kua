@@ -65,6 +65,7 @@ if (! function_exists('kua_navbar_page_url')) {
         $defaults = [
             'pengumuman' => '/pengumuman',
             'pernikahan' => '/pernikahan',
+            'pengumuman-nikah' => '/pengumuman-nikah',
             'wakaf' => '/wakaf',
             'keagamaan' => '/keagamaan',
             'layanan-permohonan' => '/permohonan',
@@ -98,6 +99,7 @@ if (! function_exists('kua_navbar_page_label')) {
         $defaults = [
             'pengumuman' => 'Pengumuman',
             'pernikahan' => 'Layanan Pernikahan',
+            'pengumuman-nikah' => 'Pengumuman Nikah',
             'wakaf' => 'Layanan Wakaf',
             'keagamaan' => 'Layanan Keagamaan',
             'layanan-permohonan' => 'Permohonan Surat',

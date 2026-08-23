@@ -1,0 +1,74 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-100 leading-tight">Tambah Pengumuman Kehendak Nikah</h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white shadow-sm sm:rounded-lg dark:bg-gray-800 p-6">
+                <form method="POST" action="{{ route('marriage-announcements.store') }}">
+                    @csrf
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <x-input-label for="nama_pria" value="Nama Calon Mempelai Pria *" />
+                            <x-text-input id="nama_pria" name="nama_pria" class="mt-1 block w-full" required
+                                          placeholder="Ahmad Fauzi, S.Kom."
+                                          value="{{ old('nama_pria') }}" />
+                            <x-input-error :messages="$errors->get('nama_pria')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="asal_pria" value="Asal Mempelai Pria" />
+                            <x-text-input id="asal_pria" name="asal_pria" class="mt-1 block w-full"
+                                          placeholder="Putra dari Bpk. Muhammad Ali & Ibu Siti Aminah"
+                                          value="{{ old('asal_pria') }}" />
+                            <x-input-error :messages="$errors->get('asal_pria')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="nama_wanita" value="Nama Calon Mempelai Wanita *" />
+                            <x-text-input id="nama_wanita" name="nama_wanita" class="mt-1 block w-full" required
+                                          placeholder="Siti Maryam, S.Pd."
+                                          value="{{ old('nama_wanita') }}" />
+                            <x-input-error :messages="$errors->get('nama_wanita')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="asal_wanita" value="Asal Mempelai Wanita" />
+                            <x-text-input id="asal_wanita" name="asal_wanita" class="mt-1 block w-full"
+                                          placeholder="Putri dari Bpk. Abdullah & Ibu Khadijah"
+                                          value="{{ old('asal_wanita') }}" />
+                            <x-input-error :messages="$errors->get('asal_wanita')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="tanggal_akad" value="Tanggal Akad *" />
+                            <x-text-input id="tanggal_akad" name="tanggal_akad" type="date" class="mt-1 block w-full" required
+                                          value="{{ old('tanggal_akad') }}" />
+                            <p class="text-xs text-gray-500 mt-1">Pengumuman otomatis disembunyikan setelah tanggal ini.</p>
+                            <x-input-error :messages="$errors->get('tanggal_akad')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="tempat_nikah" value="Tempat Akad" />
+                            <x-text-input id="tempat_nikah" name="tempat_nikah" class="mt-1 block w-full"
+                                          placeholder="Masjid Nurul Iman, Desa Sukamaju"
+                                          value="{{ old('tempat_nikah') }}" />
+                            <x-input-error :messages="$errors->get('tempat_nikah')" class="mt-2" />
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <input type="checkbox" name="active" value="1"
+                                   class="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                                   {{ old('active', true) ? 'checked' : '' }}>
+                            Aktif (tampilkan di halaman publik)
+                        </label>
+                    </div>
+
+                    <div class="mt-6 flex items-center gap-4">
+                        <x-primary-button>Simpan</x-primary-button>
+                        <a href="{{ route('marriage-announcements.index') }}" class="text-sm text-gray-600 hover:underline">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

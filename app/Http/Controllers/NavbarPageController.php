@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NavbarItem;
+use App\Http\Controllers\MarriageAnnouncementPublicController;
 use Illuminate\Http\Request;
 
 class NavbarPageController extends Controller
@@ -38,6 +39,7 @@ class NavbarPageController extends Controller
                 ? app(AnnouncementPublicController::class)->index($request)
                 : app(AnnouncementPublicController::class)->showBySlug($rest),
             'pernikahan' => app(MarriageServicePublicController::class)->index(),
+            'pengumuman-nikah' => app(MarriageAnnouncementPublicController::class)->index(),
             'wakaf' => app(WakafServicePublicController::class)->index(),
             'keagamaan' => app(ReligiousServicePublicController::class)->index(),
             'layanan-permohonan' => app(SubmissionController::class)->create($request),

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\KuaSettingController;
 use App\Http\Controllers\Admin\LetterController;
 use App\Http\Controllers\Admin\LetterTemplateController;
 use App\Http\Controllers\Admin\LetterTypeController;
+use App\Http\Controllers\Admin\MarriageAnnouncementController;
 use App\Http\Controllers\Admin\MarriageServiceController;
 use App\Http\Controllers\Admin\NavbarController;
 use App\Http\Controllers\Admin\PageController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\DownloadPublicController;
 use App\Http\Controllers\FaviconController;
 use App\Http\Controllers\KritikSaranPublicController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\MarriageAnnouncementPublicController;
 use App\Http\Controllers\MarriageServicePublicController;
 use App\Http\Controllers\NavbarPageController;
 use App\Http\Controllers\ProfileController;
@@ -57,6 +59,8 @@ Route::get('/unduhan', [DownloadPublicController::class, 'index'])->name('unduha
 Route::get('/unduhan/{downloadItem}/unduh', [DownloadPublicController::class, 'download'])->name('unduhan.unduh')->middleware('throttle:10,1');
 
 Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->name('pernikahan.index');
+
+Route::get('/pengumuman-nikah', [MarriageAnnouncementPublicController::class, 'index'])->name('pengumuman-nikah.index');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -114,6 +118,7 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::resource('staff', StaffController::class)->except('show');
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
+    Route::resource('marriage-announcements', MarriageAnnouncementController::class)->except('show');
     Route::resource('download-items', DownloadItemController::class)->except('show');
 
     Route::get('/lapkin/master', [KuaDailyController::class, 'index'])->name('kua-daily.index');
