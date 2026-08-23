@@ -194,7 +194,7 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-2">Isi URL lengkap dengan <code>https://</code>. Link tampil di footer beranda dengan ikon platform. Kosongkan untuk menyembunyikan platform tersebut.</p>
 
                         <div x-data="{
-                            links: @json(json_decode(kua_setting('link_terkait', '[]'), true) ?? [])
+                            links: {{ \Illuminate\Support\Js::from(json_decode(kua_setting('link_terkait', '[]'), true) ?? []) }}
                         }" class="mt-8">
                             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Link Terkait</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1 mb-2">Tambahkan link eksternal yang ingin ditampilkan di footer (misal: SIMKAH, AIW, SIMAS, dsb). Label bersifat custom.</p>
