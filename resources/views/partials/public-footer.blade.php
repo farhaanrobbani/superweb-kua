@@ -27,7 +27,7 @@
         </div>
         <div>
             <p class="font-semibold">Kontak</p>
-            <p class="mt-2 leading-relaxed text-teal-100/70">
+            <p class="mt-2 break-words leading-relaxed text-teal-100/70">
                 @if (kua_setting('alamat')) {{ kua_setting('alamat') }}<br>@endif
                 @if (kua_setting('telepon')) Telepon: {{ kua_setting('telepon') }}<br>@endif
                 @if (kua_setting('email')) Email: {{ kua_setting('email') }}@endif
