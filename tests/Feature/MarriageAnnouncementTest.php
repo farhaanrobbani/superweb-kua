@@ -188,7 +188,7 @@ class MarriageAnnouncementTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('Ringkasan Jadwal')
+            ->assertSee('Jadwal Pelaksanaan Nikah')
             ->assertSee('1 peristiwa')
             ->assertSee('Lihat Daftar Lengkap Pengumuman Nikah');
     }

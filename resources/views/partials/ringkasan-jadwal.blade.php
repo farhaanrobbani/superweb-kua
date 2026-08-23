@@ -1,9 +1,10 @@
 @php
+    $title = $title ?? 'Ringkasan Jadwal';
     $grouped = $announcements->groupBy(fn ($a) => $a->tanggal_akad->format('Y-m-d'))->take(6);
 @endphp
 <div class="overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
     <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
-        <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Ringkasan Jadwal</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">{{ $title }}</p>
         <span class="rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white">{{ $announcements->count() }} pasangan</span>
     </div>
     <div class="grid grid-cols-1 gap-x-6 gap-y-3 px-5 py-4 sm:grid-cols-2 lg:grid-cols-3">
