@@ -17,17 +17,38 @@ class MarriageAnnouncementTest extends TestCase
         $this->seed(NavbarItemSeeder::class);
 
         MarriageAnnouncement::factory()->create([
+            'no_pendaftaran' => '2026/0123/PKN',
             'nama_pria' => 'Ahmad Fauzi',
+            'bin_pria' => 'Muhammad Ali',
             'nama_wanita' => 'Siti Maryam',
+            'binti_wanita' => 'Abdullah',
+            'status_wali' => 'Ayah Kandung',
             'tanggal_akad' => now()->addDays(7),
         ]);
 
         $this->get('/pengumuman-nikah')
             ->assertOk()
             ->assertSee('Pengumuman Kehendak Nikah')
+            ->assertSee('Ringkasan Jadwal')
+            ->assertSee('1 pasangan')
             ->assertSee('Pasal 9 PMA No. 30 Tahun 2024')
-            ->assertSee('Ahmad Fauzi')
-            ->assertSee('Siti Maryam');
+            ->assertSee('2026/0123/PKN')
+            ->assertSee('Ahmad Fauzi bin Muhammad Ali')
+            ->assertSee('Siti Maryam binti Abdullah')
+            ->assertSee('Ayah Kandung');
+    }
+
+    public function test_nama_lengkap_helpers_fall_back_without_bin_binti(): void
+    {
+        $item = MarriageAnnouncement::factory()->create([
+            'nama_pria' => 'Budi',
+            'bin_pria' => null,
+            'nama_wanita' => 'Ani',
+            'binti_wanita' => null,
+        ]);
+
+        $this->assertSame('Budi', $item->namaLengkapPria());
+        $this->assertSame('Ani', $item->namaLengkapWanita());
     }
 
     public function test_public_page_hides_past_akad_dates(): void
@@ -67,12 +88,18 @@ class MarriageAnnouncementTest extends TestCase
         $operator = User::factory()->create(['role' => User::ROLE_OPERATOR]);
 
         $payload = [
+            'no_pendaftaran' => '2026/0124/PKN',
             'nama_pria' => 'Ahmad Fauzi',
+            'bin_pria' => 'Muhammad Ali',
             'asal_pria' => 'Putra dari Bpk. Ali',
+            'alamat_pria' => 'Dusun Sukamaju, Kec. Ampelgading',
             'nama_wanita' => 'Siti Maryam',
+            'binti_wanita' => 'Abdullah',
             'asal_wanita' => 'Putri dari Bpk. Abdullah',
+            'alamat_wanita' => 'Dusun Sidodadi, Kec. Ampelgading',
             'tanggal_akad' => now()->addDays(10)->toDateString(),
             'tempat_nikah' => 'Masjid Nurul Iman',
+            'status_wali' => 'Ayah Kandung',
             'active' => '1',
         ];
 

@@ -24,6 +24,7 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                     <thead class="bg-gray-50 dark:bg-gray-700/40">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Pendaftaran</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Calon Mempelai Pria</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Calon Mempelai Wanita</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Akad</th>
@@ -35,16 +36,19 @@
                     <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800">
                         @forelse ($announcements as $item)
                             <tr>
+                                <td class="px-6 py-4 text-xs font-mono text-gray-600 dark:text-gray-300 whitespace-nowrap">
+                                    {{ $item->no_pendaftaran ?: '—' }}
+                                </td>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                                    <span class="font-medium">{{ $item->nama_pria }}</span>
-                                    @if ($item->asal_pria)
-                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->asal_pria }}</p>
+                                    <span class="font-medium">{{ $item->namaLengkapPria() }}</span>
+                                    @if ($item->alamat_pria)
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->alamat_pria }}</p>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
-                                    <span class="font-medium">{{ $item->nama_wanita }}</span>
-                                    @if ($item->asal_wanita)
-                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->asal_wanita }}</p>
+                                    <span class="font-medium">{{ $item->namaLengkapWanita() }}</span>
+                                    @if ($item->alamat_wanita)
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ $item->alamat_wanita }}</p>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -74,7 +78,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">Belum ada pengumuman kehendak nikah.</td>
+                                <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">Belum ada pengumuman kehendak nikah.</td>
                             </tr>
                         @endforelse
                     </tbody>

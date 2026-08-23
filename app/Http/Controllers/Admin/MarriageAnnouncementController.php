@@ -59,20 +59,25 @@ class MarriageAnnouncementController extends Controller
     private function validated(Request $request): array
     {
         $data = $request->validate([
+            'no_pendaftaran' => ['nullable', 'string', 'max:80'],
             'nama_pria' => ['required', 'string', 'max:150'],
+            'bin_pria' => ['nullable', 'string', 'max:120'],
             'asal_pria' => ['nullable', 'string', 'max:255'],
+            'alamat_pria' => ['nullable', 'string', 'max:255'],
             'nama_wanita' => ['required', 'string', 'max:150'],
+            'binti_wanita' => ['nullable', 'string', 'max:120'],
             'asal_wanita' => ['nullable', 'string', 'max:255'],
+            'alamat_wanita' => ['nullable', 'string', 'max:255'],
             'tanggal_akad' => ['required', 'date'],
             'tempat_nikah' => ['nullable', 'string', 'max:255'],
+            'status_wali' => ['nullable', 'string', 'max:150'],
             'active' => ['nullable', 'boolean'],
         ]);
 
-        $data['nama_pria'] = trim($data['nama_pria']);
-        $data['nama_wanita'] = trim($data['nama_wanita']);
-        $data['asal_pria'] = isset($data['asal_pria']) ? trim($data['asal_pria']) : null;
-        $data['asal_wanita'] = isset($data['asal_wanita']) ? trim($data['asal_wanita']) : null;
-        $data['tempat_nikah'] = isset($data['tempat_nikah']) ? trim($data['tempat_nikah']) : null;
+        foreach (['no_pendaftaran', 'nama_pria', 'bin_pria', 'asal_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'asal_wanita', 'alamat_wanita', 'tempat_nikah', 'status_wali'] as $field) {
+            $data[$field] = isset($data[$field]) ? trim($data[$field]) : null;
+        }
+
         $data['active'] = $request->boolean('active');
 
         return $data;

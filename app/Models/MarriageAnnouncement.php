@@ -7,12 +7,26 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['nama_pria', 'asal_pria', 'nama_wanita', 'asal_wanita', 'tanggal_akad', 'tempat_nikah', 'active'])]
+#[Fillable(['no_pendaftaran', 'nama_pria', 'bin_pria', 'asal_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'asal_wanita', 'alamat_wanita', 'tanggal_akad', 'tempat_nikah', 'status_wali', 'active'])]
 class MarriageAnnouncement extends Model
 {
     use HasFactory;
 
     protected $table = 'marriage_announcements';
+
+    public function namaLengkapPria(): string
+    {
+        return $this->bin_pria
+            ? $this->nama_pria.' bin '.$this->bin_pria
+            : $this->nama_pria;
+    }
+
+    public function namaLengkapWanita(): string
+    {
+        return $this->binti_wanita
+            ? $this->nama_wanita.' binti '.$this->binti_wanita
+            : $this->nama_wanita;
+    }
 
     public function scopeAktif(Builder $query): Builder
     {
