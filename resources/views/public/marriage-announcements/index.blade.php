@@ -38,7 +38,12 @@
                 </div>
             </div>
 
-            <div class="mt-6 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
+            <div class="mt-4 flex items-center justify-between gap-4 text-xs text-[#1b1b1870]">
+                <span>Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }}</span>
+                <a href="{{ route('pengumuman-nikah.arsip') }}" class="shrink-0 font-medium text-teal-700 hover:underline">Lihat Arsip →</a>
+            </div>
+
+            <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
                 <p class="border-b border-teal-100 bg-teal-50/60 px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-teal-800">
                     Daftar Pengumuman Kehendak Nikah — KUA {{ kua_setting('kecamatan', '') }}{{ kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '' }}
                 </p>
@@ -82,15 +87,6 @@
                 </div>
             </div>
 
-            <p class="mt-4 text-center text-xs text-[#1b1b1870]">
-                Terakhir diperbarui: {{ now()->translatedFormat('d F Y') }} WIB
-            </p>
-
-            <div class="mt-4 text-center">
-                <a href="{{ route('pengumuman-nikah.arsip') }}" class="text-sm text-teal-700 hover:underline">
-                    Lihat Arsip →
-                </a>
-            </div>
         @else
             <div class="mt-8 rounded-lg border border-teal-100 bg-white p-8 text-center text-sm text-[#1b1b1870]">
                 Belum ada pengumuman kehendak nikah.

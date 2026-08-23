@@ -62,11 +62,9 @@ class MarriageAnnouncementController extends Controller
             'no_pendaftaran' => ['nullable', 'string', 'max:80'],
             'nama_pria' => ['required', 'string', 'max:150'],
             'bin_pria' => ['nullable', 'string', 'max:120'],
-            'asal_pria' => ['nullable', 'string', 'max:255'],
             'alamat_pria' => ['nullable', 'string', 'max:255'],
             'nama_wanita' => ['required', 'string', 'max:150'],
             'binti_wanita' => ['nullable', 'string', 'max:120'],
-            'asal_wanita' => ['nullable', 'string', 'max:255'],
             'alamat_wanita' => ['nullable', 'string', 'max:255'],
             'tanggal_akad' => ['required', 'date'],
             'tempat_nikah' => ['nullable', 'string', 'max:255'],
@@ -74,7 +72,7 @@ class MarriageAnnouncementController extends Controller
             'active' => ['nullable', 'boolean'],
         ]);
 
-        foreach (['no_pendaftaran', 'nama_pria', 'bin_pria', 'asal_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'asal_wanita', 'alamat_wanita', 'tempat_nikah', 'status_wali'] as $field) {
+        foreach (['no_pendaftaran', 'nama_pria', 'bin_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'alamat_wanita', 'tempat_nikah', 'status_wali'] as $field) {
             $data[$field] = isset($data[$field]) ? trim($data[$field]) : null;
         }
 

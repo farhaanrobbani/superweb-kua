@@ -44,7 +44,7 @@
 
                     <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mt-8 mb-4">Calon Mempelai Pria</h3>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div class="sm:col-span-2">
+                        <div>
                             <x-input-label for="nama_pria" value="Nama Lengkap *" />
                             <x-text-input id="nama_pria" name="nama_pria" class="mt-1 block w-full" required
                                           placeholder="Ahmad Fauzi, S.Kom."
@@ -59,13 +59,6 @@
                             <p class="text-xs text-gray-500 mt-1">Tampil sebagai "Ahmad Fauzi bin Muhammad Ali".</p>
                             <x-input-error :messages="$errors->get('bin_pria')" class="mt-2" />
                         </div>
-                        <div>
-                            <x-input-label for="asal_pria" value="Putra dari" />
-                            <x-text-input id="asal_pria" name="asal_pria" class="mt-1 block w-full"
-                                          placeholder="Bpk. Muhammad Ali & Ibu Siti Aminah"
-                                          value="{{ old('asal_pria', $announcement->asal_pria) }}" />
-                            <x-input-error :messages="$errors->get('asal_pria')" class="mt-2" />
-                        </div>
                         <div class="sm:col-span-2">
                             <x-input-label for="alamat_pria" value="Alamat" />
                             <x-text-input id="alamat_pria" name="alamat_pria" class="mt-1 block w-full"
@@ -77,7 +70,7 @@
 
                     <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mt-8 mb-4">Calon Mempelai Wanita</h3>
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div class="sm:col-span-2">
+                        <div>
                             <x-input-label for="nama_wanita" value="Nama Lengkap *" />
                             <x-text-input id="nama_wanita" name="nama_wanita" class="mt-1 block w-full" required
                                           placeholder="Siti Maryam, S.Pd."
@@ -91,13 +84,6 @@
                                           value="{{ old('binti_wanita', $announcement->binti_wanita) }}" />
                             <p class="text-xs text-gray-500 mt-1">Tampil sebagai "Siti Maryam binti Abdullah".</p>
                             <x-input-error :messages="$errors->get('binti_wanita')" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-input-label for="asal_wanita" value="Putri dari" />
-                            <x-text-input id="asal_wanita" name="asal_wanita" class="mt-1 block w-full"
-                                          placeholder="Bpk. Abdullah & Ibu Khadijah"
-                                          value="{{ old('asal_wanita', $announcement->asal_wanita) }}" />
-                            <x-input-error :messages="$errors->get('asal_wanita')" class="mt-2" />
                         </div>
                         <div class="sm:col-span-2">
                             <x-input-label for="alamat_wanita" value="Alamat" />

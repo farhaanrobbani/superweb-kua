@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['no_pendaftaran', 'nama_pria', 'bin_pria', 'asal_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'asal_wanita', 'alamat_wanita', 'tanggal_akad', 'tempat_nikah', 'status_wali', 'active'])]
+#[Fillable(['no_pendaftaran', 'nama_pria', 'bin_pria', 'alamat_pria', 'nama_wanita', 'binti_wanita', 'alamat_wanita', 'tanggal_akad', 'tempat_nikah', 'status_wali', 'active'])]
 class MarriageAnnouncement extends Model
 {
     use HasFactory;
