@@ -51,7 +51,7 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
             @endif
 
             @if ($services->isNotEmpty())
-                <section class="mx-auto max-w-5xl px-6 pt-12">
+                <section class="mx-auto max-w-5xl px-6 pt-16">
                     <h2 class="text-center text-xl font-bold">Layanan Kami</h2>
                     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($services as $service)
@@ -68,7 +68,7 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
             @endif
 
             @if ($announcements->isNotEmpty())
-                <section class="mx-auto max-w-5xl px-6 pb-16">
+                <section class="mx-auto max-w-5xl px-6 pt-20 pb-16">
                     <div class="flex items-center justify-between">
                         <h2 class="text-xl font-bold">Berita Terbaru</h2>
                         <a href="{{ kua_navbar_page_url('pengumuman') }}" class="text-sm font-medium text-teal-700 hover:underline">
