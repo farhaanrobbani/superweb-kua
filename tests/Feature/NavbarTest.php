@@ -28,11 +28,11 @@ class NavbarTest extends TestCase
     {
         $this->seed(NavbarItemSeeder::class);
 
-        $this->assertSame(14, NavbarItem::count());
-        $this->assertSame(5, NavbarItem::root()->count());
+        $this->assertSame(13, NavbarItem::count());
+        $this->assertSame(4, NavbarItem::root()->count());
         $this->assertSame(9, NavbarItem::whereNotNull('parent_id')->count());
 
-        foreach (['beranda', 'layanan', 'pengumuman', 'video', 'tentang'] as $key) {
+        foreach (['beranda', 'layanan', 'pengumuman', 'tentang'] as $key) {
             $this->assertDatabaseHas('navbar_items', ['key' => $key]);
         }
 

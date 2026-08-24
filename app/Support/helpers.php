@@ -31,7 +31,6 @@ if (! function_exists('kua_navbar')) {
                 ]),
             ],
             (object) ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'has_submenu' => false, 'children' => collect()],
-            (object) ['key' => 'video', 'label' => 'Video', 'url' => '/videos', 'has_submenu' => false, 'children' => collect()],
             (object) [
                 'key' => 'tentang',
                 'label' => 'Tentang Kami',
@@ -65,7 +64,6 @@ if (! function_exists('kua_navbar_page_url')) {
     {
         $defaults = [
             'pengumuman' => '/pengumuman',
-            'video' => '/videos',
             'pernikahan' => '/pernikahan',
             'pengumuman-nikah' => '/pengumuman-nikah',
             'wakaf' => '/wakaf',
@@ -100,7 +98,6 @@ if (! function_exists('kua_navbar_page_label')) {
     {
         $defaults = [
             'pengumuman' => 'Pengumuman',
-            'video' => 'Video',
             'pernikahan' => 'Layanan Pernikahan',
             'pengumuman-nikah' => 'Pengumuman Nikah',
             'wakaf' => 'Layanan Wakaf',

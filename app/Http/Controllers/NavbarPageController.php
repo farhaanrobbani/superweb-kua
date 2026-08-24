@@ -40,9 +40,6 @@ class NavbarPageController extends Controller
                 : app(AnnouncementPublicController::class)->showBySlug($rest),
             'pernikahan' => app(MarriageServicePublicController::class)->index(),
             'pengumuman-nikah' => app(MarriageAnnouncementPublicController::class)->index(),
-            'video' => $rest === ''
-                ? app(VideoPublicController::class)->index($request)
-                : app(VideoPublicController::class)->showBySlug($rest),
             'wakaf' => app(WakafServicePublicController::class)->index(),
             'keagamaan' => app(ReligiousServicePublicController::class)->index(),
             'layanan-permohonan' => app(SubmissionController::class)->create($request),

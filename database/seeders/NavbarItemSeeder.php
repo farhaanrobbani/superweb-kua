@@ -13,8 +13,7 @@ class NavbarItemSeeder extends Seeder
             ['key' => 'beranda', 'label' => 'Beranda', 'url' => '/', 'sort_order' => 1, 'has_submenu' => false],
             ['key' => 'layanan', 'label' => 'Layanan', 'url' => null, 'sort_order' => 2, 'has_submenu' => true],
             ['key' => 'pengumuman', 'label' => 'Pengumuman', 'url' => '/pengumuman', 'sort_order' => 3, 'has_submenu' => false],
-            ['key' => 'video', 'label' => 'Video', 'url' => '/videos', 'sort_order' => 4, 'has_submenu' => false],
-            ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'sort_order' => 5, 'has_submenu' => true],
+            ['key' => 'tentang', 'label' => 'Tentang Kami', 'url' => null, 'sort_order' => 4, 'has_submenu' => true],
         ];
 
         foreach ($mainItems as $item) {

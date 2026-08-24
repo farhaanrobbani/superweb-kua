@@ -50,10 +50,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 </section>
             @endif
 
-            @if ($videos->isNotEmpty())
-                @include('partials.video-carousel', ['videos' => $videos])
-            @endif
-
             @if ($services->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-8 pb-8">
                     <h2 class="text-center text-xl font-bold">Layanan Kami</h2>

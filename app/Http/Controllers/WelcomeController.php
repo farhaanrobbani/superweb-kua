@@ -20,7 +20,6 @@ class WelcomeController extends Controller
             'services' => $this->services(),
             'announcements' => $this->announcements(),
             'marriageAnnouncements' => $this->marriageAnnouncements(),
-            'videos' => $this->videos(),
         ]);
     }
 
@@ -84,15 +83,6 @@ class WelcomeController extends Controller
     {
         try {
             return MarriageAnnouncement::query()->aktif()->get();
-        } catch (\Throwable) {
-            return collect();
-        }
-    }
-
-    private function videos(): Collection
-    {
-        try {
-            return \App\Models\Video::query()->published()->take(10)->get(['id', 'title', 'slug', 'thumbnail', 'video_url', 'published_at', 'created_at']);
         } catch (\Throwable) {
             return collect();
         }
