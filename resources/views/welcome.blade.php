@@ -72,9 +72,9 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
             @if ($announcements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-8 pb-16">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-xl font-bold">Berita Terbaru</h2>
+                        <h2 class="text-xl font-bold">{{ kua_navbar_page_label('pengumuman', 'Berita') }} Terbaru</h2>
                         <a href="{{ kua_navbar_page_url('pengumuman') }}" class="text-sm font-medium text-teal-700 hover:underline">
-                            Lihat Semua Berita
+                            Lihat Semua {{ kua_navbar_page_label('pengumuman', 'Berita') }}
                         </a>
                     </div>
                     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
