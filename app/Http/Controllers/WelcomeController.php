@@ -74,7 +74,7 @@ class WelcomeController extends Controller
     private function announcements(): Collection
     {
         try {
-            return Announcement::query()->published()->take(3)->get(['id', 'title', 'slug', 'content', 'excerpt', 'category', 'published_at', 'created_at', 'image', 'video_url']);
+            return Announcement::query()->published()->take(3)->get(['id', 'title', 'slug', 'content', 'excerpt', 'category', 'published_at', 'created_at', 'image']);
         } catch (\Throwable) {
             return collect();
         }
