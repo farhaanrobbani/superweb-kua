@@ -65,7 +65,6 @@ Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->na
 Route::get('/pengumuman-nikah/arsip', [MarriageAnnouncementPublicController::class, 'arsip'])->name('pengumuman-nikah.arsip');
 Route::get('/pengumuman-nikah', [MarriageAnnouncementPublicController::class, 'index'])->name('pengumuman-nikah.index');
 
-Route::get('/videos', [VideoPublicController::class, 'index'])->name('videos.index');
 Route::get('/videos/{video}', [VideoPublicController::class, 'show'])->name('videos.show');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
@@ -125,8 +124,13 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('marriage-announcements', MarriageAnnouncementController::class)->except('show');
-    Route::resource('videos', VideoController::class)->except('show');
-    Route::post('videos/gambar', [VideoController::class, 'uploadImage'])->name('videos.gambar');
+    Route::get('kelola-video', [VideoController::class, 'index'])->name('videos.index');
+    Route::get('kelola-video/create', [VideoController::class, 'create'])->name('videos.create');
+    Route::post('kelola-video', [VideoController::class, 'store'])->name('videos.store');
+    Route::get('kelola-video/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
+    Route::put('kelola-video/{video}', [VideoController::class, 'update'])->name('videos.update');
+    Route::delete('kelola-video/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
+    Route::post('kelola-video/gambar', [VideoController::class, 'uploadImage'])->name('videos.gambar');
     Route::resource('download-items', DownloadItemController::class)->except('show');
 
     Route::get('/lapkin/master', [KuaDailyController::class, 'index'])->name('kua-daily.index');
