@@ -75,7 +75,16 @@
                     .catch(e => { this.error = e.message || 'Gagal memuat jadwal.'; this.loading = false; });
             },
             buildDisplay() {
+                const fmt = mins => {
+                    const h = Math.floor((mins % (24*60) + 24*60) % (24*60) / 60);
+                    const m = (mins % 60 + 60) % 60;
+                    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+                };
+                const tFajr = this.timings['Fajr'] || '--:--';
+                const [hf, mf] = tFajr.split(':').map(Number);
+                const imsak = (!isNaN(hf) && !isNaN(mf)) ? fmt(hf*60+mf-10) : (this.timings['Imsak'] || '--:--');
                 const order = [
+                    { key: 'Imsak', label: 'Imsak', time: imsak, mins: (!isNaN(hf)?hf*60+mf-10:9999) },
                     { key: 'Fajr', label: 'Subuh' },
                     { key: 'Dhuhr', label: 'Dzuhur' },
                     { key: 'Asr', label: 'Ashar' },
@@ -86,9 +95,9 @@
                 const nowMin = now.getHours()*60 + now.getMinutes();
                 let nextIdx = -1, minDiff = Infinity;
                 const items = order.map((o, idx) => {
-                    const t = this.timings[o.key] || '--:--';
+                    const t = o.time ?? (this.timings[o.key] || '--:--');
                     const [h, m] = t.split(':').map(Number);
-                    const mins = (isNaN(h)?9999:h*60+(isNaN(m)?0:m));
+                    const mins = o.mins ?? (isNaN(h)?9999:h*60+(isNaN(m)?0:m));
                     const diff = mins - nowMin;
                     if (diff >= 0 && diff < minDiff) { minDiff = diff; nextIdx = idx; }
                     return { key: o.key, label: o.label, time: t, mins, isNext: false };
