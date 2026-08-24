@@ -1,13 +1,13 @@
 <section x-data="jadwalSholat()" x-init="init()" class="mx-auto max-w-5xl px-6 py-10">
     <div class="rounded-lg border border-teal-100 bg-white shadow-sm">
-        <div class="flex flex-col gap-2 border-b border-teal-100 bg-teal-50/60 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-center gap-2">
+        <div class="flex flex-col gap-3 border-b border-teal-100 bg-teal-50/60 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-wrap items-center gap-2">
                 <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Jadwal Sholat</p>
                 <span class="rounded-full bg-teal-700 px-2 py-0.5 text-xs font-semibold text-white" x-text="kotaLabel"></span>
                 <span class="text-xs text-[#1b1b1870]" x-show="countdown" x-text="'• ' + countdown"></span>
             </div>
             <button type="button" @click="useGeolocation()"
-                    class="self-end text-xs font-medium text-teal-700 hover:underline sm:self-auto">Lokasi Saya</button>
+                    class="shrink-0 self-end rounded-md border border-teal-200 bg-white px-3 py-1.5 text-xs font-semibold text-teal-700 transition hover:bg-teal-50 sm:self-auto">Lokasi Saya</button>
         </div>
 
         <div class="px-5 py-4">
