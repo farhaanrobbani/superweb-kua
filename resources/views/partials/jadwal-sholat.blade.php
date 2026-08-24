@@ -1,32 +1,39 @@
 <section x-data="jadwalSholat()" x-init="init()" class="mx-auto max-w-5xl px-6 py-10">
-    <div class="relative overflow-hidden rounded-xl border border-teal-800 bg-teal-800 text-teal-50 shadow-sm">
-        <img src="https://images.unsplash.com/photo-1587613865763-4b8b0d19e8ab?q=80&w=1200&auto=format&fit=crop" alt="" class="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]" aria-hidden="true">
-        <div class="absolute inset-0 bg-teal-800/80" aria-hidden="true"></div>
-        <div class="relative">
-            <div class="px-6 pb-6 pt-7 text-center">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-teal-200/90">Jadwal Sholat</p>
-                <p class="mt-1 text-xs font-medium tracking-wide text-teal-100/80" x-text="'Wilayah ' + kotaLabel + ' • Ampelgading'"></p>
+    <div class="rounded-lg border border-teal-100 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
+            <div class="flex items-center gap-2">
+                <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Jadwal Sholat</p>
+                <span class="rounded-full bg-teal-700 px-2 py-0.5 text-xs font-semibold text-white" x-text="kotaLabel"></span>
             </div>
-            <div class="px-6 pb-2">
-                <p class="text-xs text-teal-100/70" x-show="loading">Memuat jadwal...</p>
-                <p class="text-xs text-red-200" x-show="error" x-text="error"></p>
-                <div x-show="!loading && timings" class="overflow-hidden rounded-lg border border-white/15">
-                    <div class="grid grid-cols-[2.5rem_1fr_auto] gap-0 border-b border-white/10 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-teal-100">
-                        <span>No</span><span>Nama Waktu</span><span class="text-right">Waktu</span>
-                    </div>
-                    <template x-for="(item, idx) in displayTimings" :key="item.key">
-                        <div class="grid grid-cols-[2.5rem_1fr_auto] items-center gap-0 border-b border-white/10 px-4 py-3 text-sm last:border-0" :class="item.isNext ? 'bg-white/10 font-semibold text-white' : 'text-teal-50'">
-                            <span class="text-teal-200/80" x-text="idx + 1"></span>
-                            <span x-text="item.label"></span>
-                            <span class="font-mono font-medium" x-text="item.time"></span>
+            <button type="button" @click="useGeolocation()"
+                    class="shrink-0 rounded-md border border-teal-200 bg-white px-3 py-1.5 text-xs font-semibold text-teal-700 transition hover:bg-teal-50">Lokasi Saya</button>
+        </div>
+        <div x-show="countdown" class="px-5 pt-3">
+            <p class="text-xs text-[#1b1b1870]" x-text="'• ' + countdown"></p>
+        </div>
+
+        <div class="px-5 py-4">
+            <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
+            <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
+
+            <div x-show="!loading && timings" class="grid grid-cols-1 gap-3">
+                <template x-for="item in displayTimings" :key="item.key">
+                    <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-3 transition hover:border-teal-200 hover:bg-teal-50/70"
+                         :class="item.isNext ? 'border-teal-700 bg-teal-50' : ''">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-teal-700 text-white">
+                            <span class="text-xs font-bold leading-none sm:text-sm" x-text="item.time"></span>
                         </div>
-                    </template>
-                </div>
-                <p class="mt-3 text-center text-xs text-teal-100/70" x-show="countdown" x-text="'Selanjutnya: ' + countdown"></p>
-                <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
-                    <button type="button" @click="useGeolocation()" class="rounded-md border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-white/20">Lokasi Saya</button>
-                    <a href="https://bimasislam.kemenag.go.id/jadwalshalat" target="_blank" rel="noopener noreferrer" class="text-xs text-teal-100/70 underline decoration-white/20 underline-offset-4 hover:text-white">bimasislam.kemenag.go.id/jadwalshalat →</a>
-                </div>
+                        <div class="min-w-0 text-left">
+                            <p class="truncate text-sm font-semibold text-teal-900" x-text="item.label + ' — ' + item.time"></p>
+                            <p class="text-xs text-[#1b1b1870]" x-show="item.isNext">Selanjutnya</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="mt-3 text-center">
+                <a href="https://bimasislam.kemenag.go.id/jadwalshalat" target="_blank" rel="noopener noreferrer"
+                   class="text-xs text-teal-700 hover:underline">Lihat selengkapnya di bimasislam.kemenag.go.id/jadwalshalat →</a>
             </div>
         </div>
     </div>
@@ -41,7 +48,9 @@
             countdown: '',
             displayTimings: [],
             timer: null,
-            init() { this.fetchByCoords(-7.97, 112.63); },
+            init() {
+                this.fetchByCoords(-7.97, 112.63);
+            },
             useGeolocation() {
                 if (!navigator.geolocation) { this.error = 'Geolocation tidak didukung.'; return; }
                 this.loading = true;
@@ -56,29 +65,49 @@
                 const d = new Date();
                 const date = String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
                 fetch(`https://api.aladhan.com/v1/timings/${date}?latitude=${lat}&longitude=${lon}&method=20`)
-                    .then(r => r.json()).then(j => {
+                    .then(r => r.json())
+                    .then(j => {
                         if (j.code !== 200 || !j.data || !j.data.timings) throw new Error('Gagal memuat jadwal.');
-                        this.timings = j.data.timings; this.buildDisplay(); this.loading = false;
-                    }).catch(e => { this.error = e.message || 'Gagal memuat jadwal.'; this.loading = false; });
+                        this.timings = j.data.timings;
+                        this.buildDisplay();
+                        this.loading = false;
+                    })
+                    .catch(e => { this.error = e.message || 'Gagal memuat jadwal.'; this.loading = false; });
             },
             buildDisplay() {
-                const order = [{ key: 'Fajr', label: 'Subuh' },{ key: 'Dhuhr', label: 'Dzuhur' },{ key: 'Asr', label: 'Ashar' },{ key: 'Maghrib', label: 'Maghrib' },{ key: 'Isha', label: 'Isya' }];
-                const now = new Date(); const nowMin = now.getHours()*60 + now.getMinutes();
+                const order = [
+                    { key: 'Fajr', label: 'Subuh' },
+                    { key: 'Dhuhr', label: 'Dzuhur' },
+                    { key: 'Asr', label: 'Ashar' },
+                    { key: 'Maghrib', label: 'Maghrib' },
+                    { key: 'Isha', label: 'Isya' },
+                ];
+                const now = new Date();
+                const nowMin = now.getHours()*60 + now.getMinutes();
                 let nextIdx = -1, minDiff = Infinity;
                 const items = order.map((o, idx) => {
-                    const t = this.timings[o.key] || '--:--'; const [h, m] = t.split(':').map(Number);
-                    const mins = (isNaN(h)?9999:h*60+(isNaN(m)?0:m)); const diff = mins - nowMin;
+                    const t = this.timings[o.key] || '--:--';
+                    const [h, m] = t.split(':').map(Number);
+                    const mins = (isNaN(h)?9999:h*60+(isNaN(m)?0:m));
+                    const diff = mins - nowMin;
                     if (diff >= 0 && diff < minDiff) { minDiff = diff; nextIdx = idx; }
                     return { key: o.key, label: o.label, time: t, mins, isNext: false };
                 });
-                if (nextIdx === -1) nextIdx = 0; items[nextIdx].isNext = true;
-                this.displayTimings = items; this.updateCountdown(nextIdx, items);
-                if (this.timer) clearInterval(this.timer); this.timer = setInterval(() => this.updateCountdown(nextIdx, items), 60000);
+                if (nextIdx === -1) nextIdx = 0;
+                items[nextIdx].isNext = true;
+                this.displayTimings = items;
+                this.updateCountdown(nextIdx, items);
+                if (this.timer) clearInterval(this.timer);
+                this.timer = setInterval(() => this.updateCountdown(nextIdx, items), 60000);
             },
             updateCountdown(nextIdx, items) {
-                const now = new Date(); const nowMin = now.getHours()*60 + now.getMinutes();
-                const next = items[nextIdx]; let diff = next.mins - nowMin; if (diff < 0) diff += 24*60;
-                const h = Math.floor(diff/60), m = diff%60; this.countdown = `${next.label} dalam ${h} j ${m} m`;
+                const now = new Date();
+                const nowMin = now.getHours()*60 + now.getMinutes();
+                const next = items[nextIdx];
+                let diff = next.mins - nowMin;
+                if (diff < 0) diff += 24*60;
+                const h = Math.floor(diff/60), m = diff%60;
+                this.countdown = `${next.label} dalam ${h} j ${m} m`;
             }
         }
     }
