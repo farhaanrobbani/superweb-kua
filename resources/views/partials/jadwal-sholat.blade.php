@@ -21,7 +21,7 @@
                     <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-3 transition hover:border-teal-200 hover:bg-teal-50/70"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : ''">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-teal-700 text-white">
-                            <span class="text-base leading-none font-bold" x-text="item.time.split(':')[0]"></span>
+                            <span class="text-xs font-bold leading-none sm:text-sm" x-text="item.time"></span>
                         </div>
                         <div class="min-w-0 text-left">
                             <p class="truncate text-sm font-semibold text-teal-900" x-text="item.label + ' — ' + item.time"></p>
