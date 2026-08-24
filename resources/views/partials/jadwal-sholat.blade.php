@@ -1,26 +1,33 @@
 <section x-data="jadwalSholat()" x-init="init()" class="mx-auto max-w-5xl px-6 py-10">
     <div class="rounded-lg border border-teal-100 bg-white shadow-sm">
-        <div class="flex flex-col gap-2 border-b border-teal-100 bg-teal-50/60 px-5 py-3 sm:flex-row sm:items-center sm:justify-start sm:gap-4">
-            <div class="flex flex-wrap items-center gap-2 text-left">
+        <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
+            <div class="flex items-center gap-2">
                 <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Jadwal Sholat</p>
                 <span class="rounded-full bg-teal-700 px-2 py-0.5 text-xs font-semibold text-white" x-text="kotaLabel"></span>
-                <span class="text-xs text-[#1b1b1870]" x-show="countdown" x-text="'• ' + countdown"></span>
             </div>
             <button type="button" @click="useGeolocation()"
-                    class="shrink-0 self-start rounded-md border border-teal-200 bg-white px-3 py-1.5 text-xs font-semibold text-teal-700 transition hover:bg-teal-50 sm:ml-auto sm:self-auto">Lokasi Saya</button>
+                    class="shrink-0 rounded-md border border-teal-200 bg-white px-3 py-1.5 text-xs font-semibold text-teal-700 transition hover:bg-teal-50">Lokasi Saya</button>
+        </div>
+        <div x-show="countdown" class="px-5 pt-3">
+            <p class="text-xs text-[#1b1b1870]" x-text="'• ' + countdown"></p>
         </div>
 
         <div class="px-5 py-4">
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-5 gap-2 sm:gap-3">
+            <div x-show="!loading && timings" class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="rounded-lg border p-2 text-center sm:p-3"
+                    <div class="flex items-center gap-3 rounded-lg border p-3"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
-                        <p class="text-[10px] font-semibold uppercase tracking-wide text-[#1b1b1870] sm:text-xs" x-text="item.label"></p>
-                        <p class="mt-1 text-xs font-bold text-teal-900 sm:text-base" x-text="item.time"></p>
-                        <p x-show="item.isNext" class="mt-1 text-[9px] font-semibold uppercase tracking-wide text-teal-700 sm:text-[10px]">Selanjutnya</p>
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                             :class="item.isNext ? 'bg-teal-700 text-white' : 'bg-white text-teal-700 border border-teal-100'"
+                             x-text="item.label.charAt(0)"></div>
+                        <div class="min-w-0 text-left">
+                            <p class="text-xs font-semibold uppercase tracking-wide text-[#1b1b1870]" x-text="item.label"></p>
+                            <p class="text-sm font-bold text-teal-900" x-text="item.time"></p>
+                        </div>
+                        <span x-show="item.isNext" class="ml-auto shrink-0 rounded-full bg-teal-700 px-2 py-0.5 text-[10px] font-semibold text-white">Selanjutnya</span>
                     </div>
                 </template>
             </div>
