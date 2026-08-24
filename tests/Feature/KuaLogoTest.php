@@ -242,8 +242,8 @@ class KuaLogoTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('Senin – Jumat')
-            ->assertSee('08.00 – 15.00 WIB');
+            ->assertSee('Senin – Kamis')
+            ->assertSee('07.30 – 16.00 WIB');
     }
 
     public function test_admin_navbar_shows_kua_logo(): void

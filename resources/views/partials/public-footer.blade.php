@@ -32,7 +32,7 @@
                 @if (kua_setting('jam_layanan'))
                     {!! nl2br(e(kua_setting('jam_layanan'))) !!}
                 @else
-                    Senin – Jumat<br>08.00 – 15.00 WIB
+                    Senin – Kamis<br>07.30 – 16.00 WIB<br>Jumat 07.30 – 16.30 WIB
                 @endif
             </p>
         </div>
