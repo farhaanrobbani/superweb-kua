@@ -7,7 +7,7 @@
                 <span class="text-xs text-[#1b1b1870]" x-show="countdown" x-text="'• ' + countdown"></span>
             </div>
             <button type="button" @click="useGeolocation()"
-                    class="text-xs font-medium text-teal-700 hover:underline">Lokasi Saya</button>
+                    class="self-end text-xs font-medium text-teal-700 hover:underline sm:self-auto">Lokasi Saya</button>
         </div>
 
         <div class="px-5 py-4">
