@@ -40,15 +40,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                      class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
             @endif
 
-            @php($kuaOpen = is_kua_open())
-            <div class="mx-auto max-w-5xl px-6 py-3 text-center text-xs">
-                <span class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold {{ $kuaOpen ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-red-200 bg-red-50 text-red-700' }}">
-                    <span class="h-2 w-2 rounded-full {{ $kuaOpen ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
-                    {{ $kuaOpen ? 'Buka' : 'Tutup' }} • {{ kua_status_label() }}
-                </span>
-                <span class="ml-2 text-[#1b1b1870]">Senin–Kamis 07.30–16.00 • Jumat 07.30–16.30 WIB</span>
-            </div>
-
             @if ($marriageAnnouncements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-12 pb-10">
                     @include('partials.ringkasan-jadwal', ['announcements' => $marriageAnnouncements, 'title' => 'Jadwal Pelaksanaan Nikah'])
