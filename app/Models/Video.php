@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\AnnouncementCategory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,22 +10,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'slug', 'content', 'excerpt', 'category', 'image', 'author_id', 'published_at', 'active'])]
-class Announcement extends Model
+#[Fillable(['title', 'slug', 'excerpt', 'content', 'thumbnail', 'video_url', 'author_id', 'published_at', 'active'])]
+class Video extends Model
 {
     use HasFactory;
 
-    public function imageUrl(): ?string
+    public function thumbnailUrl(): ?string
     {
-        return $this->image && Storage::disk('public')->exists($this->image)
-            ? Storage::disk('public')->url($this->image)
+        return $this->thumbnail && Storage::disk('public')->exists($this->thumbnail)
+            ? Storage::disk('public')->url($this->thumbnail)
             : null;
-    }
-
-    public function excerpt(): string
-    {
-        return $this->excerpt
-            ?: Str::limit(strip_tags((string) $this->content), 160);
     }
 
     public function getRouteKeyName(): string
@@ -36,9 +29,9 @@ class Announcement extends Model
 
     protected static function booted(): void
     {
-        static::creating(function (Announcement $announcement) {
-            if (! $announcement->slug) {
-                $announcement->slug = Str::slug((string) $announcement->title) ?: 'pengumuman';
+        static::creating(function (Video $video) {
+            if (! $video->slug) {
+                $video->slug = Str::slug((string) $video->title) ?: 'video';
             }
         });
     }
@@ -61,7 +54,6 @@ class Announcement extends Model
         return [
             'active' => 'boolean',
             'published_at' => 'datetime',
-            'category' => AnnouncementCategory::class,
         ];
     }
 }

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ReligiousServiceController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\SubmissionAdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\Admin\WakafServiceController;
 use App\Http\Controllers\AnnouncementPublicController;
 use App\Http\Controllers\DashboardController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\StaffExportController;
 use App\Http\Controllers\StaffPublicController;
 use App\Http\Controllers\StaffTemplateController;
 use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\VideoPublicController;
 use App\Http\Controllers\WakafServicePublicController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Middleware\RedirectLegacyPengumuman;
@@ -62,6 +64,9 @@ Route::get('/pernikahan', [MarriageServicePublicController::class, 'index'])->na
 
 Route::get('/pengumuman-nikah/arsip', [MarriageAnnouncementPublicController::class, 'arsip'])->name('pengumuman-nikah.arsip');
 Route::get('/pengumuman-nikah', [MarriageAnnouncementPublicController::class, 'index'])->name('pengumuman-nikah.index');
+
+Route::get('/videos', [VideoPublicController::class, 'index'])->name('videos.index');
+Route::get('/videos/{video}', [VideoPublicController::class, 'show'])->name('videos.show');
 
 Route::get('/permohonan', [SubmissionController::class, 'create'])->name('permohonan.create');
 Route::post('/permohonan', [SubmissionController::class, 'store'])->name('permohonan.store')->middleware('throttle:5,1');
@@ -120,6 +125,8 @@ Route::middleware(['auth', 'verified', 'active', 'role:operator,kepala'])->group
     Route::resource('announcements', AnnouncementController::class)->except('show');
     Route::post('announcements/gambar', [AnnouncementController::class, 'uploadImage'])->name('announcements.gambar');
     Route::resource('marriage-announcements', MarriageAnnouncementController::class)->except('show');
+    Route::resource('videos', VideoController::class)->except('show');
+    Route::post('videos/gambar', [VideoController::class, 'uploadImage'])->name('videos.gambar');
     Route::resource('download-items', DownloadItemController::class)->except('show');
 
     Route::get('/lapkin/master', [KuaDailyController::class, 'index'])->name('kua-daily.index');

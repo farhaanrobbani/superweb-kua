@@ -51,12 +51,6 @@
                             </div>
 
                             <div>
-                                <x-input-label for="video_url" value="URL Video (opsional)" />
-                                <input type="url" name="video_url" id="video_url"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
-                                       value="{{ old('video_url') }}" placeholder="https://www.youtube.com/watch?v=..." />
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Video tetap disimpan di layanan eksternal; hanya tautannya yang disimpan.</p>
-                                <x-input-error :messages="$errors->get('video_url')" class="mt-2" />
                             </div>
                             <div>
                                 <x-input-label for="published_at" value="Tanggal terbit (opsional)" />

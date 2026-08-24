@@ -50,6 +50,10 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 </section>
             @endif
 
+            @if ($videos->isNotEmpty())
+                @include('partials.video-carousel', ['videos' => $videos])
+            @endif
+
             @if ($services->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-8 pb-8">
                     <h2 class="text-center text-xl font-bold">Layanan Kami</h2>
@@ -68,30 +72,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
             @endif
 
             <div class="mx-auto max-w-5xl px-6"><hr class="border-teal-100/60"></div>
-
-            @if ($videoAnnouncements->isNotEmpty())
-                <section class="mx-auto max-w-5xl px-6 pt-8 pb-8">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-xl font-bold">Video Terbaru</h2>
-                        <a href="{{ kua_navbar_page_url('pengumuman') }}" class="text-sm font-medium text-teal-700 hover:underline">Lihat Semua Berita</a>
-                    </div>
-                    <div class="mt-6 flex snap-x gap-4 overflow-x-auto pb-3">
-                        @foreach ($videoAnnouncements as $video)
-                            <a href="{{ kua_navbar_page_url('pengumuman').'/'.$video->slug }}" class="group relative w-64 shrink-0 snap-start overflow-hidden rounded-xl border border-teal-100 bg-white shadow-sm">
-                                <div class="relative flex h-36 items-center justify-center bg-teal-900">
-                                    @if ($video->imageUrl())
-                                        <img src="{{ $video->imageUrl() }}" alt="{{ $video->title }}" class="h-full w-full object-cover transition group-hover:scale-105" />
-                                    @endif
-                                    <span class="absolute inset-0 flex items-center justify-center bg-black/20">
-                                        <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-xl text-teal-700">▶</span>
-                                    </span>
-                                </div>
-                                <p class="p-4 text-sm font-semibold leading-snug text-slate-900 group-hover:text-teal-700">{{ $video->title }}</p>
-                            </a>
-                        @endforeach
-                    </div>
-                </section>
-            @endif
 
             @if ($announcements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-8 pb-16">
