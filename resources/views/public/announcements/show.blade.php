@@ -51,6 +51,13 @@
                 </div>
             @endif
 
+            @if ($announcement->video_url && \App\Support\VideoEmbed::url($announcement->video_url))
+                <div class="mt-6 aspect-video overflow-hidden rounded-2xl border border-teal-100 bg-black shadow-sm">
+                    <iframe src="{{ \App\Support\VideoEmbed::url($announcement->video_url) }}"
+                            title="{{ $announcement->title }}" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            @endif
+
             <div class="mt-6 flex flex-wrap items-center gap-2">
                 <span class="text-sm font-medium text-[#1b1b1870]">Bagikan:</span>
                 <a href="https://wa.me/?text={{ urlencode($shareText.' '.$shareUrl) }}" target="_blank" rel="noopener noreferrer"

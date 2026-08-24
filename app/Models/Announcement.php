@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'slug', 'content', 'excerpt', 'category', 'image', 'author_id', 'published_at', 'active'])]
+#[Fillable(['title', 'slug', 'content', 'excerpt', 'category', 'image', 'video_url', 'author_id', 'published_at', 'active'])]
 class Announcement extends Model
 {
     use HasFactory;

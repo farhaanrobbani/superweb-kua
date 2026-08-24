@@ -20,6 +20,7 @@ class WelcomeController extends Controller
             'services' => $this->services(),
             'announcements' => $this->announcements(),
             'marriageAnnouncements' => $this->marriageAnnouncements(),
+            'videoAnnouncements' => $this->videoAnnouncements(),
         ]);
     }
 
@@ -73,7 +74,7 @@ class WelcomeController extends Controller
     private function announcements(): Collection
     {
         try {
-            return Announcement::query()->published()->take(3)->get(['id', 'title', 'slug', 'content', 'excerpt', 'category', 'published_at', 'created_at', 'image']);
+            return Announcement::query()->published()->take(3)->get(['id', 'title', 'slug', 'content', 'excerpt', 'category', 'published_at', 'created_at', 'image', 'video_url']);
         } catch (\Throwable) {
             return collect();
         }
@@ -83,6 +84,15 @@ class WelcomeController extends Controller
     {
         try {
             return MarriageAnnouncement::query()->aktif()->get();
+        } catch (\Throwable) {
+            return collect();
+        }
+    }
+
+    private function videoAnnouncements(): Collection
+    {
+        try {
+            return Announcement::query()->published()->whereNotNull('video_url')->take(10)->get(['id', 'title', 'slug', 'image', 'video_url']);
         } catch (\Throwable) {
             return collect();
         }

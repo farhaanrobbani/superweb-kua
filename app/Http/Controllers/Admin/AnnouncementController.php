@@ -91,6 +91,7 @@ class AnnouncementController extends Controller
             'content' => ['required', 'string', 'max:100000'],
             'category' => ['sometimes', 'string', Rule::in(array_column(AnnouncementCategory::cases(), 'value'))],
             'excerpt' => ['nullable', 'string', 'max:500'],
+            'video_url' => ['nullable', 'url', 'max:2000'],
             'image' => ['sometimes', 'image', 'mimes:jpeg,jpg,png,webp', 'max:3072'],
             'image_hapus' => ['sometimes', 'in:1'],
             'published_at' => ['nullable', 'date'],
