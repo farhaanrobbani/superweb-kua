@@ -8,16 +8,20 @@
             <div x-ref="track" class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 scroll-smooth">
                 @foreach ($videos as $video)
                     <a href="{{ kua_navbar_page_url('video').'/'.$video->slug }}"
-                       class="group relative w-64 shrink-0 snap-start overflow-hidden rounded-xl border border-teal-100 bg-white shadow-sm transition hover:shadow-md">
-                        <div class="relative flex h-36 items-center justify-center bg-teal-900">
+                       class="group relative aspect-[9/16] w-[35%] shrink-0 snap-start overflow-hidden bg-base-300 md:w-[11%]">
+                        <div class="relative h-full w-full overflow-hidden">
                             @if ($video->thumbnailUrl())
-                                <img src="{{ $video->thumbnailUrl() }}" alt="{{ $video->title }}" class="h-full w-full object-cover transition group-hover:scale-105" />
+                                <img src="{{ $video->thumbnailUrl() }}" alt="{{ $video->title }}"
+                                     class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:opacity-90" />
                             @endif
-                            <span class="absolute inset-0 flex items-center justify-center bg-black/20">
-                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-xl text-teal-700">▶</span>
-                            </span>
+                            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-transform duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="size-12 text-white opacity-60 group-hover:opacity-100"><circle cx="12" cy="12" r="10" fill="white" opacity="0.3"></circle><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"></path></svg>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-black/90 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-3">
+                                <p class="line-clamp-2 text-sm font-medium text-white group-hover:text-primary-300">{{ $video->title }}</p>
+                            </div>
                         </div>
-                        <p class="p-4 text-sm font-semibold leading-snug text-slate-900 group-hover:text-teal-700">{{ $video->title }}</p>
                     </a>
                 @endforeach
             </div>
