@@ -43,6 +43,10 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
             @if ($marriageAnnouncements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-12 pb-10">
                     @include('partials.ringkasan-jadwal', ['announcements' => $marriageAnnouncements, 'title' => 'Jadwal Pelaksanaan Nikah'])
+                    <div class="mt-6 text-center">
+                        <a href="{{ kua_navbar_page_url('pengumuman-nikah', '/pengumuman-nikah') }}"
+                           class="text-sm font-medium text-teal-700 hover:underline">Lihat Daftar Lengkap Pengumuman Nikah →</a>
+                    </div>
                 </section>
             @endif
 

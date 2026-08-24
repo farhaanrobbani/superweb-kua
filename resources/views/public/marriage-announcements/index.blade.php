@@ -22,13 +22,9 @@
             </div>
 
             <div class="mt-4 overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
-                <div class="flex items-center justify-between gap-4 border-b border-teal-100 bg-teal-50/60 px-5 py-3">
-                    <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">
-                        Daftar Pengumuman Kehendak Nikah — KUA {{ kua_setting('kecamatan', '') }}{{ kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '' }}
-                    </p>
-                    <a href="{{ route('pengumuman-nikah.arsip') }}"
-                       class="shrink-0 text-xs font-medium text-teal-700 hover:underline">Lihat Daftar Lengkap →</a>
-                </div>
+                <p class="border-b border-teal-100 bg-teal-50/60 px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-teal-800">
+                    Daftar Pengumuman Kehendak Nikah — KUA {{ kua_setting('kecamatan', '') }}{{ kua_setting('kabupaten') ? ', '.kua_setting('kabupaten') : '' }}
+                </p>
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[860px] text-sm">
                         <thead>

@@ -5,7 +5,7 @@
 <div class="overflow-hidden rounded-lg border border-teal-100 bg-white shadow-sm">
     <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
         <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">{{ $title }}</p>
-        <span class="shrink-0 rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white">{{ $announcements->count() }} pasangan</span>
+        <span class="rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white">{{ $announcements->count() }} pasangan</span>
     </div>
     <div class="grid grid-cols-1 gap-6 px-5 py-6 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-6">
         @foreach ($grouped as $date => $items)
