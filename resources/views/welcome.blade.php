@@ -40,8 +40,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                      class="mx-auto mt-8 max-h-72 w-full max-w-4xl rounded-xl border border-teal-100 object-cover shadow-sm" />
             @endif
 
-            @include('partials.jadwal-sholat')
-
             @if ($marriageAnnouncements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-12 pb-8">
                     @include('partials.ringkasan-jadwal', ['announcements' => $marriageAnnouncements, 'title' => 'Jadwal Pelaksanaan Nikah'])
@@ -107,6 +105,8 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 </section>
             @endif
         </main>
+
+        @include('partials.jadwal-sholat')
 
         @include('partials.public-footer')
     </body>

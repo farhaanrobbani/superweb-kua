@@ -1,46 +1,44 @@
-<section x-data="jadwalSholat()" x-init="init()" class="mx-auto max-w-5xl px-6 pt-12">
-    <div class="rounded-lg border border-teal-100 bg-white shadow-sm">
-        <div class="flex items-center justify-between border-b border-teal-100 bg-teal-50/60 px-5 py-3">
-            <div class="flex items-center gap-2">
-                <span class="text-teal-700">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 12V6"/></svg>
-                </span>
-                <p class="text-xs font-semibold uppercase tracking-wide text-teal-800">Jadwal Sholat</p>
-                <span class="rounded-full bg-teal-700 px-2 py-0.5 text-xs font-semibold text-white" x-text="kotaLabel"></span>
+<section x-data="jadwalSholat()" x-init="init()" class="bg-teal-900/95">
+    <div class="mx-auto max-w-5xl px-6 py-10">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-teal-200/80">Jadwal Sholat</p>
+                <h2 class="mt-1 text-xl font-bold text-white">Kecamatan <span x-text="kotaLabel"></span></h2>
+                <p class="mt-1 text-xs text-teal-100/70" x-show="hijriLabel" x-text="hijriLabel"></p>
+                <p class="mt-2 flex items-center gap-1.5 text-sm font-medium text-teal-100" x-show="countdown">
+                    <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-300"></span>
+                    <span x-text="countdown"></span>
+                </p>
             </div>
             <div class="flex items-center gap-2">
                 <select x-model="kotaKey" @change="onKotaChange()"
-                        class="rounded-md border border-teal-200 bg-white px-2 py-1 text-xs text-gray-700 focus:border-teal-500 focus:ring-teal-500">
+                        class="rounded-md border border-white/20 bg-white px-3 py-1.5 text-xs font-medium text-teal-900 focus:border-teal-500 focus:ring-teal-500">
                     <template x-for="(v, k) in kotalist" :key="k">
                         <option :value="k" x-text="v.label"></option>
                     </template>
                 </select>
                 <button type="button" @click="useGeolocation()"
-                        class="hidden text-xs text-teal-700 hover:underline sm:inline">Lokasi Saya</button>
+                        class="rounded-md bg-white/10 px-3 py-1.5 text-xs font-semibold text-teal-100 transition hover:bg-white/20">Lokasi Saya</button>
             </div>
         </div>
 
-        <div class="px-5 py-4">
-            <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
-            <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
+        <p class="mt-4 text-xs text-teal-200/70" x-show="loading">Memuat jadwal...</p>
+        <p class="mt-4 text-xs text-red-200" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-                <template x-for="item in displayTimings" :key="item.key">
-                    <div class="rounded-lg border p-3 text-center transition"
-                         :class="item.isNext ? 'border-teal-700 bg-teal-700 text-white' : 'border-teal-50 bg-teal-50/40 text-teal-900'">
-                        <p class="text-xs font-semibold uppercase tracking-wide" :class="item.isNext ? 'text-teal-100' : 'text-[#1b1b1870]'" x-text="item.label"></p>
-                        <p class="mt-1 text-base font-bold" x-text="item.time"></p>
-                        <p x-show="item.isNext" class="mt-1 text-[10px] font-semibold uppercase tracking-wide text-teal-100">Selanjutnya</p>
-                    </div>
-                </template>
-            </div>
+        <div x-show="!loading && timings" class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <template x-for="item in displayTimings" :key="item.key">
+                <div class="relative rounded-xl border-2 p-4 text-center shadow-sm transition"
+                     :class="item.isNext ? 'border-emerald-300 bg-emerald-400 text-teal-950 ring-2 ring-emerald-300/50' : 'border-white/15 bg-white/10 text-white backdrop-blur'">
+                    <p class="text-[11px] font-semibold uppercase tracking-widest" :class="item.isNext ? 'text-teal-900' : 'text-teal-100/70'" x-text="item.label"></p>
+                    <p class="mt-1 text-xl font-bold tabular-nums" x-text="item.time"></p>
+                    <span x-show="item.isNext" class="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-teal-950">Selanjutnya</span>
+                </div>
+            </template>
+        </div>
 
-            <p class="mt-3 text-center text-xs text-[#1b1b1870]" x-show="countdown" x-text="countdown"></p>
-
-            <div class="mt-3 text-center">
-                <a href="https://bimasislam.kemenag.go.id/jadwalshalat" target="_blank" rel="noopener noreferrer"
-                   class="text-xs text-teal-700 hover:underline">Lihat selengkapnya di bimasislam.kemenag.go.id/jadwalshalat →</a>
-            </div>
+        <div class="mt-6 flex justify-center">
+            <a href="https://bimasislam.kemenag.go.id/jadwalshalat" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-1.5 text-xs font-medium text-teal-100/70 hover:text-teal-100">Lihat selengkapnya di bimasislam.kemenag.go.id/jadwalshalat <span aria-hidden="true">→</span></a>
         </div>
     </div>
 
@@ -49,6 +47,7 @@
         return {
             kotaKey: localStorage.getItem('jadwal_sholat_kota') || 'ampelgading',
             kotaLabel: 'Ampelgading',
+            hijriLabel: '',
             kotalist: {
                 ampelgading: { label: 'Ampelgading', lat: -7.97, lon: 112.63 },
                 malang: { label: 'Malang', lat: -7.98, lon: 112.63 },
@@ -96,6 +95,8 @@
                     .then(j => {
                         if (j.code !== 200 || !j.data || !j.data.timings) throw new Error('Gagal memuat jadwal.');
                         this.timings = j.data.timings;
+                        const h = j.data.date && j.data.date.hijri;
+                        this.hijriLabel = h ? `${h.day} ${h.month.en} ${h.year} H` : '';
                         this.buildDisplay();
                         this.loading = false;
                     })
