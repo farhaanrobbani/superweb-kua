@@ -16,17 +16,13 @@
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-1 gap-3">
+            <div x-show="!loading && timings" class="grid grid-cols-5 gap-2 sm:gap-3">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-3 transition hover:border-teal-200 hover:bg-teal-50/70"
-                         :class="item.isNext ? 'border-teal-700 bg-teal-50' : ''">
-                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-teal-700 text-white">
-                            <span class="text-xs font-bold leading-none sm:text-sm" x-text="item.time"></span>
-                        </div>
-                        <div class="min-w-0 text-left">
-                            <p class="truncate text-sm font-semibold text-teal-900" x-text="item.label + ' — ' + item.time"></p>
-                            <p class="text-xs text-[#1b1b1870]" x-show="item.isNext">Selanjutnya</p>
-                        </div>
+                    <div class="flex flex-col items-center gap-1 rounded-lg border p-2 text-center sm:p-3"
+                         :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
+                        <p class="text-[10px] font-semibold uppercase tracking-wide text-[#1b1b1870] sm:text-xs" x-text="item.label"></p>
+                        <p class="text-xs font-bold text-teal-900 sm:text-base" x-text="item.time"></p>
+                        <p x-show="item.isNext" class="text-[9px] font-semibold uppercase tracking-wide text-teal-700 sm:text-[10px]">Selanjutnya</p>
                     </div>
                 </template>
             </div>
