@@ -181,7 +181,7 @@ class ServicesAnnouncementsTest extends TestCase
 
         $this->get(route('pengumuman.show', $current))
             ->assertOk()
-            ->assertSee('Pengumuman Lainnya')
+            ->assertSee('Berita Lainnya')
             ->assertSee('Kabar Terbaru Satu')
             ->assertSee('Kabar Terbaru Dua');
     }

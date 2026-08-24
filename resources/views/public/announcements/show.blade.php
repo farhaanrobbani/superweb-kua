@@ -97,7 +97,7 @@
     @if ($related->isNotEmpty())
         <section class="border-t border-teal-100 bg-white py-12">
             <div class="mx-auto max-w-7xl px-6">
-                <h2 class="text-2xl font-bold text-slate-900">Pengumuman Lainnya</h2>
+                <h2 class="text-2xl font-bold text-slate-900">{{ $announcement->category?->label() ?? kua_navbar_page_label('pengumuman', 'Berita') }} Lainnya</h2>
                 <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($related as $item)
                         <a href="{{ kua_navbar_page_url('pengumuman').'/'.$item->slug }}"
