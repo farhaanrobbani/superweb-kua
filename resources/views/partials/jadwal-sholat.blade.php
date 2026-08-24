@@ -12,13 +12,13 @@
             <p class="text-xs text-[#1b1b1870]" x-text="'• ' + countdown"></p>
         </div>
 
-        <div class="px-5 py-4">
+        <div class="px-5 py-6">
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-1 gap-3">
+            <div x-show="!loading && timings" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-3 transition hover:border-teal-200 hover:bg-teal-50/70"
+                    <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-4 transition hover:border-teal-200 hover:bg-teal-50/70"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : ''">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-teal-700 text-white">
                             <span class="text-xs font-bold leading-none sm:text-sm" x-text="item.time"></span>
