@@ -16,7 +16,7 @@
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="mx-auto grid max-w-xl grid-cols-5 gap-2">
+            <div x-show="!loading && timings" class="mx-auto grid max-w-lg grid-cols-5 gap-1 sm:gap-2">
                 <template x-for="item in displayTimings" :key="item.key">
                     <div class="flex flex-col items-center gap-1 rounded-lg border p-2 text-center sm:p-3"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
