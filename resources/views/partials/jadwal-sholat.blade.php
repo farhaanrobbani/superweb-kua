@@ -16,12 +16,12 @@
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="mx-auto grid max-w-md grid-cols-5 gap-1">
+            <div x-show="!loading && timings" class="mx-auto grid grid-cols-4 gap-3 sm:grid-cols-4 md:grid-cols-5 md:gap-4">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="flex flex-col items-center gap-1 rounded-lg border p-2 text-center sm:p-3"
+                    <div class="flex flex-col items-center gap-1 rounded-xl border p-3 transition md:p-4"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
-                        <p class="text-[10px] font-semibold uppercase tracking-wide text-[#1b1b1870] sm:text-xs" x-text="item.label"></p>
-                        <p class="text-xs font-bold text-teal-900 sm:text-base" x-text="item.time"></p>
+                        <p class="text-xs font-semibold uppercase tracking-wide text-[#1b1b1870] sm:text-sm md:text-sm" x-text="item.label"></p>
+                        <p class="text-sm font-bold text-teal-900 md:text-base" x-text="item.time"></p>
                         <p x-show="item.isNext" class="text-[9px] font-semibold uppercase tracking-wide text-teal-700 sm:text-[10px]">Selanjutnya</p>
                     </div>
                 </template>
