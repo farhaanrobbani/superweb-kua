@@ -16,18 +16,18 @@
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-1 gap-2">
+            <div x-show="!loading && timings" class="grid grid-cols-1 gap-3">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="flex items-center gap-3 rounded-lg border p-3"
-                         :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-xs font-bold"
-                             :class="item.isNext ? 'bg-teal-700 text-white' : 'bg-white text-teal-700 border border-teal-100'"
-                             x-text="item.label.charAt(0)"></div>
-                        <div class="min-w-0 text-left">
-                            <p class="text-xs font-semibold uppercase tracking-wide text-[#1b1b1870]" x-text="item.label"></p>
-                            <p class="text-sm font-bold text-teal-900" x-text="item.time"></p>
+                    <div class="flex items-center gap-3 rounded-lg border border-teal-50 bg-teal-50/40 p-3 transition hover:border-teal-200 hover:bg-teal-50/70"
+                         :class="item.isNext ? 'border-teal-700 bg-teal-50' : ''">
+                        <div class="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-md bg-teal-700 text-white">
+                            <span class="text-base leading-none font-bold" x-text="item.time.split(':')[0]"></span>
+                            <span class="text-[10px] uppercase leading-tight" x-text="item.label.slice(0,3)"></span>
                         </div>
-                        <span x-show="item.isNext" class="ml-auto shrink-0 rounded-full bg-teal-700 px-2 py-0.5 text-[10px] font-semibold text-white">Selanjutnya</span>
+                        <div class="min-w-0 text-left">
+                            <p class="truncate text-sm font-semibold text-teal-900" x-text="item.label + ' — ' + item.time"></p>
+                            <p class="text-xs text-[#1b1b1870]" x-show="item.isNext">Selanjutnya</p>
+                        </div>
                     </div>
                 </template>
             </div>
