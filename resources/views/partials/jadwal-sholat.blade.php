@@ -16,13 +16,18 @@
             <p class="text-xs text-[#1b1b1870]" x-show="loading">Memuat jadwal...</p>
             <p class="text-xs text-red-600" x-show="error" x-text="error"></p>
 
-            <div x-show="!loading && timings" class="grid grid-cols-5 gap-2 sm:gap-3">
+            <div x-show="!loading && timings" class="grid grid-cols-1 gap-2">
                 <template x-for="item in displayTimings" :key="item.key">
-                    <div class="flex flex-col items-center gap-1 rounded-lg border p-2 text-center sm:p-3"
+                    <div class="flex items-center gap-3 rounded-lg border p-3"
                          :class="item.isNext ? 'border-teal-700 bg-teal-50' : 'border-teal-50 bg-teal-50/40'">
-                        <p class="text-[10px] font-semibold uppercase tracking-wide text-[#1b1b1870] sm:text-xs" x-text="item.label"></p>
-                        <p class="text-xs font-bold text-teal-900 sm:text-base" x-text="item.time"></p>
-                        <p x-show="item.isNext" class="text-[9px] font-semibold uppercase tracking-wide text-teal-700 sm:text-[10px]">Selanjutnya</p>
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                             :class="item.isNext ? 'bg-teal-700 text-white' : 'bg-white text-teal-700 border border-teal-100'"
+                             x-text="item.label.charAt(0)"></div>
+                        <div class="min-w-0 text-left">
+                            <p class="text-xs font-semibold uppercase tracking-wide text-[#1b1b1870]" x-text="item.label"></p>
+                            <p class="text-sm font-bold text-teal-900" x-text="item.time"></p>
+                        </div>
+                        <span x-show="item.isNext" class="ml-auto shrink-0 rounded-full bg-teal-700 px-2 py-0.5 text-[10px] font-semibold text-white">Selanjutnya</span>
                     </div>
                 </template>
             </div>
