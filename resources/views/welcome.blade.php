@@ -67,8 +67,6 @@ Pihak KUA akan memverifikasi, menerbitkan, dan menandatangani surat Anda secara 
                 </section>
             @endif
 
-            <div class="mx-auto max-w-5xl px-6"><hr class="border-teal-100/60"></div>
-
             @if ($announcements->isNotEmpty())
                 <section class="mx-auto max-w-5xl px-6 pt-8 pb-16">
                     <div class="flex items-center justify-between">
