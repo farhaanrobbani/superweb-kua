@@ -34,7 +34,7 @@
                     <select name="bulan" id="bulan"
                             class="mt-1 border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
                         @foreach (range(1, 12) as $m)
-                            <option value="{{ $m }}" @selected($m === $month)>{{ tanggal_indonesia(now()->month($m), 'F') }}</option>
+                            <option value="{{ $m }}" @selected($m === $month)>{{ tanggal_indonesia(now()->startOfMonth()->month($m), 'F') }}</option>
                         @endforeach
                     </select>
                 </div>

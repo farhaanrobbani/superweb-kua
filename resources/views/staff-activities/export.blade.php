@@ -56,7 +56,7 @@
                             <select name="bulan" id="filter-bulan"
                                     class="mt-1 border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm">
                                 @foreach (range(1, 12) as $m)
-                                    <option value="{{ $m }}" @selected($m === $month)>{{ tanggal_indonesia(now()->month($m), 'F') }}</option>
+                                    <option value="{{ $m }}" @selected($m === $month)>{{ tanggal_indonesia(now()->startOfMonth()->month($m), 'F') }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -101,7 +101,7 @@
                             <div>
                                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-100">Export Rekap Laporan Kinerja</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                    Isi jumlah kehadiran pegawai pada bulan {{ tanggal_indonesia(now()->month($month), 'F') }} {{ $year }}.
+                                    Isi jumlah kehadiran pegawai pada bulan {{ tanggal_indonesia(now()->startOfMonth()->month($month), 'F') }} {{ $year }}.
                                 </p>
                             </div>
                             <button type="button" @click="$dispatch('close-modal', 'export-rekap')"
@@ -152,7 +152,7 @@
                             <div>
                                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-100">Export Laporan Kinerja</h3>
                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                    Pilih format file laporan kinerja bulan {{ tanggal_indonesia(now()->month($month), 'F') }} {{ $year }}.
+                                    Pilih format file laporan kinerja bulan {{ tanggal_indonesia(now()->startOfMonth()->month($month), 'F') }} {{ $year }}.
                                 </p>
                             </div>
                             <button type="button" @click="$dispatch('close-modal', 'export-laporan')"
