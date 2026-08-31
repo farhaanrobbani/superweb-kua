@@ -34,7 +34,7 @@
         .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
         .ttd .nip { font-size: 11px; line-height: 1; }
-        .footer-surat { position: fixed; bottom: 1cm; left: 3cm; right: 3cm; text-align: left; font-size: 11px; line-height: 1.4; color: #111; }
+        .footer-surat { position: fixed; bottom: 1cm; left: 0; right: 0; padding-left: 0.8cm; padding-right: 0.8cm; text-align: left; font-size: 11px; line-height: 1.4; color: #111; }
     </style>
 </head>
 <body>
@@ -105,7 +105,7 @@
 
     <div class="ttd">
         <div class="blok">
-            <div class="kota">{{ Str::title($settings['kabupaten']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
+            <div class="kota">{{ Str::title($settings['kecamatan']) }}, {{ $letter->tanggal_surat ? tanggal_indonesia($letter->tanggal_surat, 'd F Y') : '' }}</div>
             <div>Kepala,</div>
             @if (($settings['kop_anchor'] ?? '1') !== '0')
                 <div class="anchor">^</div>
