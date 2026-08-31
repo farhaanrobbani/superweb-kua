@@ -155,6 +155,27 @@
                         </label>
                     </div>
 
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-2">Footer Surat</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 mb-3">Teks footer tampil di bagian paling bawah halaman PDF surat jenis ini dan bisa berbeda antar jenis surat.</p>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="flex items-start gap-2">
+                                <input type="checkbox" name="kop_footer_enabled" value="1"
+                                       @checked((bool) (old('kop_footer_enabled', $letterType->kop_footer_enabled)))
+                                       class="mt-1 rounded border-gray-300 text-teal-600 focus:ring-teal-500" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-500">Tampilkan footer di bagian bawah surat</span>
+                            </label>
+                            <x-input-error :messages="$errors->get('kop_footer_enabled')" class="mt-2" />
+                        </div>
+                        <div>
+                            <x-input-label for="kop_footer" value="Isi Teks Footer Surat" />
+                            <textarea id="kop_footer" name="kop_footer" rows="3"
+                                      class="mt-1 block w-full border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-md shadow-sm text-sm"
+                                      placeholder="Contoh: Surat ini diterbitkan secara elektronik melalui sistem surat digital KUA.">{{ old('kop_footer', $letterType->kop_footer) }}</textarea>
+                            <x-input-error :messages="$errors->get('kop_footer')" class="mt-2" />
+                        </div>
+                    </div>
+
                     <div class="mt-6">
                         <label class="flex items-center">
                             <input type="checkbox" name="active" value="1" {{ old('active', $letterType->active) ? 'checked' : '' }} class="rounded border-gray-300">

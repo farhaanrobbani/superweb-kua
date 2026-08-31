@@ -247,6 +247,8 @@ class LetterController extends Controller
             'settings' => $settings,
             'body' => PdfSupport::resolveLocalImages($letter->renderBody()),
             'kopLines' => PdfSupport::parseKopTeks($settings['kop_teks']),
+            'kopFooter' => $letter->letterType?->kop_footer ?? null,
+            'kopFooterEnabled' => $letter->letterType?->kop_footer_enabled ?? false,
             'kopSizes' => [
                 'judul' => (float) ($settings['kop_ukuran_judul'] ?: 17),
                 'sub' => (float) ($settings['kop_ukuran_sub'] ?: 13),

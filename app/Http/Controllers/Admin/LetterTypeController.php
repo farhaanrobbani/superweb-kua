@@ -92,6 +92,8 @@ class LetterTypeController extends Controller
             'fields.*.options' => ['nullable', 'array'],
             'active' => ['sometimes', 'boolean'],
             'publik' => ['sometimes', 'boolean'],
+            'kop_footer' => ['nullable', 'string', 'max:5000'],
+            'kop_footer_enabled' => ['sometimes', 'boolean'],
         ]);
 
         if (! blank($data['permohonan_body'] ?? null)) {
@@ -106,6 +108,7 @@ class LetterTypeController extends Controller
 
         $data['active'] = $request->boolean('active');
         $data['publik'] = $request->boolean('publik');
+        $data['kop_footer_enabled'] = $request->boolean('kop_footer_enabled');
 
         return $data;
     }

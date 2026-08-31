@@ -34,6 +34,7 @@
         .ttd .anchor { font-size: 16px; font-weight: bold; margin: 6px 0; }
         .ttd .nama { font-weight: bold; text-decoration: underline; }
         .ttd .nip { font-size: 11px; line-height: 1; }
+        .footer-surat { position: fixed; bottom: 1cm; left: 3cm; right: 3cm; text-align: left; font-size: 11px; line-height: 1.4; color: #111; }
     </style>
 </head>
 <body>
@@ -117,5 +118,9 @@
             @endif
         </div>
     </div>
+
+    @if ($kopFooterEnabled && ! empty($kopFooter))
+        <div class="footer-surat">{{ $kopFooter }}</div>
+    @endif
 </body>
 </html>
